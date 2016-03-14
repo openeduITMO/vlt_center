@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>VLT</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/vlt_index.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vlt_index.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.form.js}"></script>
+</head>
+<body>
+
+<div class="vlt">
+    <div class="title">Среда тестирования виртуальных лабораторий</div>
+    <div class="vl_list">
+        <div class="title_list">Список виртуальных лабораторий</div>
+        <div class="list_div">
+            <table id="vl_table">
+                <tr>
+                    <th class="name">Имя</th>
+                    <th class="status">Статус</th>
+                    <th class="commands">Команды</th>
+                </tr>
+                <tr th:each="vl : ${vlList}">
+                    <td th:text="${vl.name}"/>
+                    <td>...</td>
+                    <td>
+                        <button class="run" onclick="run()"><span>Запустить</span></button>
+                        <button class="tune" th:attr="dirName=${vl.dirName}"><span>Настроить</span></button>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="add_form">
+                <label for="name_vl">Название ВЛ:</label>
+                <input id="name_vl" type="text" value=""/>
+                <button id="add_vl"><span>Добавить</span></button>
+                <div class="error">
+                    <span>Введите название виртуальной лаборатории</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="vl_current">
+        <div class="settings"></div>
+
+        <div class="import"></div>
+    </div>
+</div>
+
+</body>
+</html>
