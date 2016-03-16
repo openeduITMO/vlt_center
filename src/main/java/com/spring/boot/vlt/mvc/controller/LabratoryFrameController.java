@@ -69,9 +69,6 @@ public class LabratoryFrameController {
 
                 ));
                 List<Check> checks = new ArrayList<>();
-//                vlProperty.put("check", new Check(
-//                        node.selectSingleNode("LaboratoryFrame").selectSingleNode("LaboratoryTestsGroups")
-//                ));
                 List<Node> check = node.selectSingleNode("LaboratoryFrame").selectSingleNode("LaboratoryTestsGroups").selectNodes("LaboratoryTestsGroup");
                 check.forEach(c -> {
                     checks.add(new Check(

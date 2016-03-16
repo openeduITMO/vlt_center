@@ -28,11 +28,14 @@ public class VltController {
         PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");
         List<VirtLab> vlList = new ArrayList<>();
         try {
-            Files.walk(new File(path).toPath()).filter(p -> requestPathMatcher.matches(p)).forEach(
-                    p -> {
-                        vlList.add(new VirtLab(p.toFile()));
-                    }
-            );
+            File vlabs = new File(path);
+            if(vlabs.exists()){
+                Files.walk(vlabs.toPath()).filter(p -> requestPathMatcher.matches(p)).forEach(
+                        p -> {
+                            vlList.add(new VirtLab(p.toFile()));
+                        }
+                );
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
