@@ -3,9 +3,9 @@ package com.spring.boot.vlt.mvc.controller;
 import com.spring.boot.vlt.mvc.model.frames.Check;
 import com.spring.boot.vlt.mvc.model.frames.Frame;
 import com.spring.boot.vlt.mvc.model.frames.Generate;
+import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.util.*;
 
 @Controller
 public class LabratoryFrameController {
     @Autowired
     private Environment env;
-    private String framesXml = "LaboratoryFrames.xml";
+    private enum StaticType {js, css};
 
     @RequestMapping(value = "/getLabratoryFame", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
@@ -68,6 +70,7 @@ public class LabratoryFrameController {
                         node.selectSingleNode("LaboratoryFrame").selectSingleNode("Generator").selectSingleNode("Algorithm/comment()").getText()
 
                 ));
+
                 List<Check> checks = new ArrayList<>();
                 List<Node> check = node.selectSingleNode("LaboratoryFrame").selectSingleNode("LaboratoryTestsGroups").selectNodes("LaboratoryTestsGroup");
                 check.forEach(c -> {
@@ -80,6 +83,9 @@ public class LabratoryFrameController {
                     ));
                 });
                 vlProperty.put("check", checks);
+
+                vlProperty.put("js", readStatic(nameVl, StaticType.js));
+                vlProperty.put("css", readStatic(nameVl, StaticType.css));
                 System.out.println();
             });
             System.out.println();
@@ -92,6 +98,27 @@ public class LabratoryFrameController {
     private Document readLabratoryFame(String nameVl) throws MalformedURLException, DocumentException {
         final String path = env.getProperty("paths.uploadedFiles");
         SAXReader saxReader = new SAXReader();
-        return saxReader.read(new File(path + File.separator + nameVl, "frames" + File.separator + framesXml));
+        return saxReader.read(new File(path + File.separator + nameVl, "frames" + File.separator + env.getProperty("framesXml")));
+    }
+
+    private StaticFile readStatic(String nameDirVl, StaticType type){
+        final String path = env.getProperty("paths.uploadedFiles");
+        StaticFile staticFile = new StaticFile(nameDirVl);
+        File st = new File(path + File.separator + nameDirVl, "tool" + File.separator + type);
+        try {
+            Files.walk(st.toPath()).forEach(j -> {
+                if (j.getParent().getFileName().toString().equalsIgnoreCase("dev")) {
+                    staticFile.addDev(j.getFileName().toString());
+                } else{
+                    if (j.getParent().getFileName().toString().equalsIgnoreCase("lib")) {
+                        staticFile.addLib(j.getFileName().toString());
+                    }
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return staticFile;
     }
 }

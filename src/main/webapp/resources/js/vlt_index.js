@@ -40,10 +40,6 @@ jQuery(document).ready(function () {
         });
     });
 
-    //$('body').on("click", ".start", function(){
-    //
-    //});
-
     $('body').on("click", ".tune", function () {
         $(".error").css("display", "none");
         var currentTr = $(this).parent().parent();
@@ -101,4 +97,13 @@ jQuery(document).ready(function () {
         $(".import").html("");
     });
 
-})
+});
+
+//получение значения параметров из адресной строки
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+        vars[key] = value;
+    });
+    return vars;
+}

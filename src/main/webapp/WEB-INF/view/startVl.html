@@ -23,9 +23,20 @@
     <div>
         <b>Виртуальный стенд</b>
         <div id="jsLab"></div>
-        <div id="">
-            <input type="hidden" id="preGeneratedCode" name="preGeneratedCode" th:value="${vlProperty.generate.defaultText}"/>
-            <!--<script type="text/javascript" src="/vlabs/lab1458154900378/tool/js/lib/t.js"></script>-->
+        <div id="list_script">
+            <input type="hidden" id="preGeneratedCode" name="preGeneratedCode"
+                   th:value="${vlProperty.generate.defaultText}"/>
+            <script type="text/javascript" th:each="js: ${vlProperty.js.lib}"
+                    th:src="'/VLabs/'+${vlProperty.js.dirName}+'/tool/js/lib/'+${js}"></script>
+            <script type="text/javascript" th:each="js: ${vlProperty.js.dev}"
+                    th:src="'/VLabs/'+${vlProperty.js.dirName}+'/tool/js/dev/'+${js}"></script>
+            <link rel="stylesheet" th:each="css: ${vlProperty.css.lib}" th:href="'/VLabs/'+${vlProperty.css.dirName}+'/tool/css/lib/'+${css}"/>
+            <link rel="stylesheet" th:each="css: ${vlProperty.css.dev}" th:href="'/VLabs/'+${vlProperty.css.dirName}+'/tool/css/dev/'+${css}"/>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    Vlab.init();
+                });
+            </script>
         </div>
     </div>
 </div>
