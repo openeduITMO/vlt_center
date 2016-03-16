@@ -8,7 +8,14 @@ jQuery(document).ready(function () {
                 if (data.length != 0) {
                     $(".error").css("display", "none");
                     $("#name_vl").val("");
-                    $("#vl_table").append(data);
+                    $("#vl_table").append("<tr>" +
+                        "<td>" + data.name + "</td>" +
+                        "<td>...</td>" +
+                        "<td>" +
+                        "<button class='run' onclick='run()'><span>Запустить</span></button>" +
+                        "<button class='tune' dirName='" + data.dirName + "'><span>Настроить</span></button>" +
+                        "</td>" +
+                        "</tr>");
                 } else {
                     $(".error").css("display", "block");
                 }
@@ -19,6 +26,23 @@ jQuery(document).ready(function () {
             }
         });
     });
+
+    $('body').on("click", ".run", function () {
+        $(".error").css("display", "none");
+        $(".settings").html("");
+        $(".import").html("");
+        var vlName = $(this).attr("dirName");
+        $.post("/getLabratoryFame?name=" + vlName, function (data) {
+            $(".settings").append("<table id='table_start'><tr><td>ID</td><td>Схема</td><td>Название</td><td>Задание</td><td>Запуск</td></tr></table>");
+            $.each(data, function (key, val) {
+                $("#table_start").append("<tr><td>" + val.id + "</td><td>" + val.sheme + "</td><td>" + val.name + "</td><td>" + val.data + "</td><td><form method='post' action='startVl?name=" + vlName + "&frameId=" + val.id + "'><button class='start'><span>Запуск</span></button></form></td></tr>");
+            });
+        });
+    });
+
+    //$('body').on("click", ".start", function(){
+    //
+    //});
 
     $('body').on("click", ".tune", function () {
         $(".error").css("display", "none");

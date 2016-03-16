@@ -53,12 +53,12 @@ html, body {
     padding-top: 20px;
     position:relative;
 }
-#vl_table, #table_configuration{
+#vl_table, #table_configuration, #table_start{
     display: table;
     width: 100%;
     border-collapse: collapse;
 }
-#vl_table td, #vl_table th, #table_configuration td, #table_configuration th{
+#vl_table td, #vl_table th, #table_configuration td, #table_configuration th, #table_start td, #table_start th{
     padding: 5px;
     border: 1px solid black;
 }

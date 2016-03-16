@@ -1,15 +1,11 @@
 package com.spring.boot.vlt.mvc.controller;
 
-import com.spring.boot.vlt.mvc.model.VirtLab;
-import com.sun.istack.internal.NotNull;
+import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,9 +14,7 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.PathMatcher;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -29,7 +23,7 @@ public class VltController {
     private Environment env;
 
     @RequestMapping("/")
-    public ModelAndView index(Model model) {
+    public ModelAndView index() {
         final String path = env.getProperty("paths.uploadedFiles");
         PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");
         List<VirtLab> vlList = new ArrayList<>();
@@ -47,9 +41,9 @@ public class VltController {
 
     @RequestMapping("/addVL")
     @ResponseBody
-    public String addVl(@Valid VirtLab vl, BindingResult bindResult) {
+    public VirtLab addVl(@Valid VirtLab vl, BindingResult bindResult) {
         if (bindResult.hasErrors()) {
-            return "";
+            return null;
         }
         final String path = env.getProperty("paths.uploadedFiles");
         File vlDir = new File(path, "lab" + System.currentTimeMillis());
@@ -61,7 +55,7 @@ public class VltController {
         }
         vl.setDirName(vlDir.getName());
         vl.save(path);
-        return vl.getTableRow();
+        return vl;
     }
 
     @RequestMapping("/getPropertyVl")

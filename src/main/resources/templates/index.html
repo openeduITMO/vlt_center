@@ -25,7 +25,7 @@
                     <td th:text="${vl.name}"/>
                     <td>...</td>
                     <td>
-                        <button class="run" onclick="run()"><span>Запустить</span></button>
+                        <button class="run" th:attr="dirName=${vl.dirName}"><span>Запустить</span></button>
                         <button class="tune" th:attr="dirName=${vl.dirName}"><span>Настроить</span></button>
                     </td>
                 </tr>

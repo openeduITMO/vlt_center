@@ -1,4 +1,4 @@
-package com.spring.boot.vlt.mvc.model;
+package com.spring.boot.vlt.mvc.model.vl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -104,19 +104,9 @@ public class VirtLab {
                 "height=" + height;
     }
 
-    public String getTableRow() {
-        return "<tr>" +
-                "<td>" + name + "</td>" +
-                "<td>...</td>" +
-                "<td>" +
-                "<button class='run' onclick='run()'><span>Запустить</span></button>" +
-                "<button class='tune' dirName='" + dirName + "'><span>Настроить</span></button>" +
-                "</td>" +
-                "</tr>";
-    }
 
     public boolean save(String path) {
-        File desc = new File(new File(path, dirName), propertyFileName);
+        File desc = new File(path + File.separator + dirName, propertyFileName);
         try {
             desc.createNewFile();
             PrintWriter out = new PrintWriter(desc.getAbsoluteFile());
