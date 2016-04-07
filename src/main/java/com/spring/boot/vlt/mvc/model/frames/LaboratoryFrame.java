@@ -1,11 +1,13 @@
 package com.spring.boot.vlt.mvc.model.frames;
 
-public class Frame {
+public class LaboratoryFrame {
     private int id;
     private int sheme;
     private String name;
 
-    public Frame(int id, int sheme, String name, String data) {
+    public LaboratoryFrame(){}
+
+    public LaboratoryFrame(int id, int sheme, String name, String data) {
         this.id = id;
         this.sheme = sheme;
         this.name = name;

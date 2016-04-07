@@ -3,50 +3,84 @@
 <head>
     <title>VLT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/resources/css/bootflat.css}"/>
     <link rel="stylesheet" th:href="@{/resources/css/vlt_index.css}"/>
     <script type="text/javascript" th:src="@{/resources/js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/vlt_index.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery.form.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery.fs.selecter.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery.fs.stepper.min.js}"></script>
 </head>
 <body>
 
+<div class="title">Среда тестирования виртуальных лабораторий</div>
+
 <div class="vlt">
-    <div class="title">Среда тестирования виртуальных лабораторий</div>
-    <div class="vl_list">
-        <div class="title_list">Список виртуальных лабораторий</div>
-        <div class="list_div">
-            <table id="vl_table">
-                <tr>
+    <div class="vl-list">
+        <div class="list-div">
+            <div class="panel panel-default">
+                <span class="button plusTd"></span>
+                <div class="panel-heading">Список виртуальных лабораторий</div>
+                <table class="table">
+                    <thead>
                     <th class="name">Имя</th>
                     <th class="status">Статус</th>
                     <th class="commands">Команды</th>
-                </tr>
-                <tr th:each="vl : ${vlList}">
-                    <td th:text="${vl.name}"/>
-                    <td>...</td>
-                    <td>
-                        <button class="run" th:attr="dirName=${vl.dirName}"><span>Запустить</span></button>
-                        <button class="tune" th:attr="dirName=${vl.dirName}"><span>Настроить</span></button>
-                    </td>
-                </tr>
-            </table>
+                    </thead>
+                    <tbody>
+                    <tr th:each="vl : ${vlList}">
+                        <td th:text="${vl.name}"/>
+                        <td>...</td>
+                        <td>
+                            <span class="button run-vl" th:attr="dirName=${vl.dirName}"/>
+                            <span class="button tune-vl" th:attr="dirName=${vl.dirName}"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-            <div class="add_form">
-                <label for="name_vl">Название ВЛ:</label>
-                <input id="name_vl" type="text" value=""/>
-                <button id="add_vl"><span>Добавить</span></button>
-                <div class="error">
-                    <span>Введите название виртуальной лаборатории</span>
+    <div class="vl-current">
+        <div class="panel panel-default s-form">
+            <span class="button close"></span>
+            <div class="panel-heading">Добавить новую ВЛ</div>
+            <div class="panel-body">
+                <div class="add-form col-xs-6">
+                    <input id="name-vl" class="form-control input-group" type="text" placeholder="Название ВЛ"
+                           value=""/>
+                    <span class="input-group-btn">
+                        <button id="add-vl" class="btn btn-primary">Добавить</button>
+                    </span>
                 </div>
             </div>
+        </div>
+        <div class="panel panel-default settings">
+            <span class="button close"></span>
+            <div class="panel-heading">Свойства</div>
+            <div class="panel-body"></div>
+        </div>
+        <div class="panel panel-default running">
+            <span class="button close"></span>
+            <div class="panel-heading">Запуск</div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <th class="name">ID</th>
+                        <th class="status">Схема</th>
+                        <th class="commands">Название</th>
+                        <th class="commands">Задание</th>
+                        <th class="commands">Запуск</th>
+                    </thead>
+                    <tbody>
 
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-    </div>
-    <div class="vl_current">
-        <div class="settings"></div>
 
-        <div class="import"></div>
     </div>
 </div>
 

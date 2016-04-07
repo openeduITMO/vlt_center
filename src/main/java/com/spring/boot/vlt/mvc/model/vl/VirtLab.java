@@ -122,26 +122,4 @@ public class VirtLab {
         return true;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        VirtLab virtLab = (VirtLab) o;
-
-        if (width != virtLab.width) return false;
-        if (height != virtLab.height) return false;
-        if (!name.equals(virtLab.name)) return false;
-        return dirName.equals(virtLab.dirName);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + dirName.hashCode();
-        result = 31 * result + width;
-        result = 31 * result + height;
-        return result;
-    }
 }

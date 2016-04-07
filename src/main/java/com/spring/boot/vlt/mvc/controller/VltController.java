@@ -17,7 +17,7 @@ import java.nio.file.PathMatcher;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 public class VltController {
     @Autowired
     private Environment env;
@@ -43,7 +43,6 @@ public class VltController {
     }
 
     @RequestMapping("/addVL")
-    @ResponseBody
     public VirtLab addVl(@Valid VirtLab vl, BindingResult bindResult) {
         if (bindResult.hasErrors()) {
             return null;
@@ -62,7 +61,6 @@ public class VltController {
     }
 
     @RequestMapping("/getPropertyVl")
-    @ResponseBody
     public VirtLab getPropertyVl(@RequestParam("name") String nameVl) {
         final String path = env.getProperty("paths.uploadedFiles");
         File vlDir = new File(path, nameVl);

@@ -3,106 +3,253 @@
 <head>
     <title>VLT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/resources/css/bootflat.css}"/>
     <link rel="stylesheet" th:href="@{/resources/css/vlt_index.css}"/>
     <script type="text/javascript" th:src="@{/resources/js/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{/resources/js/vlt_index.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/vl_test.js}"></script>
     <script type="text/javascript" th:src="@{/resources/js/jquery.form.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery.fs.selecter.min.js}"></script>
+    <script type="text/javascript" th:src="@{/resources/js/jquery.fs.stepper.min.js}"></script>
 </head>
 <body>
-
+<div class="start">
+    <button id="stop_but">Завершить</button>
+    <button id="check_but" th:attr="check=${check}">Ответ готов</button>
+    <button id="start_but">Запустить</button>
+</div>
 <div id="frame">
-    <h2>Кадр</h2>
-    <div>
-        <b>Задание</b>
-        <span th:text="${vlProperty.frame.data}"/>
+    <div class="panel">
+        <span class="button hidden"></span>
+        <div class="panel-heading">Информация о виртуальном стенде</div>
     </div>
-    <div>
-        <b>Вариант</b>
-        <span th:text="${vlProperty.generate.defaultText}"/>
-    </div>
-    <div>
-        <b>Виртуальный стенд</b>
-        <div id="jsLab"></div>
-        <div id="list_script">
-            <input type="hidden" id="preGeneratedCode" name="preGeneratedCode"
-                   th:value="${vlProperty.generate.defaultText}"/>
-            <script type="text/javascript" th:each="js: ${vlProperty.js.lib}"
-                    th:src="'/VLabs/'+${vlProperty.js.dirName}+'/tool/js/lib/'+${js}"></script>
-            <script type="text/javascript" th:each="js: ${vlProperty.js.dev}"
-                    th:src="'/VLabs/'+${vlProperty.js.dirName}+'/tool/js/dev/'+${js}"></script>
-            <link rel="stylesheet" th:each="css: ${vlProperty.css.lib}" th:href="'/VLabs/'+${vlProperty.css.dirName}+'/tool/css/lib/'+${css}"/>
-            <link rel="stylesheet" th:each="css: ${vlProperty.css.dev}" th:href="'/VLabs/'+${vlProperty.css.dirName}+'/tool/css/dev/'+${css}"/>
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    Vlab.init();
-                });
-            </script>
+    <div class="info-all">
+        <div id="frame-info">
+            <div class="panel panel-default">
+                <div class="panel-heading">Кадр</div>
+                <table class="table table-frame">
+                    <tr>
+                        <td>Задание</td>
+                        <td><span th:text="${frame.data}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Вариант</td>
+                        <td><span th:text="${generate.text}"/></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="property">
+            <div class="panel panel-default">
+                <div class="panel-heading">Свойства</div>
+                <table class="table property-table">
+                    <tr>
+                        <td>ID</td>
+                        <td><span th:text="${frame.id}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Схема</td>
+                        <td><span th:text="${frame.sheme}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Название кадра</td>
+                        <td><span th:text="${frame.name}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Задание</td>
+                        <td><span th:text="${frame.data}"/></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-<hr/>
-<div id="property">
-    <h2>Свойства</h2>
-    <table>
-        <tr>
-            <td>ID</td>
-            <td><span th:text="${vlProperty.frame.id}"/></td>
-        </tr>
-        <tr>
-            <td>Схема</td>
-            <td><span th:text="${vlProperty.frame.sheme}"/></td>
-        </tr>
-        <tr>
-            <td>Название кадра</td>
-            <td><span th:text="${vlProperty.frame.name}"/></td>
-        </tr>
-        <tr>
-            <td>Задание</td>
-            <td><span th:text="${vlProperty.frame.data}"/></td>
-        </tr>
-    </table>
+<div id="jsLab"></div>
+<div id="list_script">
+    <input type="hidden" id="preGeneratedCode" name="preGeneratedCode"
+           th:value="${generate.text}"/>
+    <script type="text/javascript" th:each="jsFile: ${js.lib}"
+            th:src="'/VLabs/'+${js.dirName}+'/tool/js/lib/'+${jsFile}"></script>
+    <script type="text/javascript" th:each="jsFile: ${js.dev}"
+            th:src="'/VLabs/'+${js.dirName}+'/tool/js/dev/'+${jsFile}"></script>
+    <link rel="stylesheet" th:each="cssFile: ${css.lib}"
+          th:href="'/VLabs/'+${css.dirName}+'/tool/css/lib/'+${cssFile}"/>
+    <link rel="stylesheet" th:each="cssFile: ${css.dev}"
+          th:href="'/VLabs/'+${css.dirName}+'/tool/css/dev/'+${cssFile}"/>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Vlab.init();
+        });
+    </script>
 </div>
-<hr/>
+
 <div id="generate">
-    <h2>Generate</h2>
-    <table>
-        <tr>
-            <td>DefaultCode</td>
-            <td><span th:text="${vlProperty.generate.defaultCode}"/></td>
-        </tr>
-        <tr>
-            <td>DefaultText</td>
-            <td><span th:text="${vlProperty.generate.defaultText}"/></td>
-        </tr>
-        <tr>
-            <td>DeafaultInstructions</td>
-            <td><span th:text="${vlProperty.generate.deafaultInstructions}"/></td>
-        </tr>
-        <tr>
-            <td>Algorithm</td>
-            <td><span th:text="${vlProperty.generate.algorithm}"/></td>
-        </tr>
-    </table>
+    <div class="panel">
+        <span class="button hidden"></span>
+        <div class="panel-heading">Generate</div>
+    </div>
+    <div class="info-all">
+        <div id="generate-info">
+            <div class="panel panel-default">
+                <div class="panel-heading">Описание блока Generate</div>
+                <table class="table generate-table">
+                    <tr>
+                        <td>DefaultCode</td>
+                        <td colspan="2"><span id="preText" th:text="${generate.code}"/></td>
+                    </tr>
+                    <tr>
+                        <td>DefaultText</td>
+                        <td colspan="2"><span th:text="${generate.text}"/></td>
+                    </tr>
+                    <tr>
+                        <td>DeafaultInstructions</td>
+                        <td colspan="2"><span th:text="${generate.instructions}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Algorithm</td>
+                        <td colspan="2"><span id="algorithm" th:text="${algorithm}"/></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="generate-result">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ответ метода Generate</div>
+                <table class="table generate-table"></table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="calculate">
+    <div class="panel">
+        <span class="button hidden"></span>
+        <div class="panel-heading">Calculate</div>
+    </div>
+    <div class="info-all">
+        <div id="calculate-result">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ответ метода Check</div>
+                <table class="table check-table">
+                    <thead>
+                    <tr class="table_tit">
+                        <th>Code</th>
+                        <th>Text</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="calculate-answer">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ответ метода Check</div>
+                <table class="table check-table">
+                    <thead>
+                    <tr class="table_tit">
+                        <th>Ответ пользователя</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="check">
-    <h2>Generate</h2>
-    <table>
-        <tr>
-            <td>ID</td>
-            <td>Ограничение по времени</td>
-            <td>Входной набор</td>
-            <td>Выходной набор</td>
-        </tr>
-        <tr th:each="check : ${vlProperty.check}">
-            <td th:text="${check.testId}"/>
-            <td th:text="${check.limitOnTest} + ' ' + ${check.timeScale}"/>
-            <td th:text="${check.testInput}"/>
-            <td th:text="${check.testOutput}"/>
-        </tr>
-
-    </table>
+    <div class="panel">
+        <span class="button hidden"></span>
+        <div class="panel-heading">Check</div>
+    </div>
+    <div class="info-all">
+        <div id="check-test">
+            <div class="panel panel-default">
+                <div class="panel-heading"> Список тестовых наборов</div>
+                <table class="table check-table">
+                    <thead>
+                    <tr class="table_tit">
+                        <th>ID</th>
+                        <th>Ограничение по времени</th>
+                        <th>Входной набор</th>
+                        <th>Выходной набор</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="check" th:each="ch : ${check}">
+                        <td type="id" th:text="${ch.id}"/>
+                        <td type="time" th:text="${ch.time}"/>
+                        <td type="input" th:text="${ch.input}"/>
+                        <td type="output" th:text="${ch.output}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="check-result">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ответ метода Check</div>
+                <table class="table check-table">
+                    <thead>
+                    <tr class="table_tit">
+                        <th>ID</th>
+                        <th>Занятое время</th>
+                        <th>Итог</th>
+                        <th>Комментарий сервера</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="check-answer">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ответ метода Check</div>
+                <table class="table check-table">
+                    <thead>
+                    <tr class="table_tit">
+                        <th>Ответ пользователя</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script type="text/javascript">
+    var count = 0;
+    var ANT = new Object();
 
+    ANT.calculate = function () {
+        var result = Vlab.getResults();
+        $.ajax({
+            cache: false,
+            url: "getCalculate",
+            global: false,
+            type: "POST",
+            data: (
+            {
+                instructions: result,
+                condition: Vlab.getCondition()
+            }
+            ),
+            dataType: "text",
+            success: function (text) {
+                if (count==0){
+                    $("#calculate").css("display", "block");
+                    count++;
+                }
+                $("#calculate-answer").find("table tbody").append("<tr><td>"+result+"</td></tr>");
+                var json = JSON.parse(text);
+                $("#calculate-result").find("table tbody").append("<tr><td>"+json.code+"</td><td>"+json.text+"</td></tr>");
+                Vlab.calculateHandler(json.code);
+            }
+        });
+    }
+</script>
 </body>
 </html>

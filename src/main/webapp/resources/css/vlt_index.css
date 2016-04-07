@@ -1,83 +1,304 @@
-html, body {
-    z-index: 1;
+@font-face {
+    font-family: Glyphicons Halflings;
+    src: url(fonts/glyphicons-halflings-regular.ttf);
+}
+
+body {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+.vlt {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
 }
 
-.vlt{
+.title {
     width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-.title{
-    width: 100%;
-    font-family: Verdana;
     font-size: 30px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     margin-top: 10px;
-    }
-.vl_list{
-    width: 35%;
-    /*height: 100%;*/
-    /*display: inline-block;*/
+    margin-bottom: 30px;
 }
-.vl_current{
+
+.vl-list {
+    min-width: 550px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 50px;
+    margin-bottom: 50px;
+}
+
+.vl-current {
     width: 50%;
-    margin-top: 15px;
-    /*height: 100%;*/
-    /*display: inline-block;*/
+    min-width: 500px;
+    display: inline-block;
+    vertical-align: top;
 }
-.vl_list .title_list{
-    width: 100%;
-    font-family: Verdana;
-    font-size: 15px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    margin-top: 10px;
-    display: block;
-    position:relative;
+
+.panel-heading {
+    color: #434a54;
+    background-color: #e6e9ed;
+    border-color: #e6e9ed;
+    border-radius: 4px 4px 0 0;
+    -webkit-border-radius: 4px 4px 0 0;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
 }
-.vl_list .list_div{
+
+.table {
     width: 100%;
-    font-family: Verdana;
-    font-size: 15px;
-    text-align: center;
-    margin-top: 10px;
-    display: block;
-    padding-top: 20px;
-    position:relative;
-}
-#vl_table, #table_configuration, #table_start{
-    display: table;
-    width: 100%;
+    border-spacing: 0;
     border-collapse: collapse;
+    table-layout: fixed;
 }
-#vl_table td, #vl_table th, #table_configuration td, #table_configuration th, #table_start td, #table_start th{
-    padding: 5px;
-    border: 1px solid black;
+
+.list-div .table th:first-child {
+    width: 60%;
 }
-#vl_table .name{
-    width: auto;
+
+.table th, .table td {
+    padding: 9px;
+    line-height: 1.5;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
 }
-#vl_table .status{
-    width: 20%
+.table th {
+    text-align: left;
+    border-top: 2px solid #ddd;
 }
-#vl_table .commands{
-    width: 20%
+.table td{
+    word-wrap: break-word;
 }
-.list_div .upload_form{
+
+.button {
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Glyphicons Halflings';
+}
+
+.plusTd, .close {
+    float: right;
+    box-sizing: border-box;
+    font-size: 24px;
+    padding: 4.5px 15px;
+}
+
+.plusTd::before {
+    content: "\002b";
+}
+
+.close::before {
+    content: "\e014";
+}
+
+.run-vl {
+    margin-left: 5px;
+    margin-right: 20px;
+}
+
+.run-vl, .tune-vl, .start-vl, .hidden {
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+.run-vl::before, .start-vl::before {
+    content: "\e072";
+}
+
+.running button,
+.running button:active,
+.running button:focus {
+    border: 0;
+    background: none;
+    outline: none;
+    margin-left: 20%;
+}
+
+.tune-vl::before {
+    content: "\e136";
+}
+
+.settings button,
+.settings button:active,
+.settings button:focus {
+    border: 0;
+    background: none;
+    outline: none;
+    margin-left: 43%;
+    margin-top: 10px;
+}
+
+.save-vl {
+    box-sizing: border-box;
+    font-size: 35px;
+}
+
+.save-vl::before {
+    content: "\e172";
+}
+.hidden, .show{
+    float: right;
+    box-sizing: border-box;
+    font-size: 24px;
+    padding: 4.5px 15px;
+}
+.hidden::before{
+    content: "\e113";
+}
+.show::before{
+    content: "\e114";
+}
+
+.s-form {
+    display: none;
+    height: 200px;
+    width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.form-control {
+    color: #434a54;
+    border-color: #aab2bd;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    float: left;
+    margin-bottom: 0;
+}
+
+.form-control-tune {
+    margin-top: 20px;
+    color: #434a54;
+    height: 25px;
+    font-size: 14px;
+    border-color: #aab2bd;
+    padding: 6px 12px;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    margin-bottom: 0;
+}
+
+.settings label {
+    font-weight: 700;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.col-xs-6 {
+    margin-top: 10%;
+    margin-left: 20%;
+}
+
+.input-group-btn {
+    width: 1%;
+    vertical-align: middle;
+}
+
+.input-group:focus {
+    outline: none;
+}
+
+.btn {
+    display: inline-block;
+    height: 48px;
+    margin-left: -1px;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.btn-primary {
+    background-color: #3bafda;
+    border-color: #3bafda;
+}
+
+.running {
+    display: none;
+    height: auto;
+    width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.settings {
+    display: none;
+    height: 300px;
+    width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.import hr {
+    border: none;
+    color: #DDDDDD;
+    background-color: #DDDDDD;
+    height: 1px;
+}
+
+.import form {
+    margin-top: 30px;
+}
+
+.server-error {
+    width: 100%;
+    height: 100px;
+    color: rgba(232, 76, 61, 1);
+    margin-top: 5%;
+    font-size: 20px;
+    text-align: center;
+}
+
+.info-all{
+    display: block;
+    width: 100%;
+}
+#frame-info, #property, #generate-info, #generate-result, #check-test, #check-result, #check-answer, #calculate-result, #calculate-answer{
+    margin-top: 30px;
+    margin-left: 2%;
+    width: 46%;
+    min-width: 300px;
+    display: inline-block;
+}
+.table-frame, .property-table{
+    border-top: 1px solid #ddd;
+}
+.table-frame tr td:first-child, .property-table tr td:first-child, .generate-table tr td:first-child{
+    vertical-align: middle;
+    border-right: 1px solid #e6e9ed;
+    font-weight: bold;
+}
+#generate-result, #check-result{
     display: none;
 }
-.add_form #add_vl{
-    margin-top:30px;
-}
-.add_form .error{
+#calculate{
+    margin-top: 15px;
     display: none;
-    color: red;
+}
+#check{
+    margin-top: 15px;
+    margin-bottom: 50px;
 }

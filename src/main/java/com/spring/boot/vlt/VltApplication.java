@@ -51,19 +51,6 @@ public class VltApplication extends WebMvcConfigurerAdapter {
             container.setPort(8012);
         });
     }
-//    @Bean
-//    public ScriptTemplateConfigurer reactConfigurer() {
-//        ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
-////        configurer.setEngineName("nashorn");
-//        configurer.setScripts(
-//                "static/polyfill.js",
-//                "static/lib/js/ejs.min.js",
-//                "static/render.js",
-//                "static/output/bundle.js");
-//        configurer.setRenderFunction("render");
-//        configurer.setSharedEngine(false);
-//        return configurer;
-//    }
 
     public static void main(String[] args) {
         SpringApplication.run(VltApplication.class, args);
