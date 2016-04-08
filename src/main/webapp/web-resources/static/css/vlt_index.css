@@ -1,0 +1,83 @@
+html, body {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.vlt{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.title{
+    width: 100%;
+    font-family: Verdana;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 10px;
+    }
+.vl_list{
+    width: 35%;
+    /*height: 100%;*/
+    /*display: inline-block;*/
+}
+.vl_current{
+    width: 50%;
+    margin-top: 15px;
+    /*height: 100%;*/
+    /*display: inline-block;*/
+}
+.vl_list .title_list{
+    width: 100%;
+    font-family: Verdana;
+    font-size: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 10px;
+    display: block;
+    position:relative;
+}
+.vl_list .list_div{
+    width: 100%;
+    font-family: Verdana;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 10px;
+    display: block;
+    padding-top: 20px;
+    position:relative;
+}
+#vl_table, #table_configuration, #table_start{
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+#vl_table td, #vl_table th, #table_configuration td, #table_configuration th, #table_start td, #table_start th{
+    padding: 5px;
+    border: 1px solid black;
+}
+#vl_table .name{
+    width: auto;
+}
+#vl_table .status{
+    width: 20%
+}
+#vl_table .commands{
+    width: 20%
+}
+.list_div .upload_form{
+    display: none;
+}
+.add_form #add_vl{
+    margin-top:30px;
+}
+.add_form .error{
+    display: none;
+    color: red;
+}

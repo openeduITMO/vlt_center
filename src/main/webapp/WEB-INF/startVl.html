@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>VLT</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/vlt_index.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vlt_index.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.form.js}"></script>
+</head>
+<body>
+
+<div id="frame">
+    <h2>Кадр</h2>
+    <div>
+        <b>Задание</b>
+        <span th:text="${vlProperty.frame.data}"/>
+    </div>
+    <div>
+        <b>Вариант</b>
+        <span th:text="${vlProperty.generate.defaultText}"/>
+    </div>
+    <div>
+        <b>Виртуальный стенд</b>
+        <div id="jsLab"></div>
+        <div id="">
+            <input type="hidden" id="preGeneratedCode" name="preGeneratedCode" th:value="${vlProperty.generate.defaultText}"/>
+            <script type="text/javascript" src="../resources/lab1457958524686/tool/js/lib/t.js"></script>
+        </div>
+    </div>
+</div>
+<hr/>
+<div id="property">
+    <h2>Свойства</h2>
+    <table>
+        <tr>
+            <td>ID</td>
+            <td><span th:text="${vlProperty.frame.id}"/></td>
+        </tr>
+        <tr>
+            <td>Схема</td>
+            <td><span th:text="${vlProperty.frame.sheme}"/></td>
+        </tr>
+        <tr>
+            <td>Название кадра</td>
+            <td><span th:text="${vlProperty.frame.name}"/></td>
+        </tr>
+        <tr>
+            <td>Задание</td>
+            <td><span th:text="${vlProperty.frame.data}"/></td>
+        </tr>
+    </table>
+</div>
+<hr/>
+<div id="generate">
+    <h2>Generate</h2>
+    <table>
+        <tr>
+            <td>DefaultCode</td>
+            <td><span th:text="${vlProperty.generate.defaultCode}"/></td>
+        </tr>
+        <tr>
+            <td>DefaultText</td>
+            <td><span th:text="${vlProperty.generate.defaultText}"/></td>
+        </tr>
+        <tr>
+            <td>DeafaultInstructions</td>
+            <td><span th:text="${vlProperty.generate.deafaultInstructions}"/></td>
+        </tr>
+        <tr>
+            <td>Algorithm</td>
+            <td><span th:text="${vlProperty.generate.algorithm}"/></td>
+        </tr>
+    </table>
+</div>
+<div id="check">
+    <h2>Generate</h2>
+    <table>
+        <tr>
+            <td>ID</td>
+            <td>Ограничение по времени</td>
+            <td>Входной набор</td>
+            <td>Выходной набор</td>
+        </tr>
+        <tr th:each="check : ${vlProperty.check}">
+            <td th:text="${check.testId}"/>
+            <td th:text="${check.limitOnTest} + ' ' + ${check.timeScale}"/>
+            <td th:text="${check.testInput}"/>
+            <td th:text="${check.testOutput}"/>
+        </tr>
+
+    </table>
+</div>
+
+
+</body>
+</html>
