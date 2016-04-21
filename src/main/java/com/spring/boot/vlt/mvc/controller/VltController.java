@@ -3,8 +3,10 @@ package com.spring.boot.vlt.mvc.controller;
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,7 +31,7 @@ public class VltController {
         List<VirtLab> vlList = new ArrayList<>();
         try {
             File vlabs = new File(path);
-            if(vlabs.exists()){
+            if (vlabs.exists()) {
                 Files.walk(vlabs.toPath()).filter(p -> requestPathMatcher.matches(p)).forEach(
                         p -> {
                             vlList.add(new VirtLab(p.toFile()));
@@ -43,10 +45,7 @@ public class VltController {
     }
 
     @RequestMapping("/addVL")
-    public VirtLab addVl(@Valid VirtLab vl, BindingResult bindResult) {
-        if (bindResult.hasErrors()) {
-            return null;
-        }
+    public VirtLab addVl(@Valid VirtLab vl) {
         final String path = env.getProperty("paths.uploadedFiles");
         File vlDir = new File(path, "lab" + System.currentTimeMillis());
         while (vlDir.exists()) {
@@ -60,8 +59,8 @@ public class VltController {
         return vl;
     }
 
-    @RequestMapping("/getPropertyVl")
-    public VirtLab getPropertyVl(@RequestParam("name") String nameVl) {
+    @RequestMapping("/getPropertyVl/{name}")
+    public VirtLab getPropertyVl(@PathVariable("name") String nameVl) {
         final String path = env.getProperty("paths.uploadedFiles");
         File vlDir = new File(path, nameVl);
         return new VirtLab(new File(vlDir, "lab.desc"));
@@ -73,6 +72,31 @@ public class VltController {
         final String path = env.getProperty("paths.uploadedFiles");
         vl.save(path);
         return vl;
+    }
+
+    @RequestMapping(value = "/startVl/{dir}/img/{name}.{suffix}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<byte[]> getImg(@PathVariable("dir") String dir, @PathVariable("name") String name, @PathVariable("suffix") String suffix) throws IOException {
+        final String path = env.getProperty("paths.uploadedFiles");
+        final File img = new File(path + File.separator + dir + File.separator + "tool" + File.separator + "img", name + "." + suffix);
+        return getStatic(img);
+    }
+
+    @RequestMapping(value = "/VLabs/{dir}/tool/css/{d-l}/img/{name}.{suffix}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<byte[]> getImg2(@PathVariable("dir") String dir, @PathVariable("name") String name, @PathVariable("suffix") String suffix) throws IOException {
+        final String path = env.getProperty("paths.uploadedFiles");
+        final File img = new File(path + File.separator + dir + File.separator + "tool" + File.separator + "img", name + "." + suffix);
+        return getStatic(img);
+    }
+
+    private ResponseEntity<byte[]> getStatic(File img) throws IOException {
+        RandomAccessFile f = new RandomAccessFile(img, "r");
+        byte[] b = new byte[(int) f.length()];
+        f.readFully(b);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return new ResponseEntity<>(b, headers, HttpStatus.CREATED);
     }
 
 }

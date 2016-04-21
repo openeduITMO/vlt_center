@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div class="title">Среда тестирования виртуальных лабораторий</div>
+<div class="title-text">Среда тестирования виртуальных лабораторий</div>
 
 <div class="vlt">
     <div class="vl-list">
@@ -24,16 +24,15 @@
                 <table class="table">
                     <thead>
                     <th class="name">Имя</th>
-                    <th class="status">Статус</th>
                     <th class="commands">Команды</th>
                     </thead>
                     <tbody>
                     <tr th:each="vl : ${vlList}">
                         <td th:text="${vl.name}"/>
-                        <td>...</td>
                         <td>
                             <span class="button run-vl" th:attr="dirName=${vl.dirName}"/>
                             <span class="button tune-vl" th:attr="dirName=${vl.dirName}"/>
+                            <span class="button import-vl" th:attr="dirName=${vl.dirName}"/>
                         </td>
                     </tr>
                     </tbody>
@@ -51,27 +50,32 @@
                     <input id="name-vl" class="form-control input-group" type="text" placeholder="Название ВЛ"
                            value=""/>
                     <span class="input-group-btn">
-                        <button id="add-vl" class="btn btn-primary">Добавить</button>
+                        <button id="add-vl" class="btn-add btn-primary">Добавить</button>
                     </span>
                 </div>
             </div>
         </div>
         <div class="panel panel-default settings">
             <span class="button close"></span>
-            <div class="panel-heading">Свойства</div>
+            <div class="panel-heading">Настройка <span class="name-vl"></span></div>
+            <div class="panel-body"></div>
+        </div>
+        <div class="panel panel-default import">
+            <span class="button close"></span>
+            <div class="panel-heading">Импорт <span class="name-vl"></span></div>
             <div class="panel-body"></div>
         </div>
         <div class="panel panel-default running">
             <span class="button close"></span>
-            <div class="panel-heading">Запуск</div>
+            <div class="panel-heading">Запуск <span class="name-vl"></span></div>
             <div class="panel-body">
                 <table class="table">
                     <thead>
-                        <th class="name">ID</th>
-                        <th class="status">Схема</th>
-                        <th class="commands">Название</th>
-                        <th class="commands">Задание</th>
-                        <th class="commands">Запуск</th>
+                    <th class="name">ID</th>
+                    <th class="status">Схема</th>
+                    <th class="commands">Название</th>
+                    <th class="commands">Задание</th>
+                    <th class="commands">Запуск</th>
                     </thead>
                     <tbody>
 
@@ -83,6 +87,5 @@
 
     </div>
 </div>
-
 </body>
 </html>

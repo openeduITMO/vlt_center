@@ -1,5 +1,6 @@
 package com.spring.boot.vlt.mvc.model;
 
+import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -15,11 +16,20 @@ public class Trial {
     public Trial() {
     }
 
+    private VirtLab vl;
+    private boolean isConnect = true;
     private GeneratingResult generatingResult;
     private CalculatingResult calculatingResult;
     private List<ConditionForChecking> conditionsList;
-
     private String url;
+
+    public VirtLab getVl() {
+        return vl;
+    }
+
+    public void setVl(VirtLab vl) {
+        this.vl = vl;
+    }
 
     public GeneratingResult getGeneratingResult() {
         return generatingResult;
@@ -51,5 +61,13 @@ public class Trial {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isConnect() {
+        return isConnect;
+    }
+
+    public void setConnect(boolean connect) {
+        isConnect = connect;
     }
 }

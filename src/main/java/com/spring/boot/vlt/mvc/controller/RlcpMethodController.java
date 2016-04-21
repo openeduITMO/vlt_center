@@ -12,24 +12,22 @@ import rlcp.generate.GeneratingResult;
 import rlcp.generate.RlcpGenerateRequest;
 import rlcp.generate.RlcpGenerateRequestBody;
 import rlcp.generate.RlcpGenerateResponse;
-
-import java.net.UnknownHostException;
 import java.util.List;
 
 @RestController
-public class RlcpController {
+public class RlcpMethodController {
     @Autowired
     private Trial trial;
 
+
     @RequestMapping(value = "/getGenerate", method = RequestMethod.POST)
     public GeneratingResult getGenerate(@RequestParam("algorithm") String algorithm) {
+        trial.setConnect(true);
         RlcpGenerateRequestBody body = new RlcpGenerateRequestBody(algorithm);
         RlcpGenerateRequest rlcpGenerateRequest = body.prepareRequest(trial.getUrl());
         RlcpGenerateResponse rlcpResponse = null;
         try {
             rlcpResponse = rlcpGenerateRequest.execute();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,34 +36,48 @@ public class RlcpController {
         return result;
     }
 
-    @RequestMapping(value = "/getCalculate", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/repeat", method = RequestMethod.POST)
+    public GeneratingResult repeat(){
+        trial.setConnect(true);
+        return trial.getGeneratingResult();
+    }
+
+
+    @RequestMapping(value = "/getCalculate", method = RequestMethod.POST)
     public CalculatingResult getCalculate(@RequestParam("instructions") String instructions,
                                           @RequestParam("condition") String condition) {
-        RlcpCalculateRequestBody body = new RlcpCalculateRequestBody(condition, instructions, trial.getGeneratingResult());
-        RlcpCalculateRequest rlcpCalculateRequest = body.prepareRequest(trial.getUrl());
-        RlcpCalculateResponse rlcpResponse = null;
-        try {
-            rlcpResponse = rlcpCalculateRequest.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
+        CalculatingResult result = null;
+        if(trial.isConnect()){
+            RlcpCalculateRequestBody body = new RlcpCalculateRequestBody(condition, instructions, trial.getGeneratingResult());
+            RlcpCalculateRequest rlcpCalculateRequest = body.prepareRequest(trial.getUrl());
+            RlcpCalculateResponse rlcpResponse = null;
+            try {
+                rlcpResponse = rlcpCalculateRequest.execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            result = rlcpResponse.getBody().getCalculatingResult();
+            trial.setCalculatingResult(result);
         }
-        CalculatingResult result = rlcpResponse.getBody().getCalculatingResult();
-        trial.setCalculatingResult(result);
+
         return result;
     }
 
     @RequestMapping(value = "/getCheck", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public List<CheckingResult> getCheck(@RequestBody String instructions) {
-        RlcpCheckRequestBody rlcpRequestBody = new RlcpCheckRequestBody(
-                trial.getConditionsList(),
-                instructions,
-                trial.getGeneratingResult());
-        RlcpCheckRequest rlcpRequest = rlcpRequestBody.prepareRequest(trial.getUrl());
         RlcpCheckResponse rlcpResponse = null;
-        try {
-            rlcpResponse = rlcpRequest.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(trial.isConnect()) {
+            RlcpCheckRequestBody rlcpRequestBody = new RlcpCheckRequestBody(
+                    trial.getConditionsList(),
+                    instructions,
+                    trial.getGeneratingResult());
+            RlcpCheckRequest rlcpRequest = rlcpRequestBody.prepareRequest(trial.getUrl());
+            try {
+                rlcpResponse = rlcpRequest.execute();
+                trial.setConnect(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return rlcpResponse.getBody().getResults();
     }

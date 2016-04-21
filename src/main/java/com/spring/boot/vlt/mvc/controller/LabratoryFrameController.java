@@ -1,9 +1,9 @@
 package com.spring.boot.vlt.mvc.controller;
 
 import com.spring.boot.vlt.mvc.model.Trial;
-import com.spring.boot.vlt.mvc.model.frames.Generator;
 import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
+import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import rlcp.check.ConditionForChecking;
 import rlcp.generate.GeneratingResult;
-import rlcp.generate.RlcpGenerateRequestBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,10 +50,13 @@ public class LabratoryFrameController {
         return frames;
     }
 
-    @RequestMapping(value = "/startVl", method = RequestMethod.POST)
-    public ModelAndView startVl(@RequestParam("name") String nameVl, @RequestParam("frameId") String frameId) {
+    @RequestMapping(value = "/startVl/{name}/{frameId}", method = RequestMethod.GET)
+    public ModelAndView startVl(@PathVariable("name") String nameVl, @PathVariable("frameId") String frameId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("startVl");
+        VirtLab vl = new VirtLab(new File(new File(env.getProperty("paths.uploadedFiles"), nameVl), "lab.desc"));
+        modelAndView.addObject("nameVl", vl.getName());
+
         Document document = null;
         try {
             document = readLabratoryFame(nameVl);
@@ -81,6 +83,7 @@ public class LabratoryFrameController {
 
         trial.setUrl(readUrl(node.get()));
         trial.setConditionsList(checks);
+        trial.setVl(vl);
 
         return modelAndView;
     }
@@ -126,12 +129,6 @@ public class LabratoryFrameController {
                 node.selectSingleNode("LaboratoryTestInput/comment()").getText(),
                 node.selectSingleNode("LaboratoryTestOutput/comment()").getText()
         );
-//                new LaboratoryTest(
-//                Integer.parseInt(node.valueOf("@TestID")),
-//                Integer.parseInt(node.valueOf("@LimitOnTest")),
-//                node.valueOf("@TimeScale"),
-//                node.selectSingleNode("LaboratoryTestInput/comment()").getText(),
-//                node.selectSingleNode("LaboratoryTestOutput/comment()").getText());
     }
 
     private Optional<Node> findFrameById(List<Node> frameIndex, String frameId) {

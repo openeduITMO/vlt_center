@@ -1,7 +1,4 @@
 .idea/
+.mvn/
 *.iml
-build/
-out/
-toVLT/
-temp/
-pure/
+target/

@@ -17,8 +17,6 @@ public class VirtLab {
     @Size(min = 1, message = "Введите название ВЛ")
     private String name;
     private String dirName;
-    private int width = 400;
-    private int height = 800;
     static String propertyFileName = "lab.desc";
 
     public VirtLab() {
@@ -35,22 +33,6 @@ public class VirtLab {
         readFile(file);
         dirName = file.getParentFile().getName();
 
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     public String getDirName() {
@@ -79,10 +61,6 @@ public class VirtLab {
                         name = s.substring(5);
                     } else if (s.matches("dirName=(.*)")) {
                         dirName = s.substring(8);
-                    } else if (s.matches("width=(.*)")) {
-                        width = Integer.parseInt(s.substring(6));
-                    } else if (s.matches("height=(.*)")) {
-                        height = Integer.parseInt(s.substring(7));
                     }
                 }
             } finally {
@@ -99,9 +77,7 @@ public class VirtLab {
                 new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new Date()) + "\n" +
                 "name=" + name + "\n" +
 
-                "dirName=" + dirName + "\n" +
-                "width=" + width + "\n" +
-                "height=" + height;
+                "dirName=" + dirName;
     }
 
 
