@@ -25,7 +25,7 @@ public class VltApplication extends WebMvcConfigurerAdapter {
 
     @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/vlabs/**").addResourceLocations("/VLabs/");
+        registry.addResourceHandler("/VLabs/**").addResourceLocations("file:VLabs/").setCachePeriod(0);
     }
 
     @Bean
