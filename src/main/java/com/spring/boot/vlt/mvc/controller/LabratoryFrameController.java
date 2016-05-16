@@ -54,7 +54,7 @@ public class LabratoryFrameController {
     public ModelAndView startVl(@PathVariable("name") String nameVl, @PathVariable("frameId") String frameId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("startVl");
-        VirtLab vl = new VirtLab(new File(new File(env.getProperty("paths.uploadedFiles"), nameVl), "lab.desc"));
+        VirtLab vl = new VirtLab(new File(new File(System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles"), nameVl), "lab.desc"));
         modelAndView.addObject("nameVl", vl.getName());
 
         Document document = null;
@@ -142,7 +142,7 @@ public class LabratoryFrameController {
     }
 
     private StaticFile readStatic(String nameDirVl, StaticType type) {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
         StaticFile staticFile = new StaticFile(nameDirVl);
         File st = new File(path + File.separator + nameDirVl, "tool" + File.separator + type);
         try {

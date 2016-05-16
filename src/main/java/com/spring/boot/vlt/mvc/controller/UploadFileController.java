@@ -19,7 +19,7 @@ public class UploadFileController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public String uploadFile(
             @RequestParam("uploadfile") MultipartFile uploadfile, @RequestParam("nameDir") String dir) {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
         File vlDir = new File(path, dir);
         String name = uploadfile.getOriginalFilename();
         name.lastIndexOf('.');

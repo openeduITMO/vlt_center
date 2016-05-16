@@ -14,38 +14,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 @SpringBootApplication
-public class VltApplication extends WebMvcConfigurerAdapter {
-    @Autowired
-    private Environment env;
-
-    @Bean
-    public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
-        return new ResourceUrlEncodingFilter();
-    }
-
-    @Override
-        public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/VLabs/**").addResourceLocations("file:VLabs/").setCachePeriod(0);
-    }
-
-    @Bean
-    public ITemplateResolver defaultTemplateResolver() {
-        TemplateResolver resolver = new FileTemplateResolver();
-        resolver.setSuffix(".html");
-        resolver.setPrefix("src/main/resources/templates/");
-        resolver.setTemplateMode("HTML5");
-        resolver.setCharacterEncoding("UTF-8");
-        resolver.setCacheable(false);
-        return resolver;
-    }
-
-    @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return (container -> {
-            container.setPort(8012);
-        });
-    }
-
+public class VltApplication{
     public static void main(String[] args) {
         SpringApplication.run(VltApplication.class, args);
     }

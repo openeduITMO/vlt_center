@@ -12,7 +12,7 @@ jQuery(document).ready(function () {
   });
 
   $('body').on("click", "#back-btn", function () {
-    window.location.href = "/"
+    window.location.href = "/VLT/"
   });
 
   $('body').on("click", "#check-status-server-btn", function () {
@@ -73,7 +73,7 @@ function checkServer() {
 
 function checkServerStatus() {
   $.ajax({
-    url: "/getServerStatus",
+    url: "/VLT/getServerStatus",
     type: "POST",
     data: {},
     success: function (data) {
@@ -92,7 +92,7 @@ function checkServerStatus() {
 function runInteriorServer() {
   $(".run-server-button").attr("class", "run-server-button");
   $.ajax({
-    url: "/runInteriorServer",
+    url: "/VLT/runInteriorServer",
     type: "POST",
     data: {},
     success: function (data) {
@@ -105,7 +105,7 @@ function runInteriorServer() {
 function stopInteriorServer() {
   $(".run-server-button").attr("class", "run-server-button");
   $.ajax({
-    url: "/stopInteriorServer",
+    url: "/VLT/stopInteriorServer",
     type: "POST",
     data: {},
     success: function (data) {
@@ -117,7 +117,7 @@ function stopInteriorServer() {
 
 function generate() {
   $.ajax({
-    url: "/getGenerate",
+    url: "/VLT/getGenerate",
     type: "POST",
     data: {
       algorithm: $("#algorithm").html()
@@ -137,6 +137,7 @@ function generate() {
         "<td>Instructions</td>" +
         "<td><div>" + data.instructions + "</div></td>" +
         "</tr>");
+      $("#generate_text .text").html("" + data.text);
       Vlab.init();
     },
     error: function () {
@@ -147,7 +148,7 @@ function generate() {
 
 function repeat() {
   $.ajax({
-    url: "/repeat",
+    url: "/VLT/repeat",
     type: "POST",
     data: {},
     success: function (data) {
@@ -174,13 +175,14 @@ function repeat() {
 function check() {
   var result = Vlab.getResults();
   $.ajax({
-    url: "/getCheck",
+    url: "/VLT/getCheck",
     type: "POST",
     dataType: 'json',
     contentType: 'application/json',
     mimeType: 'application/json',
     data: result,
     success: function (data) {
+      $("#previousSolution").val(result);
       $(".refresh-btn").css("display", "none");
       $(".check-btn").css("display", "none");
       $("#start-btn-start").attr("id", "start-btn");

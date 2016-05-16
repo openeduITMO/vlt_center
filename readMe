@@ -1,0 +1,13 @@
+--установить библиотеку в локальный maven-репозиторий
+mvn install:install-file -Dfile=E:\rlcp.jar -DgroupId=org.me -DartifactId=rlcp -Dversion=1.0 -Dpackaging=jar
+
+--собрать проект
+mvn package
+
+--настройка кодировки
+java -jar -Dfile.encoding=utf-8 vlt.jar
+
+
+pidof java
+-- return index
+kill index

@@ -40,6 +40,7 @@ public class RlcpServerController {
     @RequestMapping(value = "/runInteriorServer", method = RequestMethod.POST)
     public ResponseEntity<String> runInteriorServer() {
         File file = new File(
+                System.getProperty("user.dir")  + File.separator +
                 env.getProperty("paths.uploadedFiles") +
                 File.separator + trial.getVl().getDirName() + File.separator + "server");
         if (file.exists()) {

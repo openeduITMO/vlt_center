@@ -13,11 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.PathMatcher;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.nio.file.Files.*;
 
 @RestController
 public class VltController {
@@ -26,17 +26,20 @@ public class VltController {
 
     @RequestMapping("/")
     public ModelAndView index() {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
         PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");
         List<VirtLab> vlList = new ArrayList<>();
         try {
-            File vlabs = new File(path);
-            if (vlabs.exists()) {
-                Files.walk(vlabs.toPath()).filter(p -> requestPathMatcher.matches(p)).forEach(
+            Path vlabs = Paths.get(path);
+//            File vlabs = new File(path);
+            if (exists(vlabs)) {
+                walk(vlabs).filter(p -> requestPathMatcher.matches(p)).forEach(
                         p -> {
                             vlList.add(new VirtLab(p.toFile()));
                         }
                 );
+            } else{
+                System.out.println(vlabs.toAbsolutePath() + " is not exist!");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +49,7 @@ public class VltController {
 
     @RequestMapping("/addVL")
     public VirtLab addVl(@Valid VirtLab vl) {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
         File vlDir = new File(path, "lab" + System.currentTimeMillis());
         while (vlDir.exists()) {
             vlDir = new File(path, "lab" + System.currentTimeMillis());
@@ -61,15 +64,16 @@ public class VltController {
 
     @RequestMapping("/getPropertyVl/{name}")
     public VirtLab getPropertyVl(@PathVariable("name") String nameVl) {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
         File vlDir = new File(path, nameVl);
         return new VirtLab(new File(vlDir, "lab.desc"));
     }
 
-    @RequestMapping(value = "/savePropertyVl", method = RequestMethod.POST)
+    @RequestMapping(value = "/savePropertyVl/{dir}", method = RequestMethod.POST)
     @ResponseBody
-    public VirtLab savePropertyVl(@Valid VirtLab vl, BindingResult bindResult) {
-        final String path = env.getProperty("paths.uploadedFiles");
+    public VirtLab savePropertyVl(@Valid VirtLab vl, @PathVariable("dir") String dir, BindingResult bindResult) {
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
+        vl.setDirName(dir);
         vl.save(path);
         return vl;
     }
@@ -77,7 +81,7 @@ public class VltController {
     @RequestMapping(value = "/startVl/{dir}/img/{name}.{suffix}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<byte[]> getImg(@PathVariable("dir") String dir, @PathVariable("name") String name, @PathVariable("suffix") String suffix) throws IOException {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
         final File img = new File(path + File.separator + dir + File.separator + "tool" + File.separator + "img", name + "." + suffix);
         return getStatic(img);
     }
@@ -85,7 +89,7 @@ public class VltController {
     @RequestMapping(value = "/VLabs/{dir}/tool/css/{d-l}/img/{name}.{suffix}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<byte[]> getImg2(@PathVariable("dir") String dir, @PathVariable("name") String name, @PathVariable("suffix") String suffix) throws IOException {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
         final File img = new File(path + File.separator + dir + File.separator + "tool" + File.separator + "img", name + "." + suffix);
         return getStatic(img);
     }

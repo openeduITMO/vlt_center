@@ -3,14 +3,14 @@
 <head>
     <title>VLT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" th:href="@{/css/bootflat.css}"/>
-    <link rel="stylesheet" th:href="@{/css/vlt_index.css}"/>
-    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{/js/vl_test.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.form.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.fs.selecter.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.fs.stepper.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/icheck.min.js}"></script>
+    <link rel="stylesheet" href="/VLT/css/bootflat.css"/>
+    <link rel="stylesheet" href="/VLT/css/vlt_index.css"/>
+    <script type="text/javascript" src="/VLT/js/jquery.js"></script>
+    <script type="text/javascript" src="/VLT/js/vl_test.js"></script>
+    <script type="text/javascript" src="/VLT/js/jquery.form.js"></script>
+    <script type="text/javascript" src="/VLT/js/jquery.fs.selecter.min.js"></script>
+    <script type="text/javascript" src="/VLT/js/jquery.fs.stepper.min.js"></script>
+    <script type="text/javascript" src="/VLT/js/icheck.min.js"></script>
 </head>
 <body>
 <div class="start">
@@ -34,8 +34,9 @@
         <span id="repeat-btn" class="button repeat-btn" data="Повторить с текущим вариантом"></span>
         <span id="refresh-btn" class="button refresh-btn" data="Перезапустить с новым вариантом"></span>
     </div>
-
-
+</div>
+<div id="generate_text">
+    Задание: <span class="text" th:text="${generate.text}"></span>
 </div>
 <div id="jsLab"></div>
 
@@ -89,15 +90,16 @@
     <input type="hidden" id="preGeneratedCode" name="preGeneratedCode"
            th:value="${generate.text}"/>
     <input type="hidden" value="calcfake" id="calculatedCode"/>
+    <input type="hidden" value="calcfake" id="calculatedText"/>
     <input type="hidden" value="prevsolfake" id="previousSolution"/>
     <script type="text/javascript" th:each="jsFile: ${js.lib}"
-            th:src="'/VLabs/'+${js.dirName}+'/tool/js/lib/'+${jsFile}"></script>
+            th:src="'/VLT/VLabs/'+${js.dirName}+'/tool/js/lib/'+${jsFile}"></script>
     <script type="text/javascript" th:each="jsFile: ${js.dev}"
-            th:src="'/VLabs/'+${js.dirName}+'/tool/js/dev/'+${jsFile}"></script>
+            th:src="'/VLT/VLabs/'+${js.dirName}+'/tool/js/dev/'+${jsFile}"></script>
     <link rel="stylesheet" th:each="cssFile: ${css.lib}"
-          th:href="'/VLabs/'+${css.dirName}+'/tool/css/lib/'+${cssFile}"/>
+          th:href="'/VLT/VLabs/'+${css.dirName}+'/tool/css/lib/'+${cssFile}"/>
     <link rel="stylesheet" th:each="cssFile: ${css.dev}"
-          th:href="'/VLabs/'+${css.dirName}+'/tool/css/dev/'+${cssFile}"/>
+          th:href="'/VLT/VLabs/'+${css.dirName}+'/tool/css/dev/'+${cssFile}"/>
     <script type="text/javascript">
         $(document).ready(function () {
             Vlab.init();
@@ -149,28 +151,23 @@
         <div class="panel-heading">Calculate</div>
     </div>
     <div class="info-all">
-        <div id="calculate-result">
+        <div id="calculate-answer">
             <div class="panel panel-default">
-                <div class="panel-heading">Ответ метода Check</div>
+                <div class="panel-heading">Ответ пользователя</div>
                 <table class="table check-table">
-                    <thead>
-                    <tr class="table_tit">
-                        <th>Code</th>
-                        <th>Text</th>
-                    </tr>
-                    </thead>
                     <tbody>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div id="calculate-answer">
+        <div id="calculate-result">
             <div class="panel panel-default">
-                <div class="panel-heading">Ответ метода Check</div>
+                <div class="panel-heading">Ответ метода Calculate</div>
                 <table class="table check-table">
                     <thead>
                     <tr class="table_tit">
-                        <th>Ответ пользователя</th>
+                        <th>Code</th>
+                        <th>Text</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -251,7 +248,7 @@
         var result = Vlab.getResults();
         $.ajax({
             cache: false,
-            url: "/getCalculate",
+            url: "/VLT/getCalculate",
             global: false,
             type: "POST",
             data: (
@@ -262,6 +259,7 @@
             ),
             dataType: "text",
             success: function (text) {
+
                 if (count == 0) {
                     $("#calculate").css("display", "block");
                     count++;
@@ -269,6 +267,8 @@
                 $("#calculate-answer").find("table tbody").append("<tr><td>" + result + "</td></tr>");
                 var json = JSON.parse(text);
                 $("#calculate-result").find("table tbody").append("<tr><td>" + json.code + "</td><td>" + json.text + "</td></tr>");
+                $("#calculatedCode").val(json.code);
+                $("#calculatedText").val(json.text);
                 Vlab.calculateHandler(json.code);
             },
             error: function (){

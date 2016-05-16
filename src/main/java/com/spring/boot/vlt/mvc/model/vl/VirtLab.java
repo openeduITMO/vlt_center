@@ -20,8 +20,8 @@ public class VirtLab {
     static String propertyFileName = "lab.desc";
 
     public VirtLab() {
-        name = "";
-        dirName = "";
+//        name = "";
+//        dirName = "";
     }
 
     public VirtLab(String name, String dirName) {

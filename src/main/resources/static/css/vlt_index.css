@@ -38,6 +38,13 @@ body, html {
     vertical-align: top;
 }
 
+#generate_text{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 .panel-heading {
     color: #434a54;
     background-color: #e6e9ed;

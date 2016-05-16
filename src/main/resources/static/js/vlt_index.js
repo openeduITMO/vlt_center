@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
 
   $('body').on("click", "#add-vl", function () {
     $.ajax({
-      url: "/addVL",
+      url: "/VLT/addVL",
       type: "POST",
       data: "name=" + $("#name-vl").val(),
       success: function (data) {
@@ -42,7 +42,7 @@ jQuery(document).ready(function () {
 
     $(".running").find($(".panel-heading")).find($(".name-vl")).html("\"" + currentTr.find('td').first().html() + "\"");
     var vlName = $(this).attr("dirName");
-    $.post("/getLabratoryFame?name=" + vlName, function (data) {
+    $.post("/VLT/getLabratoryFame?name=" + vlName, function (data) {
       if (data.length != 0) {
         $.each(data, function (key, val) {
           $(".running").find($(".panel-body")).find("table tbody").append("<tr>" +
@@ -51,7 +51,7 @@ jQuery(document).ready(function () {
             "<td>" + val.name + "</td>" +
             "<td>" + val.data + "</td>" +
             "<td>" +
-            "<form method='get' action='startVl/" + vlName + "/" + val.id + "'>" +
+            "<form method='get' action='/VLT/startVl/" + vlName + "/" + val.id + "'>" +
             "<button><span class='button start-vl'/></button>" +
             "</form></td></tr>");
         });
@@ -70,7 +70,7 @@ jQuery(document).ready(function () {
 
     $(".import").find($(".panel-heading")).find($(".name-vl")).html("\"" + currentTr.find('td').first().html() + "\"");
     var vlName = $(this).attr("dirName");
-    $(".import").find($(".panel-body")).append("<form id='upload_form' method='post' enctype='multipart/form-data' action='/uploadFile?nameDir=" + vlName + "'>" +
+    $(".import").find($(".panel-body")).append("<form id='upload_form' method='post' enctype='multipart/form-data' action='/VLT/uploadFile?nameDir=" + vlName + "'>" +
       "<div class='uploader'>" +
       "<label for='uploader' data-file='Выберите файл'></label>" +
       "<input type='file' name='uploadfile' id='uploader'/>" +
@@ -92,12 +92,12 @@ jQuery(document).ready(function () {
     var currentTr = $(this).parent().parent();
     $(".settings").find($(".panel-heading")).find($(".name-vl")).html("\"" + currentTr.find('td').first().html() + "\"");
     var vlName = $(this).attr("dirName");
-    $.post("/getPropertyVl/" + vlName, function (data) {
+    $.post("/VLT/getPropertyVl/" + vlName, function (data) {
       $(".settings").find($(".panel-body")).html("");
 
 
       if (data.length != 0) {
-        $(".settings").find($(".panel-body")).append("<form id='save-property-vl' method='post' action='/savePropertyVl'>" +
+        $(".settings").find($(".panel-body")).append("<form id='save-property-vl' method='post' action='/VLT/savePropertyVl/" + data.dirName + "'>" +
           "<table><tr><td><label>Название лаборатори</label></td>" +
           "<td><input class='form-control-tune' id='name-current-vl' name='name' value='" + data.name + "'/></td></tr>" +
           "<tr><td><label>Название каталога</label></td>" +
