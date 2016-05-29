@@ -6,6 +6,19 @@ jQuery(document).ready(function () {
     }
   });
 
+  $('body').on("click", "#setting-server-btn", function () {
+    if ($('.settings-servers').css('display') == 'none') {
+      getServersList();
+      $('.settings-servers').css('display', 'inline-block');
+    } else {
+      $('.settings-servers').css('display', 'none');
+    }
+  });
+
+  $('body').on("click", "#update-btn", function () {
+    getServersList();
+  });
+
   $('body').on("click", "#add-vl", function () {
     $.ajax({
       url: "/VLT/addVL",
@@ -17,7 +30,6 @@ jQuery(document).ready(function () {
           $('.s-form').css("display", "none");
           $(".list-div").find($(".table")).append("<tr>" +
             "<td>" + data.name + "</td>" +
-              //"<td>...</td>" +
             "<td>" +
             "<span class='button run-vl' dirName='" + data.dirName + "'/>" +
             "<span class='button tune-vl' dirName='" + data.dirName + "'/>" +
@@ -109,7 +121,6 @@ jQuery(document).ready(function () {
           currentTr.children().first().html(data.name);
           $(".settings").css("display", "none");
           $(".settings").find($(".panel-body")).html("");
-          //$(".import").html("");
         });
       } else {
         $(".settings").append("<div class='server-error'>Не найден файл конфигурации ВЛ (lab.desc)</div>")
@@ -143,7 +154,31 @@ jQuery(document).ready(function () {
     $('.import').find($(".panel-body")).find("table tbody").html("");
   });
 
+  $('body').on("click", "#interior-stop-run", function () {
+    stopInteriorServer($(this));
+  });
+
+
 });
+
+function getServersList() {
+  $.ajax({
+    dataType: "json",
+    url: "/VLT/getServersList",
+    type: "POST",
+    data: {},
+    success: function (data) {
+      $('#table-servers tbody').html('');
+      $.each(data, function (key, val) {
+        $('#table-servers tbody').append("<tr>" +
+          "<td>" + key.replace(/[\n\r]/g, ' ').split('name=')[1].split(' dirName')[0] + "</td>" +
+          "<td>" + val + "</td>" +
+          "<td><span id='interior-stop-run' class='button interior-stop-btn' data='Остановить сервер' url-server='" + val + "'></span></td>" +
+          "</tr>");
+      });
+    }
+  });
+}
 
 function clearSettingsForm() {
   $(".running").css("display", "none");
@@ -154,4 +189,21 @@ function clearSettingsForm() {
   $(".import").find($(".panel-body")).find("table tbody").html("");
   $('.s-form').css("display", "none");
   $('.s-form').find($("#name-vl")).val("");
+};
+
+function stopInteriorServer(btn) {
+  $(".run-server-button").attr("class", "run-server-button");
+  $.ajax({
+    url: "/VLT/stopInteriorServer",
+    type: "POST",
+    data: {
+      url: btn.attr("url-server"),
+    },
+    success: function (data) {
+      btn.parent().parent().remove()
+    },
+    error: function () {
+
+    }
+  });
 }

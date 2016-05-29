@@ -1,91 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>VLT</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="css/bootflat.css"/>
-    <link rel="stylesheet" href="css/vlt_index.css"/>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/vlt_index.js"></script>
-    <script type="text/javascript" src="js/jquery.form.js"></script>
-    <script type="text/javascript" src="js/jquery.fs.selecter.min.js"></script>
-    <script type="text/javascript" src="js/jquery.fs.stepper.min.js"></script>
+  <title>VLT</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" href="css/bootflat.css"/>
+  <link rel="stylesheet" href="css/vlt_index.css"/>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/vlt_index.js"></script>
+  <script type="text/javascript" src="js/jquery.form.js"></script>
+  <script type="text/javascript" src="js/jquery.fs.selecter.min.js"></script>
+  <script type="text/javascript" src="js/jquery.fs.stepper.min.js"></script>
 </head>
 <body>
 
-<div class="title-text">Среда тестирования виртуальных лабораторий</div>
+<div class="title-text">
+  Среда тестирования виртуальных лабораторий
+  <span id="setting-server-btn" class="button setting-server-btn" data="Список серверов"></span>
+</div>
 
 <div class="vlt">
-    <div class="vl-list">
-        <div class="list-div">
-            <div class="panel panel-default">
-                <span class="button plusTd"></span>
-                <div class="panel-heading">Список виртуальных лабораторий</div>
-                <table class="table">
-                    <thead>
-                    <th class="name">Имя</th>
-                    <th class="commands">Команды</th>
-                    </thead>
-                    <tbody>
-                    <tr th:each="vl : ${vlList}">
-                        <td th:text="${vl.name}"/>
-                        <td>
-                            <span class="button run-vl" th:attr="dirName=${vl.dirName}"/>
-                            <span class="button tune-vl" th:attr="dirName=${vl.dirName}"/>
-                            <span class="button import-vl" th:attr="dirName=${vl.dirName}"/>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <div class="vl-list">
+    <div class="list-div">
+      <div class="panel panel-default">
+        <span class="button plusTd"></span>
+        <div class="panel-heading">Список виртуальных лабораторий</div>
+        <table class="table">
+          <thead>
+          <th class="name">Имя</th>
+          <th class="commands">Команды</th>
+          </thead>
+          <tbody>
+          <tr th:each="vl : ${vlList}">
+            <td th:text="${vl.name}"/>
+            <td>
+              <span class="button run-vl" th:attr="dirName=${vl.dirName}"/>
+              <span class="button tune-vl" th:attr="dirName=${vl.dirName}"/>
+              <span class="button import-vl" th:attr="dirName=${vl.dirName}"/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-servers">
+    <div class="">
+      <div class="panel panel-default">
+        <span id="update-btn" class="button update-btn" data="Обновить"></span>
+        <div class="panel-heading">Список запущенных серверов</div>
+        <table class="table" id="table-servers">
+          <thead>
+          <tr class="table_tit">
+            <th>Название</th>
+            <th>URL</th>
+            <th>Остановить сервер</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="vl-current">
-        <div class="panel panel-default s-form">
-            <span class="button close"></span>
-            <div class="panel-heading">Добавить новую ВЛ</div>
-            <div class="panel-body">
-                <div class="add-form col-xs-6">
-                    <input id="name-vl" class="form-control input-group" type="text" placeholder="Название ВЛ"
-                           value=""/>
+  </div>
+
+  <div class="vl-current">
+    <div class="panel panel-default s-form">
+      <span class="button close"></span>
+      <div class="panel-heading">Добавить новую ВЛ</div>
+      <div class="panel-body">
+        <div class="add-form col-xs-6">
+          <input id="name-vl" class="form-control input-group" type="text" placeholder="Название ВЛ"
+                 value=""/>
                     <span class="input-group-btn">
                         <button id="add-vl" class="btn-add btn-primary">Добавить</button>
                     </span>
-                </div>
-            </div>
         </div>
-        <div class="panel panel-default settings">
-            <span class="button close"></span>
-            <div class="panel-heading">Настройка <span class="name-vl"></span></div>
-            <div class="panel-body"></div>
-        </div>
-        <div class="panel panel-default import">
-            <span class="button close"></span>
-            <div class="panel-heading">Импорт <span class="name-vl"></span></div>
-            <div class="panel-body"></div>
-        </div>
-        <div class="panel panel-default running">
-            <span class="button close"></span>
-            <div class="panel-heading">Запуск <span class="name-vl"></span></div>
-            <div class="panel-body">
-                <table class="table">
-                    <thead>
-                    <th class="name">ID</th>
-                    <th class="status">Схема</th>
-                    <th class="commands">Название</th>
-                    <th class="commands">Задание</th>
-                    <th class="commands">Запуск</th>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
+      </div>
     </div>
+    <div class="panel panel-default settings">
+      <span class="button close"></span>
+      <div class="panel-heading">Настройка <span class="name-vl"></span></div>
+      <div class="panel-body"></div>
+    </div>
+    <div class="panel panel-default import">
+      <span class="button close"></span>
+      <div class="panel-heading">Импорт <span class="name-vl"></span></div>
+      <div class="panel-body"></div>
+    </div>
+    <div class="panel panel-default running">
+      <span class="button close"></span>
+      <div class="panel-heading">Запуск <span class="name-vl"></span></div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+          <th class="name">ID</th>
+          <th class="status">Схема</th>
+          <th class="commands">Название</th>
+          <th class="commands">Задание</th>
+          <th class="commands">Запуск</th>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>
 </body>
 </html>

@@ -1,7 +1,8 @@
 jQuery(document).ready(function () {
-  $('body').on("click", ".toggle", function () {
-    checkServer();
-  });
+
+  //$('body').on("click", ".toggle", function () {
+  //  checkServer();
+  //});
 
   $('body').on("click", "#start-btn", function () {
     generate();
@@ -24,7 +25,7 @@ jQuery(document).ready(function () {
   });
 
   $('body').on("click", "#interior-stop-run", function () {
-    stopInteriorServer();
+    stopInteriorServer($("#url-server").val());
   });
 
   $('body').on("click", "#repeat-btn", function () {
@@ -49,7 +50,9 @@ jQuery(document).ready(function () {
 
 });
 
-function checkServer() {
+var first_load = true;
+
+function setCheckBox(){
   $(".run-server-button").attr("class", "run-server-button");
   $('.server-status').html("");
   if ($('#check-checkbox').prop("checked")) {
@@ -61,14 +64,33 @@ function checkServer() {
       "</div>"
     );
   } else {
-    stopInteriorServer();
     $('.server-status').append(
       "<div class='server-check'><span id='check-status-server-btn' class='button check-status-server-btn' data='Проверить статус сервера'></span>" +
       "<p>Внешний сервер</p>" +
       "</div>"
     );
-    checkServerStatus();
   }
+  checkServerStatus();
+}
+
+function checkServer() {
+  if (first_load) {
+    checkTypeServer();
+    first_load = false;
+  } else{
+
+  }
+}
+
+function checkTypeServer() {
+  $.ajax({
+    url: "/VLT/getTypeServer",
+    type: "POST",
+    data: {},
+    success: function (data) {
+      isInteriorServer(data);
+    }
+  });
 }
 
 function checkServerStatus() {
@@ -77,40 +99,70 @@ function checkServerStatus() {
     type: "POST",
     data: {},
     success: function (data) {
-      $("#check-status-server-btn").css("color", "green");
-      $("#check-status-server-btn").parent().find("p").detach();
-      $("#check-status-server-btn").parent().append("<p class='success'>Внешний сервер запушен</p>");
+      if (data.responseText=="true" || data==true) {
+        setStyleForRunningInteriorServer();
+      } else {
+        $("#check-status-server-btn").css("color", "green");
+        $("#check-status-server-btn").parent().find("p").detach();
+        $("#check-status-server-btn").parent().append("<p class='success'>Внешний сервер запушен</p>");
+      }
     },
     error: function (data) {
-      $("#check-status-server-btn").css("color", "red");
-      $("#check-status-server-btn").parent().find("p").detach();
-      $("#check-status-server-btn").parent().append("<p class='error'>Запустите внешний сервер по адресу " + data.responseText + "</p>");
-    }
+      if (data.responseText=="true" || data==true) {
+        setStyleForStoppedInteriorServer();
+      } else {
+        $("#check-status-server-btn").css("color", "red");
+        $("#check-status-server-btn").parent().find("p").detach();
+        $("#check-status-server-btn").parent().append("<p class='error'>Запустите внешний сервер по адресу " + $("#url-server").val() + "</p>");
+      }
+    },
   });
+}
+
+function isInteriorServer(type) {
+  if (type) {
+    $('#check-checkbox').prop("checked", true);
+  } else {
+    $('#check-checkbox').prop("checked", false);
+  }
+  setCheckBox();
+
+}
+
+function setStyleForRunningInteriorServer() {
+  $(".start-btn").css("color", "#434a54");
+  $("#interior-start-btn").attr("id", "interior-start-run");
+  $("#interior-stop-btn").attr("id", "interior-stop-run");
+}
+
+function setStyleForStoppedInteriorServer() {
+  $("#interior-start-run").attr("id", "interior-start-btn");
+  $("#interior-stop-run").attr("id", "interior-stop-btn");
 }
 
 function runInteriorServer() {
   $(".run-server-button").attr("class", "run-server-button");
+  $(".start-btn").css("color", "#A7A7A7");
   $.ajax({
     url: "/VLT/runInteriorServer",
     type: "POST",
     data: {},
     success: function (data) {
-      $("#interior-start-btn").attr("id", "interior-start-run");
-      $("#interior-stop-btn").attr("id", "interior-stop-run");
+      setStyleForRunningInteriorServer();
     },
   });
 }
 
-function stopInteriorServer() {
+function stopInteriorServer(url) {
   $(".run-server-button").attr("class", "run-server-button");
   $.ajax({
     url: "/VLT/stopInteriorServer",
     type: "POST",
-    data: {},
+    data: {
+      url: url
+    },
     success: function (data) {
-      $("#interior-start-run").attr("id", "interior-start-btn");
-      $("#interior-stop-run").attr("id", "interior-stop-btn");
+      setStyleForStoppedInteriorServer();
     },
   });
 }

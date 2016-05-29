@@ -91,25 +91,33 @@ body, html {
     word-wrap: break-word;
 }
 
-.vlt .button, #generate .button, #check .button, #calculate .button, .start .button, #frame .button {
+.vlt .button, #generate .button, #check .button, #calculate .button, .start .button, #frame .button, .title-text .button {
     text-align: center;
     cursor: pointer;
     font-family: 'Glyphicons Halflings';
 }
 
-.vlt .button:hover, #generate .button:hover, #check .button:hover, #calculate:hover .button:hover, #frame .button:hover {
+.vlt .button:hover, .title-text .button:hover, #generate .button:hover, #check .button:hover, #calculate:hover .button:hover, #frame .button:hover {
     color: #3bafda;
 }
 
-.plusTd, .close {
+.plusTd, .close, .setting-server-btn, .update-btn {
     float: right;
     box-sizing: border-box;
     font-size: 24px;
     padding: 4.5px 15px;
 }
 
+.setting-server-btn{
+    margin-right: 100px;
+}
+
 .plusTd::before {
     content: "\002b";
+}
+
+.setting-server-btn:before{
+    content: "\e012";
 }
 
 .vl-current .close::before {
@@ -137,7 +145,7 @@ body, html {
     margin-right: 20px;
     right: 20px;
     height: 150px;
-    width: 365px;
+    width: 400px;
     display: inline-block;
     padding: 15px;
 
@@ -197,9 +205,31 @@ body, html {
     color: #A7A7A7;
 }
 
-/*#interior-stop-run {*/
-    /*color: #000000;*/
-/*}*/
+.settings-servers{
+    display: none;
+    margin-left: 50px;
+    width: 30%;
+    min-width: 800px;
+}
+
+.settings-servers .interior-stop-btn{
+    margin-left: 38%;
+    margin-top: -15px;
+    padding: 0;
+}
+
+.settings-servers table th{
+    text-align: center !important;
+    font-size: 18px;
+}
+
+.settings-servers table th:first-child{
+    width: 40%;
+}
+
+.settings-servers table th:last-child{
+    width: 20%;
+}
 
 .check-btn, .repeat-btn, .refresh-btn {
     display: none;
@@ -247,6 +277,10 @@ body, html {
 
 .back-btn::before {
     content: "\e091";
+}
+
+.update-btn::before{
+    content: "\e031";
 }
 
 .button:hover, .wrapper-btn:hover {

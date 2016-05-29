@@ -1,5 +1,7 @@
 package com.spring.boot.vlt.mvc.model.vl;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -9,20 +11,18 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class VirtLab {
+public class VirtLab implements Serializable{
+    private static final Logger logger = LogManager.getLogger(VirtLab.class);
     @Autowired
     private Environment env;
 
     @NotNull
-    @Size(min = 1, message = "Введите название ВЛ")
+    @Size(min = 1)
     private String name;
     private String dirName;
     static String propertyFileName = "lab.desc";
 
-    public VirtLab() {
-//        name = "";
-//        dirName = "";
-    }
+    public VirtLab() {}
 
     public VirtLab(String name, String dirName) {
         this.name = name;
@@ -67,6 +67,7 @@ public class VirtLab {
                 in.close();
             }
         } catch (IOException e) {
+            logger.error("RuntimeException when trying to read "  + dirName + File.separator + propertyFileName);
             throw new RuntimeException(e);
         }
     }
@@ -85,6 +86,7 @@ public class VirtLab {
         File desc = new File(path + File.separator + dirName, propertyFileName);
         try {
             desc.createNewFile();
+            logger.info("Create description file " + dirName + File.separator + propertyFileName);
             PrintWriter out = new PrintWriter(desc.getAbsoluteFile());
             try {
                 out.print(toString());
@@ -92,10 +94,28 @@ public class VirtLab {
                 out.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error create description file " + dirName + File.separator + propertyFileName, e.fillInStackTrace());
             return false;
         }
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VirtLab virtLab = (VirtLab) o;
+
+        if (name != null ? !name.equals(virtLab.name) : virtLab.name != null) return false;
+        return dirName != null ? dirName.equals(virtLab.dirName) : virtLab.dirName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (dirName != null ? dirName.hashCode() : 0);
+        return result;
+    }
 }

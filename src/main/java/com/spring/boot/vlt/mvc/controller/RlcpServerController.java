@@ -1,71 +1,57 @@
 package com.spring.boot.vlt.mvc.controller;
 
-import com.spring.boot.vlt.mvc.info.LogStreamReader;
-import com.spring.boot.vlt.mvc.model.Trial;
+import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
+import com.spring.boot.vlt.mvc.model.vl.VirtLab;
+import com.spring.boot.vlt.mvc.service.RlcpServerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rlcp.echo.RlcpEchoRequest;
-import rlcp.echo.RlcpEchoRequestBody;
-import rlcp.echo.RlcpEchoResponse;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.Map;
 
 @RestController
 public class RlcpServerController {
     @Autowired
-    private Environment env;
-    @Autowired
-    private Trial trial;
-    private Process p;
+    private RlcpServerService rlcpServerService;
 
     @RequestMapping(value = "/getServerStatus", method = RequestMethod.POST)
-    public ResponseEntity<String> getStatusExternalServer() {
-        RlcpEchoRequestBody body = new RlcpEchoRequestBody();
-        RlcpEchoRequest rlcpEchoRequest = body.prepareRequest(trial.getUrl());
-        RlcpEchoResponse rlcpEchoResponse;
-        try{
-            rlcpEchoResponse = rlcpEchoRequest.execute();
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(trial.getUrl(), HttpStatus.SERVICE_UNAVAILABLE);
+    public ResponseEntity<Boolean> getStatusExternalServer() {
+        if (rlcpServerService.getStatusExternalServer()) {
+            return new ResponseEntity<>(rlcpServerService.isInteriorServer(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(rlcpServerService.isInteriorServer(), HttpStatus.SERVICE_UNAVAILABLE);
         }
+    }
+
+    @RequestMapping(value = "/getServersList", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<Map<VirtLab, String>> getServersList() {
+        return new ResponseEntity<>(rlcpServerService.getServersList(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getTypeServer", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> getTypeServer() {
+        return new ResponseEntity<>(rlcpServerService.isInteriorServer(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/runInteriorServer", method = RequestMethod.POST)
-    public ResponseEntity<String> runInteriorServer() {
-        File file = new File(
-                System.getProperty("user.dir")  + File.separator +
-                env.getProperty("paths.uploadedFiles") +
-                File.separator + trial.getVl().getDirName() + File.separator + "server");
-        if (file.exists()) {
-            ProcessBuilder process = new ProcessBuilder("java", "-jar", "-Dfile.encoding=utf-8", new File(file, "server.jar").getAbsolutePath());
-            process.directory(file);
-            try {
-                p = process.start();
-                LogStreamReader lsr = new LogStreamReader(p.getInputStream());
-                Thread thread = new Thread(lsr, "LogStreamReader");
-                thread.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
-            }
+    public ResponseEntity<String> runInteriorServer() throws InterruptedException {
+        if (rlcpServerService.runInteriorServer()) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/stopInteriorServer", method = RequestMethod.POST)
-    public ResponseEntity<String> stopInteriorServer() {
-        try{
-            p.destroy();
-        } catch (NullPointerException e){
-//            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+    public ResponseEntity<String> stopInteriorServer(@RequestParam("url") String url) {
+        if (rlcpServerService.stopInteriorServer(url)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

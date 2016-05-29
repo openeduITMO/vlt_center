@@ -8,6 +8,7 @@ import rlcp.calculate.CalculatingResult;
 import rlcp.check.ConditionForChecking;
 import rlcp.generate.GeneratingResult;
 
+import javax.annotation.PreDestroy;
 import java.util.List;
 
 @Component
@@ -17,11 +18,20 @@ public class Trial {
     }
 
     private VirtLab vl;
+    private String fraimeId;
     private boolean isConnect = true;
     private GeneratingResult generatingResult;
     private CalculatingResult calculatingResult;
     private List<ConditionForChecking> conditionsList;
     private String url;
+
+    public String getFraimeId() {
+        return fraimeId;
+    }
+
+    public void setFraimeId(String fraimeId) {
+        this.fraimeId = fraimeId;
+    }
 
     public VirtLab getVl() {
         return vl;
@@ -70,4 +80,5 @@ public class Trial {
     public void setConnect(boolean connect) {
         isConnect = connect;
     }
+
 }
