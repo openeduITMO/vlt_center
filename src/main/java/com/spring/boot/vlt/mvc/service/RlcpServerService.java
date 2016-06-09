@@ -4,7 +4,6 @@ import com.spring.boot.vlt.mvc.info.LogStreamReader;
 import com.spring.boot.vlt.mvc.model.MapServer;
 import com.spring.boot.vlt.mvc.model.Trial;
 import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
-import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -33,19 +32,18 @@ public class RlcpServerService {
         return status(trial.getUrl());
     }
 
-    public boolean isInteriorServer(){
-        for(InteriorServer server: servers.getMapServers().values()){
-            if(server.getUrl().equalsIgnoreCase(trial.getUrl())){
-                return true;
-            }
+    public boolean isInteriorServer() {
+        Optional<InteriorServer> isInteriorServer = Optional.ofNullable(servers.getMapServers().get(trial.getUrl()));
+        if (isInteriorServer.isPresent()) {
+            return true;
         }
         return false;
     }
 
-    public Map<VirtLab, String> getServersList(){
-        Map<VirtLab, String> virtLab = new HashMap<>();
-        servers.getMapServers().forEach((key, val) ->{
-            virtLab.put(key, val.getUrl());
+    public Map<String, String> getServersList() {
+        Map<String, String> virtLab = new HashMap<>();
+        servers.getMapServers().forEach((key, val) -> {
+            virtLab.put(key, val.getName());
         });
         return virtLab;
     }
@@ -91,9 +89,9 @@ public class RlcpServerService {
     public boolean stopInteriorServer(String url) {
         try {
             Optional<Process> process = servers.getProcess(url);
-            if(process.isPresent()){
+            if (process.isPresent()) {
                 process.get().destroy();
-                servers.remove(trial.getVl());
+                servers.remove(url);
             }
         } catch (NullPointerException e) {
             return false;

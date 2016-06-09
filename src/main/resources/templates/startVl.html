@@ -5,6 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <link rel="stylesheet" href="/VLT/css/bootflat.css"/>
   <link rel="stylesheet" href="/VLT/css/vlt_index.css"/>
+  <link rel="stylesheet" href="/VLT/css/loader.css"/>
   <script type="text/javascript" src="/VLT/js/jquery.js"></script>
   <script type="text/javascript" src="/VLT/js/vl_test.js"></script>
   <script type="text/javascript" src="/VLT/js/jquery.form.js"></script>
@@ -15,21 +16,27 @@
 <body>
 <div class="start">
   <div class="run-server-button">
-    <div class="server-setting">
-      <label>Выбирите сервер:</label>
-      <label class="toggle">
-        <input id="check-checkbox" type="checkbox" onchange="setCheckBox()"/>
-        <span class="handle"></span>
-      </label>
+    <div class="server-div">
+      <div class="server-setting">
+        <label>Выбирите сервер:</label>
+        <label class="toggle">
+          <input id="check-checkbox" type="checkbox" onchange="setCheckBox()"/>
+          <span class="handle"></span>
+        </label>
+      </div>
+      <div class="server-status">
+        <script>checkServer();</script>
+      </div>
     </div>
-    <div class="server-status">
-      <script>checkServer();</script>
+    <div class="loader-div">
+      <div class="loader">Loading...</div>
     </div>
+
   </div>
   <div class="title-text" th:text="${nameVl}"></div>
   <div class="run-vl-button">
     <span id="back-btn" class="button back-btn" data="Выход"></span>
-    <span id="start-btn" class="button start-btn" data="Запустить"></span>
+    <span id="start-btn-wain-run-server" class="button start-btn" data="Запустить"></span>
     <span id="check-btn" class="button check-btn" data="Проверить"></span>
     <span id="repeat-btn" class="button repeat-btn" data="Повторить с текущим вариантом"></span>
     <span id="refresh-btn" class="button refresh-btn" data="Перезапустить с новым вариантом"></span>

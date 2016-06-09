@@ -32,24 +32,21 @@ public class LaboratoryFrameService {
     @Autowired
     private Environment env;
 
-    private enum StaticType {js, css};
+    private enum StaticType {js, css}
+
+    ;
     private Document document;
     private Optional<Node> node;
 
     private String nameVl;
 
-    public void setNameVl(String nameVl){
+    public Optional<Document> setNameVl(String nameVl) {
         this.nameVl = nameVl;
-        try {
-            document = readLabratoryFame(nameVl);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
+        document = readLabratoryFame(nameVl);
+        return Optional.ofNullable(document);
     }
 
-    public void setFrameId(String frameId){
+    public void setFrameId(String frameId) {
         node = findFrameById(document.selectNodes("//FrameIndex"), frameId);
     }
 
@@ -59,37 +56,37 @@ public class LaboratoryFrameService {
         return frames;
     }
 
-    public VirtLab getVirtLab(){
-        return new VirtLab(new File(new File(System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles"), nameVl), "lab.desc"));
+    public VirtLab getVirtLab() {
+        return new VirtLab(new File(new File(System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles"), nameVl), "lab.desc"));
     }
 
-    public LaboratoryFrame getFrame(){
+    public LaboratoryFrame getFrame() {
         return readFrame(node.get());
     }
 
-    public GeneratingResult getGeneratingResult(){
-        return  readGeneratingResult(node.get());
+    public GeneratingResult getGeneratingResult() {
+        return readGeneratingResult(node.get());
     }
 
-    public String readAlgorithm(){
+    public String readAlgorithm() {
         return readAlgorithm(node.get());
     }
 
-    public List<ConditionForChecking> getCheckList(){
+    public List<ConditionForChecking> getCheckList() {
         List<ConditionForChecking> checks = new ArrayList<>();
         readAllTests(checks, (node.get().selectSingleNode("LaboratoryFrame/LaboratoryTestsGroups/LaboratoryTestsGroup").selectNodes("LaboratoryTest")));
         return checks;
     }
 
-    public StaticFile getStatic(String type){
-        if(type.equalsIgnoreCase("js")){
+    public StaticFile getStatic(String type) {
+        if (type.equalsIgnoreCase("js")) {
             return readStatic(nameVl, StaticType.js);
-        } else{
+        } else {
             return readStatic(nameVl, StaticType.css);
         }
     }
 
-    public String getUrl(){
+    public String getUrl() {
         return readUrl(node.get());
     }
 
@@ -141,14 +138,23 @@ public class LaboratoryFrameService {
         return frameIndex.stream().filter((node) -> node.valueOf("@FrameID").equals(frameId)).findFirst();
     }
 
-    private Document readLabratoryFame(String nameVl) throws MalformedURLException, DocumentException {
+    private Document readLabratoryFame(String nameVl) {
         final String path = env.getProperty("paths.uploadedFiles");
         SAXReader saxReader = new SAXReader();
-        return saxReader.read(new File(path + File.separator + nameVl, "frames" + File.separator + env.getProperty("framesXml")));
+        Document framesXml = null;
+        File xml = new File(path + File.separator + nameVl, "frames" + File.separator + env.getProperty("framesXml"));
+        try {
+            framesXml = saxReader.read(xml);
+        } catch (DocumentException e) {
+            logger.error("File " + xml.getAbsolutePath() + " not foud", e.fillInStackTrace());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return framesXml;
     }
 
     private StaticFile readStatic(String nameDirVl, StaticType type) {
-        final String path = System.getProperty("user.dir")  + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
         StaticFile staticFile = new StaticFile(nameDirVl);
         File st = new File(path + File.separator + nameDirVl, "tool" + File.separator + type);
         try {

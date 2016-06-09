@@ -1,9 +1,5 @@
 jQuery(document).ready(function () {
 
-  //$('body').on("click", ".toggle", function () {
-  //  checkServer();
-  //});
-
   $('body').on("click", "#start-btn", function () {
     generate();
   });
@@ -52,7 +48,7 @@ jQuery(document).ready(function () {
 
 var first_load = true;
 
-function setCheckBox(){
+function setCheckBox() {
   $(".run-server-button").attr("class", "run-server-button");
   $('.server-status').html("");
   if ($('#check-checkbox').prop("checked")) {
@@ -77,7 +73,7 @@ function checkServer() {
   if (first_load) {
     checkTypeServer();
     first_load = false;
-  } else{
+  } else {
 
   }
 }
@@ -99,7 +95,8 @@ function checkServerStatus() {
     type: "POST",
     data: {},
     success: function (data) {
-      if (data.responseText=="true" || data==true) {
+      $("#start-btn-wain-run-server").attr("id", "start-btn");
+      if (data.responseText == "true" || data == true) {
         setStyleForRunningInteriorServer();
       } else {
         $("#check-status-server-btn").css("color", "green");
@@ -108,7 +105,8 @@ function checkServerStatus() {
       }
     },
     error: function (data) {
-      if (data.responseText=="true" || data==true) {
+      $("#start-btn").attr("id", "start-btn-wain-run-server");
+      if (data.responseText == "true" || data == true) {
         setStyleForStoppedInteriorServer();
       } else {
         $("#check-status-server-btn").css("color", "red");
@@ -126,11 +124,12 @@ function isInteriorServer(type) {
     $('#check-checkbox').prop("checked", false);
   }
   setCheckBox();
-
 }
 
 function setStyleForRunningInteriorServer() {
-  $(".start-btn").css("color", "#434a54");
+  $(".loader-div").css("display", "none");
+  $("#start-btn-wain-run-server").attr("id", "start-btn");
+  $("#wait-start-btn").attr("id", "interior-start-run");
   $("#interior-start-btn").attr("id", "interior-start-run");
   $("#interior-stop-btn").attr("id", "interior-stop-run");
 }
@@ -138,23 +137,48 @@ function setStyleForRunningInteriorServer() {
 function setStyleForStoppedInteriorServer() {
   $("#interior-start-run").attr("id", "interior-start-btn");
   $("#interior-stop-run").attr("id", "interior-stop-btn");
+  $("#start-btn").attr("id", "start-btn-wain-run-server");
 }
 
 function runInteriorServer() {
-  $(".run-server-button").attr("class", "run-server-button");
-  $(".start-btn").css("color", "#A7A7A7");
+  $(".loader-div").css("display", "block");
+  $("#interior-start-btn").attr("id", "wait-start-btn");
   $.ajax({
     url: "/VLT/runInteriorServer",
     type: "POST",
     data: {},
     success: function (data) {
-      setStyleForRunningInteriorServer();
+      waitStartServer();
     },
   });
 }
 
+function waitStartServer() {
+  wait(2000);
+  $.ajax({
+    url: "/VLT/getServerStatus",
+    type: "POST",
+    data: {},
+    success: function (data) {
+      setStyleForRunningInteriorServer();
+    },
+    error: function (data) {
+      waitStartServer();
+
+    },
+  });
+}
+
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+  while (end < start + ms) {
+    end = new Date().getTime();
+  }
+}
+
 function stopInteriorServer(url) {
-  $(".run-server-button").attr("class", "run-server-button");
+  //$(".run-server-button").attr("class", "run-server-button");
   $.ajax({
     url: "/VLT/stopInteriorServer",
     type: "POST",

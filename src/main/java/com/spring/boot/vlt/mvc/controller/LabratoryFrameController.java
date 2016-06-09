@@ -3,6 +3,7 @@ package com.spring.boot.vlt.mvc.controller;
 import com.spring.boot.vlt.mvc.model.Trial;
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
+import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +20,10 @@ public class LabratoryFrameController {
 
     @RequestMapping(value = "/getLabratoryFame", method = RequestMethod.POST, produces = "application/json")
     public List getLabratoryFrme(@RequestParam("name") String nameVl) {
-        laboratoryFrameService.setNameVl(nameVl);
+        Optional<Document> documentOptional = laboratoryFrameService.setNameVl(nameVl);
+        if(!documentOptional.isPresent()){
+            return null;
+        }
         return laboratoryFrameService.getLaboratoryFrame();
     }
 

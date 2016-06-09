@@ -1,22 +1,20 @@
 package com.spring.boot.vlt.mvc.model.vl;
 
-import org.springframework.stereotype.Component;
-
 public class InteriorServer {
-    private String url;
+    private String name;
     private Process process;
 
     public InteriorServer(String url, Process process) {
-        this.url = url;
+        this.name = url;
         this.process = process;
     }
 
-    public String getUrl() {
-        return url;
+    public String getName() {
+        return name;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.name = url;
     }
 
     public Process getProcess() {
@@ -25,21 +23,5 @@ public class InteriorServer {
 
     public void setProcess(Process process) {
         this.process = process;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        InteriorServer that = (InteriorServer) o;
-
-        return url != null ? url.equals(that.url) : that.url == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return url != null ? url.hashCode() : 0;
     }
 }

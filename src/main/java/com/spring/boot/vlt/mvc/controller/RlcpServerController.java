@@ -1,7 +1,5 @@
 package com.spring.boot.vlt.mvc.controller;
 
-import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
-import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import com.spring.boot.vlt.mvc.service.RlcpServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,7 @@ public class RlcpServerController {
     private RlcpServerService rlcpServerService;
 
     @RequestMapping(value = "/getServerStatus", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> getStatusExternalServer() {
+    public ResponseEntity<Boolean> getStatusExternalServer() throws InterruptedException {
         if (rlcpServerService.getStatusExternalServer()) {
             return new ResponseEntity<>(rlcpServerService.isInteriorServer(), HttpStatus.OK);
         } else {
@@ -28,7 +26,7 @@ public class RlcpServerController {
     }
 
     @RequestMapping(value = "/getServersList", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<Map<VirtLab, String>> getServersList() {
+    public ResponseEntity<Map<String, String>> getServersList() {
         return new ResponseEntity<>(rlcpServerService.getServersList(), HttpStatus.OK);
     }
 

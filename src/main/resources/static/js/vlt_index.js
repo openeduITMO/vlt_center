@@ -1,4 +1,6 @@
 jQuery(document).ready(function () {
+
+
   $(document).on('change', '.uploader :file', function () {
     var name = $(this).get(0).files[0].name;
     if (name != "") {
@@ -7,12 +9,7 @@ jQuery(document).ready(function () {
   });
 
   $('body').on("click", "#setting-server-btn", function () {
-    if ($('.settings-servers').css('display') == 'none') {
-      getServersList();
-      $('.settings-servers').css('display', 'inline-block');
-    } else {
-      $('.settings-servers').css('display', 'none');
-    }
+    closeOrOpenServerSettings()
   });
 
   $('body').on("click", "#update-btn", function () {
@@ -28,14 +25,12 @@ jQuery(document).ready(function () {
         if (data.length != 0) {
           $("#name-vl").val("");
           $('.s-form').css("display", "none");
-          $(".list-div").find($(".table")).append("<tr>" +
-            "<td>" + data.name + "</td>" +
-            "<td>" +
-            "<span class='button run-vl' dirName='" + data.dirName + "'/>" +
-            "<span class='button tune-vl' dirName='" + data.dirName + "'/>" +
-            "<span class='button import-vl' dirName='" + data.dirName + "'/>" +
-            "</td>" +
-            "</tr>");
+          $('#vl-list').DataTable().row.add([
+            data.name,
+            " <span class='button run-vl' dirName='" + data.dirName + "' data='Запуск'></span> " +
+            " <span class='button tune-vl' dirName='" + data.dirName + "' data='Настройки'></span> " +
+            " <span class='button import-vl' dirName='" + data.dirName + "' data='Импрот'></span>"
+          ]).draw(false);
         } else {
           $(".error").css("display", "block");
         }
@@ -64,7 +59,7 @@ jQuery(document).ready(function () {
             "<td>" + val.data + "</td>" +
             "<td>" +
             "<form method='get' action='/VLT/startVl/" + vlName + "/" + val.id + "'>" +
-            "<button><span class='button start-vl'/></button>" +
+            "<button><span class='button start-vl' data='Запуск'/></button>" +
             "</form></td></tr>");
         });
       } else {
@@ -87,7 +82,7 @@ jQuery(document).ready(function () {
       "<label for='uploader' data-file='Выберите файл'></label>" +
       "<input type='file' name='uploadfile' id='uploader'/>" +
       "</div>" +
-      "<button><span class='button import-btn'></span></button>" +
+      "<button><span class='button import-btn' data='Импорт'></span></button>" +
       "</form>");
     $('#upload_form').ajaxForm(function (data) {
       if (data == "OK") {
@@ -114,7 +109,7 @@ jQuery(document).ready(function () {
           "<td><input class='form-control-tune' id='name-current-vl' name='name' value='" + data.name + "'/></td></tr>" +
           "<tr><td><label>Название каталога</label></td>" +
           "<td><input class='form-control-tune lock' id='dir-current-vl' name='dirName' placeholder='" + data.dirName + "' disabled/><br/></td></tr></table>" +
-          "<button id='save'><span class='button save-vl'/></button>" +
+          "<button id='save'><span class='button save-vl' data='Сохранить'/></button>" +
           "</form>"
         );
         $("#save-property-vl").ajaxForm(function (data) {
@@ -136,6 +131,10 @@ jQuery(document).ready(function () {
   $('body').on("click", ".s-form .close", function () {
     $('.s-form').css("display", "none");
     $('.s-form').find($("#name-vl")).val("");
+  });
+
+  $('body').on("click", ".settings-servers .close", function () {
+    closeOrOpenServerSettings();
   });
 
   $('body').on("click", ".settings .close", function () {
@@ -171,13 +170,22 @@ function getServersList() {
       $('#table-servers tbody').html('');
       $.each(data, function (key, val) {
         $('#table-servers tbody').append("<tr>" +
-          "<td>" + key.replace(/[\n\r]/g, ' ').split('name=')[1].split(' dirName')[0] + "</td>" +
-          "<td>" + val + "</td>" +
-          "<td><span id='interior-stop-run' class='button interior-stop-btn' data='Остановить сервер' url-server='" + val + "'></span></td>" +
+          "<td>" + val +"</td>" +
+          "<td>" + key + "</td>" +
+          "<td><span id='interior-stop-run' class='button interior-stop-btn' data='Остановить сервер' url-server='" + key + "'></span></td>" +
           "</tr>");
       });
     }
   });
+}
+
+function closeOrOpenServerSettings() {
+  if ($('.settings-servers').css('display') == 'none') {
+    getServersList();
+    $('.settings-servers').css('display', 'inline-block');
+  } else {
+    $('.settings-servers').css('display', 'none');
+  }
 }
 
 function clearSettingsForm() {

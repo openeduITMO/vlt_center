@@ -5,11 +5,47 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <link rel="stylesheet" href="css/bootflat.css"/>
   <link rel="stylesheet" href="css/vlt_index.css"/>
+  <link rel="stylesheet" href="css/jquery.dataTables.min.css"/>
   <script type="text/javascript" src="js/jquery.js"></script>
   <script type="text/javascript" src="js/vlt_index.js"></script>
   <script type="text/javascript" src="js/jquery.form.js"></script>
   <script type="text/javascript" src="js/jquery.fs.selecter.min.js"></script>
   <script type="text/javascript" src="js/jquery.fs.stepper.min.js"></script>
+  <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+  <script>
+    $(function () {
+      $("#vl-list").dataTable({
+        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Все"]],
+        "aoColumns": [
+          { "bSortable": true },
+          { "bSortable": false },
+        ],
+        "language": {
+          "processing": "Подождите...",
+          "search": "Поиск:",
+          "lengthMenu": "Показать _MENU_",
+          "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+          "infoEmpty": "Записи с 0 до 0 из 0 записей",
+          "infoFiltered": "(отфильтровано из _MAX_ записей)",
+          "infoPostFix": "",
+          "loadingRecords": "Загрузка записей...",
+          "zeroRecords": "Записи отсутствуют",
+          "emptyTable": "В таблице отсутствуют данные",
+          "paginate": {
+            "first": "Первая",
+            "previous": "Предыдущая",
+            "next": "Следующая",
+            "last": "Последняя"
+          },
+          "aria": {
+            "sortAscending": ": активировать для сортировки столбца по возрастанию",
+            "sortDescending": ": активировать для сортировки столбца по убыванию"
+          }
+        }
+      });
+    })
+  </script>
+
 </head>
 <body>
 
@@ -22,9 +58,9 @@
   <div class="vl-list">
     <div class="list-div">
       <div class="panel panel-default">
-        <span class="button plusTd"></span>
+        <span class="button plusTd" data="Добавить новую ВЛ"></span>
         <div class="panel-heading">Список виртуальных лабораторий</div>
-        <table class="table">
+        <table class="table" id="vl-list">
           <thead>
           <th class="name">Имя</th>
           <th class="commands">Команды</th>
@@ -33,9 +69,9 @@
           <tr th:each="vl : ${vlList}">
             <td th:text="${vl.name}"/>
             <td>
-              <span class="button run-vl" th:attr="dirName=${vl.dirName}"/>
-              <span class="button tune-vl" th:attr="dirName=${vl.dirName}"/>
-              <span class="button import-vl" th:attr="dirName=${vl.dirName}"/>
+              <span class="button run-vl" th:attr="dirName=${vl.dirName}" data="Запуск"/>
+              <span class="button tune-vl" th:attr="dirName=${vl.dirName}" data="Настройки"/>
+              <span class="button import-vl" th:attr="dirName=${vl.dirName}" data="Импрот"/>
             </td>
           </tr>
           </tbody>
@@ -47,6 +83,7 @@
   <div class="settings-servers">
     <div class="">
       <div class="panel panel-default">
+        <span class="button close" data="Закрыть"></span>
         <span id="update-btn" class="button update-btn" data="Обновить"></span>
         <div class="panel-heading">Список запущенных серверов</div>
         <table class="table" id="table-servers">
@@ -67,7 +104,7 @@
 
   <div class="vl-current">
     <div class="panel panel-default s-form">
-      <span class="button close"></span>
+      <span class="button close" data="Закрыть"></span>
       <div class="panel-heading">Добавить новую ВЛ</div>
       <div class="panel-body">
         <div class="add-form col-xs-6">
@@ -80,17 +117,17 @@
       </div>
     </div>
     <div class="panel panel-default settings">
-      <span class="button close"></span>
+      <span class="button close" data="Закрыть"></span>
       <div class="panel-heading">Настройка <span class="name-vl"></span></div>
       <div class="panel-body"></div>
     </div>
     <div class="panel panel-default import">
-      <span class="button close"></span>
+      <span class="button close" data="Закрыть"></span>
       <div class="panel-heading">Импорт <span class="name-vl"></span></div>
       <div class="panel-body"></div>
     </div>
     <div class="panel panel-default running">
-      <span class="button close"></span>
+      <span class="button close" data="Закрыть"></span>
       <div class="panel-heading">Запуск <span class="name-vl"></span></div>
       <div class="panel-body">
         <table class="table">
@@ -108,7 +145,6 @@
       </div>
     </div>
   </div>
-
 </div>
 </body>
 </html>

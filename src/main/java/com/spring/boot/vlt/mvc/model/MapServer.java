@@ -3,7 +3,6 @@ package com.spring.boot.vlt.mvc.model;
 import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -13,33 +12,26 @@ import java.util.Optional;
 @Component
 @Scope(value = "application")
 public class MapServer {
-    Map<VirtLab, InteriorServer> mapServers;
+    private Map<String, InteriorServer> mapServers;
 
     public MapServer() {
         mapServers = new HashMap<>();
     }
 
     public void put(VirtLab virtLab, String url, Process process) {
-        mapServers.put(virtLab, new InteriorServer(url, process));
+        mapServers.put(url, new InteriorServer(virtLab.getName(), process));
     }
 
-    public Optional<Process> getProcess(String url){
-        Process p = null;
-        for(InteriorServer i: mapServers.values()){
-            if(i.getUrl().equals(url)){
-                p = i.getProcess();
-            }
-        }
-        return Optional.ofNullable(p);
+    public Optional<Process> getProcess(String url) {
+        return Optional.ofNullable(mapServers.get(url).getProcess());
     }
 
-    public void remove(VirtLab virtLab) {
-        mapServers.remove(virtLab);
+    public boolean remove(String url) {
+        return Optional.ofNullable(mapServers.remove(url)).isPresent();
     }
 
-    public Map<VirtLab, InteriorServer> getMapServers() {
+    public Map<String, InteriorServer> getMapServers() {
         return mapServers;
     }
-
 
 }
