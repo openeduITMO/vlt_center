@@ -46,150 +46,150 @@ jQuery(document).ready(function () {
 
 });
 
-var first_load = true;
-
-function setCheckBox() {
-  $(".run-server-button").attr("class", "run-server-button");
-  $('.server-status').html("");
-  if ($('#check-checkbox').prop("checked")) {
-    $('.server-status').append(
-      "<div class='server-run'>" +
-      "<span id='interior-start-btn' class='button interior-start-btn' data='Запустить сервер'></span>" +
-      "<span id='interior-stop-btn' class='button interior-stop-btn' data='Остановить сервер'></span>" +
-      "<p>Внутренний сервер</p>" +
-      "</div>"
-    );
-  } else {
-    $('.server-status').append(
-      "<div class='server-check'><span id='check-status-server-btn' class='button check-status-server-btn' data='Проверить статус сервера'></span>" +
-      "<p>Внешний сервер</p>" +
-      "</div>"
-    );
-  }
-  checkServerStatus();
-}
-
-function checkServer() {
-  if (first_load) {
-    checkTypeServer();
-    first_load = false;
-  } else {
-
-  }
-}
-
-function checkTypeServer() {
-  $.ajax({
-    url: "/VLT/getTypeServer",
-    type: "POST",
-    data: {},
-    success: function (data) {
-      isInteriorServer(data);
-    }
-  });
-}
-
-function checkServerStatus() {
-  $.ajax({
-    url: "/VLT/getServerStatus",
-    type: "POST",
-    data: {},
-    success: function (data) {
-      $("#start-btn-wain-run-server").attr("id", "start-btn");
-      if (data.responseText == "true" || data == true) {
-        setStyleForRunningInteriorServer();
-      } else {
-        $("#check-status-server-btn").css("color", "green");
-        $("#check-status-server-btn").parent().find("p").detach();
-        $("#check-status-server-btn").parent().append("<p class='success'>Внешний сервер запушен</p>");
-      }
-    },
-    error: function (data) {
-      $("#start-btn").attr("id", "start-btn-wain-run-server");
-      if (data.responseText == "true" || data == true) {
-        setStyleForStoppedInteriorServer();
-      } else {
-        $("#check-status-server-btn").css("color", "red");
-        $("#check-status-server-btn").parent().find("p").detach();
-        $("#check-status-server-btn").parent().append("<p class='error'>Запустите внешний сервер по адресу " + $("#url-server").val() + "</p>");
-      }
-    },
-  });
-}
-
-function isInteriorServer(type) {
-  if (type) {
-    $('#check-checkbox').prop("checked", true);
-  } else {
-    $('#check-checkbox').prop("checked", false);
-  }
-  setCheckBox();
-}
-
-function setStyleForRunningInteriorServer() {
-  $(".loader-div").css("display", "none");
-  $("#start-btn-wain-run-server").attr("id", "start-btn");
-  $("#wait-start-btn").attr("id", "interior-start-run");
-  $("#interior-start-btn").attr("id", "interior-start-run");
-  $("#interior-stop-btn").attr("id", "interior-stop-run");
-}
-
-function setStyleForStoppedInteriorServer() {
-  $("#interior-start-run").attr("id", "interior-start-btn");
-  $("#interior-stop-run").attr("id", "interior-stop-btn");
-  $("#start-btn").attr("id", "start-btn-wain-run-server");
-}
-
-function runInteriorServer() {
-  $(".loader-div").css("display", "block");
-  $("#interior-start-btn").attr("id", "wait-start-btn");
-  $.ajax({
-    url: "/VLT/runInteriorServer",
-    type: "POST",
-    data: {},
-    success: function (data) {
-      waitStartServer();
-    },
-  });
-}
-
-function waitStartServer() {
-  wait(2000);
-  $.ajax({
-    url: "/VLT/getServerStatus",
-    type: "POST",
-    data: {},
-    success: function (data) {
-      setStyleForRunningInteriorServer();
-    },
-    error: function (data) {
-      waitStartServer();
-
-    },
-  });
-}
-
-function wait(ms) {
-  var start = new Date().getTime();
-  var end = start;
-  while (end < start + ms) {
-    end = new Date().getTime();
-  }
-}
-
-function stopInteriorServer(url) {
-  //$(".run-server-button").attr("class", "run-server-button");
-  $.ajax({
-    url: "/VLT/stopInteriorServer",
-    type: "POST",
-    data: {
-      url: url
-    },
-    success: function (data) {
-      setStyleForStoppedInteriorServer();
-    },
-  });
-}
+//var first_load = true;
+//
+//function setCheckBox() {
+//  $(".run-server-button").attr("class", "run-server-button");
+//  $('.server-status').html("");
+//  if ($('#check-checkbox').prop("checked")) {
+//    $('.server-status').append(
+//      "<div class='server-run'>" +
+//      "<span id='interior-start-btn' class='button interior-start-btn' data='Запустить сервер'></span>" +
+//      "<span id='interior-stop-btn' class='button interior-stop-btn' data='Остановить сервер'></span>" +
+//      "<p>Внутренний сервер</p>" +
+//      "</div>"
+//    );
+//  } else {
+//    $('.server-status').append(
+//      "<div class='server-check'><span id='check-status-server-btn' class='button check-status-server-btn' data='Проверить статус сервера'></span>" +
+//      "<p>Внешний сервер</p>" +
+//      "</div>"
+//    );
+//  }
+//  checkServerStatus();
+//}
+//
+//function checkServer() {
+//  if (first_load) {
+//    checkTypeServer();
+//    first_load = false;
+//  } else {
+//
+//  }
+//}
+//
+//function checkTypeServer() {
+//  $.ajax({
+//    url: "/VLT/getTypeServer",
+//    type: "POST",
+//    data: {},
+//    success: function (data) {
+//      isInteriorServer(data);
+//    }
+//  });
+//}
+//
+//function checkServerStatus() {
+//  $.ajax({
+//    url: "/VLT/getServerStatus",
+//    type: "POST",
+//    data: {},
+//    success: function (data) {
+//      $("#start-btn-wain-run-server").attr("id", "start-btn");
+//      if (data.responseText == "true" || data == true) {
+//        setStyleForRunningInteriorServer();
+//      } else {
+//        $("#check-status-server-btn").css("color", "green");
+//        $("#check-status-server-btn").parent().find("p").detach();
+//        $("#check-status-server-btn").parent().append("<p class='success'>Внешний сервер запушен</p>");
+//      }
+//    },
+//    error: function (data) {
+//      $("#start-btn").attr("id", "start-btn-wain-run-server");
+//      if (data.responseText == "true" || data == true) {
+//        setStyleForStoppedInteriorServer();
+//      } else {
+//        $("#check-status-server-btn").css("color", "red");
+//        $("#check-status-server-btn").parent().find("p").detach();
+//        $("#check-status-server-btn").parent().append("<p class='error'>Запустите внешний сервер по адресу " + $("#url-server").val() + "</p>");
+//      }
+//    },
+//  });
+//}
+//
+//function isInteriorServer(type) {
+//  if (type) {
+//    $('#check-checkbox').prop("checked", true);
+//  } else {
+//    $('#check-checkbox').prop("checked", false);
+//  }
+//  setCheckBox();
+//}
+//
+//function setStyleForRunningInteriorServer() {
+//  $(".loader-div").css("display", "none");
+//  $("#start-btn-wain-run-server").attr("id", "start-btn");
+//  $("#wait-start-btn").attr("id", "interior-start-run");
+//  $("#interior-start-btn").attr("id", "interior-start-run");
+//  $("#interior-stop-btn").attr("id", "interior-stop-run");
+//}
+//
+//function setStyleForStoppedInteriorServer() {
+//  $("#interior-start-run").attr("id", "interior-start-btn");
+//  $("#interior-stop-run").attr("id", "interior-stop-btn");
+//  $("#start-btn").attr("id", "start-btn-wain-run-server");
+//}
+//
+//function runInteriorServer() {
+//  $(".loader-div").css("display", "block");
+//  $("#interior-start-btn").attr("id", "wait-start-btn");
+//  $.ajax({
+//    url: "/VLT/runInteriorServer",
+//    type: "POST",
+//    data: {},
+//    success: function (data) {
+//      waitStartServer();
+//    },
+//  });
+//}
+//
+//function waitStartServer() {
+//  wait(2000);
+//  $.ajax({
+//    url: "/VLT/getServerStatus",
+//    type: "POST",
+//    data: {},
+//    success: function (data) {
+//      setStyleForRunningInteriorServer();
+//    },
+//    error: function (data) {
+//      waitStartServer();
+//
+//    },
+//  });
+//}
+//
+//function wait(ms) {
+//  var start = new Date().getTime();
+//  var end = start;
+//  while (end < start + ms) {
+//    end = new Date().getTime();
+//  }
+//}
+//
+//function stopInteriorServer(url) {
+//  //$(".run-server-button").attr("class", "run-server-button");
+//  $.ajax({
+//    url: "/VLT/stopInteriorServer",
+//    type: "POST",
+//    data: {
+//      url: url
+//    },
+//    success: function (data) {
+//      setStyleForStoppedInteriorServer();
+//    },
+//  });
+//}
 
 function generate() {
   $.ajax({

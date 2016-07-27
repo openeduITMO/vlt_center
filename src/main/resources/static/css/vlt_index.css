@@ -41,7 +41,6 @@ body, html {
 }
 
 .title-text {
-  /*width: 100%;*/
   margin-left: 2%;
   font-size: 30px;
   margin-top: 10px;
@@ -253,8 +252,9 @@ body, html {
 }
 
 .settings-servers {
-  display: none;
+  display: inline-block;
   margin-left: 50px;
+  margin-bottom: 50px;
   width: 30%;
   min-width: 800px;
 }
@@ -413,7 +413,6 @@ body, html {
 }
 
 .s-form {
-  display: none;
   height: 200px;
   width: 400px;
   margin-right: auto;
@@ -567,7 +566,6 @@ input[type='file'] {
 }
 
 .running {
-  display: none;
   height: auto;
   width: 800px;
   margin-right: auto;
@@ -575,15 +573,13 @@ input[type='file'] {
 }
 
 .settings {
-  display: none;
-  height: 230px;
+  height: 350px;
   width: 400px;
   margin-right: auto;
   margin-left: auto;
 }
 
 .import {
-  display: none;
   height: 170px;
   width: 400px;
   margin-right: auto;
@@ -627,16 +623,8 @@ input[type='file'] {
   font-weight: bold;
 }
 
-#generate-result, #check-result, #check-answer {
-  display: none;
-}
-
 #calculate, #generate, #check {
   margin-top: 15px;
-}
-
-#calculate {
-  display: none;
 }
 
 #check {

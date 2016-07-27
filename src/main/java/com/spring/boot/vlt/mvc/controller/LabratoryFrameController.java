@@ -1,13 +1,18 @@
 package com.spring.boot.vlt.mvc.controller;
 
 import com.spring.boot.vlt.mvc.model.Trial;
+import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
 import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import rlcp.check.ConditionForChecking;
+import rlcp.generate.GeneratingResult;
+
 import java.util.*;
 
 @RestController
@@ -18,44 +23,85 @@ public class LabratoryFrameController {
     @Autowired
     private Trial trial;
 
-    @RequestMapping(value = "/getLabratoryFame", method = RequestMethod.POST, produces = "application/json")
-    public List getLabratoryFrme(@RequestParam("name") String nameVl) {
-        Optional<Document> documentOptional = laboratoryFrameService.setNameVl(nameVl);
-        if(!documentOptional.isPresent()){
-            return null;
+    @RequestMapping(value = "/get_labratory_fame/{dir}", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<List> getLabratoryFrme(@PathVariable("dir") String dir) {
+        Optional<Document> documentOptional = laboratoryFrameService.setDirName(dir);
+        if (!documentOptional.isPresent()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return laboratoryFrameService.getLaboratoryFrame();
+        return new ResponseEntity(laboratoryFrameService.getLaboratoryFrame(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/startVl/{name}/{frameId}", method = RequestMethod.GET)
-    public ModelAndView startVl(@PathVariable("name") String nameVl, @PathVariable("frameId") String frameId) {
-        laboratoryFrameService.setNameVl(nameVl);
-        laboratoryFrameService.setFrameId(frameId);
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("startVl");
-
-        VirtLab virtLab = laboratoryFrameService.getVirtLab();
-        modelAndView.addObject("nameVl", virtLab.getName());
-
-        modelAndView.addObject("frame", laboratoryFrameService.getFrame());
-        modelAndView.addObject("generate", laboratoryFrameService.getGeneratingResult());
-        modelAndView.addObject("algorithm", laboratoryFrameService.readAlgorithm());
-
-        List<ConditionForChecking> checks = laboratoryFrameService.getCheckList();
-        modelAndView.addObject("check", checks);
-
-        modelAndView.addObject("js", laboratoryFrameService.getStatic("js"));
-        modelAndView.addObject("css", laboratoryFrameService.getStatic("css"));
-
-        String url = laboratoryFrameService.getUrl();
-        modelAndView.addObject("url", url);
-
+    @RequestMapping(value = "/start_vl/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ModelAndView startVl(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
         trial.setFraimeId(frameId);
-        trial.setUrl(url);
-        trial.setConditionsList(checks);
-        trial.setVl(virtLab);
-
-        return modelAndView;
+        return new ModelAndView("startVl");
     }
+
+    @RequestMapping(value = "/get_property/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getNameVl(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        VirtLab virtLab = laboratoryFrameService.getVirtLab();
+        trial.setVl(virtLab);
+//        return new ResponseEntity("{\"name\":" + virtLab.getName() + "," +
+//                "\"width\":" + virtLab.getWidth() + ","+
+//                "\"height\":" + virtLab.getHeight() + "}", HttpStatus.OK);
+        return new ResponseEntity(virtLab, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/get_frame/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<LaboratoryFrame> getFrame(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        return new ResponseEntity(laboratoryFrameService.getFrame(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/get_generate/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<GeneratingResult> getGeneratingResult(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        return new ResponseEntity(laboratoryFrameService.getGeneratingResult(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/get_algorithm/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getAlgorithm(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        String algorithm = laboratoryFrameService.readAlgorithm();
+        return new ResponseEntity("\"" + algorithm + "\"", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/get_check/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<ConditionForChecking>> getCheck(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        List<ConditionForChecking> checks = laboratoryFrameService.getCheckList();
+        trial.setConditionsList(checks);
+        return new ResponseEntity(checks, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/get_url/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getUrl(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        String url = laboratoryFrameService.getUrl();
+        trial.setUrl(url);
+        return new ResponseEntity("\"" + url + "\"", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/get_js/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getJs(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        return new ResponseEntity(laboratoryFrameService.getStatic("js"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/get_css/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getCss(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+        laboratoryFrameService.setDirName(dirName);
+        laboratoryFrameService.setFrameId(frameId);
+        return new ResponseEntity(laboratoryFrameService.getStatic("css"), HttpStatus.OK);
+    }
+
 }

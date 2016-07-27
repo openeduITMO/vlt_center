@@ -20,9 +20,15 @@ public class VirtLab implements Serializable{
     @Size(min = 1)
     private String name;
     private String dirName;
+    private String width;
+    private String height;
     static String propertyFileName = "lab.desc";
 
     public VirtLab() {}
+
+    public VirtLab(String name) {
+        this.name = name;
+    }
 
     public VirtLab(String name, String dirName) {
         this.name = name;
@@ -51,6 +57,22 @@ public class VirtLab implements Serializable{
         this.name = name;
     }
 
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
     private void readFile(File desc) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(desc.getAbsoluteFile()));
@@ -61,6 +83,10 @@ public class VirtLab implements Serializable{
                         name = s.substring(5);
                     } else if (s.matches("dirName=(.*)")) {
                         dirName = s.substring(8);
+                    } else if (s.matches("width=(.*)")) {
+                        width = s.substring(6);
+                    } else if (s.matches("height=(.*)")) {
+                        height = s.substring(7);
                     }
                 }
             } finally {
@@ -77,8 +103,9 @@ public class VirtLab implements Serializable{
         return "#Virtual Lab settings\n" +
                 new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new Date()) + "\n" +
                 "name=" + name + "\n" +
-
-                "dirName=" + dirName;
+                "dirName=" + dirName + "\n" +
+                "width=" + width + "\n" +
+                "height=" + height;
     }
 
 

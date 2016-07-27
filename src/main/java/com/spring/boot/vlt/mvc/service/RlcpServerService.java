@@ -60,7 +60,7 @@ public class RlcpServerService {
     }
 
     public Boolean runInteriorServer() throws InterruptedException {
-        laboratoryFrameService.setNameVl(trial.getVl().getDirName());
+        laboratoryFrameService.setDirName(trial.getVl().getDirName());
         laboratoryFrameService.setFrameId(trial.getFraimeId());
         if (!status(trial.getUrl())) {
             File file = new File(

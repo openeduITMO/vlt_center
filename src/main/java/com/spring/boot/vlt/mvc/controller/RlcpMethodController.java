@@ -3,6 +3,8 @@ package com.spring.boot.vlt.mvc.controller;
 import com.spring.boot.vlt.mvc.model.Trial;
 import com.spring.boot.vlt.mvc.service.RlcpMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rlcp.calculate.CalculatingResult;
 import rlcp.check.*;
@@ -18,24 +20,24 @@ public class RlcpMethodController {
     private RlcpMethodService rlcpMethodService;
 
 
-    @RequestMapping(value = "/getGenerate", method = RequestMethod.POST)
-    public GeneratingResult getGenerate(@RequestParam("algorithm") String algorithm) {
+    @RequestMapping(value = "/get_generate", method = RequestMethod.POST)
+    public ResponseEntity<GeneratingResult> getGenerate(@RequestBody String algorithm) {
         trial.setConnect(true);
         if (trial.getUrl() != null) {
             GeneratingResult result = rlcpMethodService.getGenerate(algorithm);
             trial.setGeneratingResult(result);
-            return result;
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
     }
 
     @RequestMapping(value = "/repeat", method = RequestMethod.POST)
-    public GeneratingResult repeat() {
+    public ResponseEntity<GeneratingResult> repeat() {
         trial.setConnect(true);
-        return trial.getGeneratingResult();
+        return new ResponseEntity<>(trial.getGeneratingResult(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getCalculate", method = RequestMethod.POST)
+    @RequestMapping(value = "/get_calculate", method = RequestMethod.POST)
     public CalculatingResult getCalculate(@RequestParam("instructions") String instructions,
                                           @RequestParam("condition") String condition) {
         CalculatingResult result = rlcpMethodService.getCalculate(instructions, condition);
@@ -43,11 +45,11 @@ public class RlcpMethodController {
         return result;
     }
 
-    @RequestMapping(value = "/getCheck", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public List<CheckingResult> getCheck(@RequestBody String instructions) {
+    @RequestMapping(value = "/get_check", method = RequestMethod.POST)
+    public ResponseEntity<List<CheckingResult>> getCheck(@RequestBody String instructions) {
         RlcpCheckResponse rlcpResponse = rlcpMethodService.getCheck(instructions);
         trial.setConnect(false);
-        return rlcpResponse.getBody().getResults();
+        return new ResponseEntity<>(rlcpResponse.getBody().getResults(), HttpStatus.OK);
     }
 
 }

@@ -1,31 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html ng-app="Vl" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>VLT</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <link rel="stylesheet" href="/VLT/css/bootflat.css"/>
   <link rel="stylesheet" href="/VLT/css/vlt_index.css"/>
   <link rel="stylesheet" href="/VLT/css/loader.css"/>
-  <script type="text/javascript" src="/VLT/js/jquery.js"></script>
-  <script type="text/javascript" src="/VLT/js/vl_test.js"></script>
-  <script type="text/javascript" src="/VLT/js/jquery.form.js"></script>
-  <script type="text/javascript" src="/VLT/js/jquery.fs.selecter.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/jquery.fs.stepper.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/icheck.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/angular.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/lodash.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.form.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.selecter.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.stepper.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/icheck.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/controllers/vl-controller.js"></script>
+  <script type="text/javascript" src="/VLT/js/controllers/server-status-controller.js"></script>
+  <script type="text/javascript" src="/VLT/js/services/vl-service.js"></script>
+  <script type="text/javascript" src="/VLT/js/services/server-status-service.js"></script>
+  <script type="text/javascript" src="/VLT/js/controllers/iframe-controller.js"></script>
+  <script type="text/javascript" src="/VLT/js/services/iframe-service.js"></script>
+  <script>
+    function setCalculateResult(res, calculate) {
+      var vlCtrl = angular.element($("body")).scope();
+      vlCtrl.calculate_result.push({'result': res, 'answer': calculate});
+      vlCtrl.$apply();
+    }
+  </script>
 </head>
-<body>
+<body ng-controller="VlCtrl">
 <div class="start">
-  <div class="run-server-button">
+  <div class="run-server-button" ng-controller="ServerStatusCtrl">
     <div class="server-div">
       <div class="server-setting">
         <label>Выбирите сервер:</label>
         <label class="toggle">
-          <input id="check-checkbox" type="checkbox" onchange="setCheckBox()"/>
+          <input id="check-checkbox" type="checkbox" ng-change="setCheckBox()" ng-model="change"/>
           <span class="handle"></span>
         </label>
       </div>
       <div class="server-status">
-        <script>checkServer();</script>
+        <div class='server-run' ng-show="interior_server">
+          <span id='interior-start-btn' class='button interior-start-btn' data='Запустить сервер'
+                ng-click='runInteriorServer()'></span>
+          <span id='interior-stop-btn' class='button interior-stop-btn' data='Остановить сервер'
+                ng-click='stopInteriorServer(url)'></span>
+          <p>Внутренний сервер</p>
+        </div>
+        <div class='server-check' ng-show="!interior_server">
+          <span id='check-status-server-btn' class='button check-status-server-btn'
+                data='Проверить статус сервера' ng-click="checkServerStatus()"></span>
+          <p>Внешний сервер</p>
+        </div>
       </div>
     </div>
     <div class="loader-div">
@@ -33,19 +58,23 @@
     </div>
 
   </div>
-  <div class="title-text" th:text="${nameVl}"></div>
+  <div class="title-text">{{nameVL}}</div>
   <div class="run-vl-button">
-    <span id="back-btn" class="button back-btn" data="Выход"></span>
-    <span id="start-btn-wain-run-server" class="button start-btn" data="Запустить"></span>
-    <span id="check-btn" class="button check-btn" data="Проверить"></span>
-    <span id="repeat-btn" class="button repeat-btn" data="Повторить с текущим вариантом"></span>
-    <span id="refresh-btn" class="button refresh-btn" data="Перезапустить с новым вариантом"></span>
+    <span id="back-btn" class="button back-btn" data="Выход" ng-click="home()"></span>
+    <span id="start-btn-wain-run-server" class="button start-btn" data="Запустить" ng-click="generateFn()"></span>
+    <span id="check-btn" class="button check-btn" data="Проверить" ng-click="checkFn()"></span>
+    <span id="repeat-btn" class="button repeat-btn" data="Повторить с текущим вариантом" ng-click="repeatFn()"></span>
+    <span id="refresh-btn" class="button refresh-btn" data="Перезапустить с новым вариантом"
+          ng-click="generateFn()"></span>
   </div>
 </div>
 <div id="generate_text">
-  Задание: <span class="text" th:text="${generate.text}"></span>
+  Задание: <span class="text">{{generate.text}}</span>
 </div>
-<div id="jsLab"></div>
+<div ng-app="iFrame" ng-controller="iFrameCtrl">
+  <iframe id="labFrame" name="vl-frame"></iframe>
+</div>
+
 
 <div id="frame">
   <div class="panel">
@@ -59,11 +88,11 @@
         <table class="table table-frame">
           <tr>
             <td>Задание</td>
-            <td><span th:text="${frame.data}"/></td>
+            <td><span>{{frame.data}}</span></td>
           </tr>
           <tr>
             <td>Вариант</td>
-            <td><span th:text="${generate.text}"/></td>
+            <td><span>{{generate.text}}</span></td>
           </tr>
         </table>
       </div>
@@ -74,47 +103,25 @@
         <table class="table property-table">
           <tr>
             <td>ID</td>
-            <td><span th:text="${frame.id}"/></td>
+            <td><span>{{frame.id}}</span></td>
           </tr>
           <tr>
             <td>Схема</td>
-            <td><span th:text="${frame.sheme}"/></td>
+            <td><span>{{frame.sheme}}</span></td>
           </tr>
           <tr>
             <td>Название кадра</td>
-            <td><span th:text="${frame.name}"/></td>
+            <td><span>{{frame.name}}</span></td>
           </tr>
           <tr>
             <td>Задание</td>
-            <td><span th:text="${frame.data}"/></td>
+            <td><span>{{frame.data}}</span></td>
           </tr>
         </table>
       </div>
     </div>
   </div>
 </div>
-<div id="list_script">
-  <input type="hidden" id="url-server" th:value="${url}"/>
-  <input type="hidden" id="preGeneratedCode" name="preGeneratedCode"
-         th:value="${generate.text}"/>
-  <input type="hidden" value="calcfake" id="calculatedCode"/>
-  <input type="hidden" value="calcfake" id="calculatedText"/>
-  <input type="hidden" value="prevsolfake" id="previousSolution"/>
-  <script type="text/javascript" th:each="jsFile: ${js.lib}"
-          th:src="'/VLT/VLabs/'+${js.dirName}+'/tool/js/lib/'+${jsFile}"></script>
-  <script type="text/javascript" th:each="jsFile: ${js.dev}"
-          th:src="'/VLT/VLabs/'+${js.dirName}+'/tool/js/dev/'+${jsFile}"></script>
-  <link rel="stylesheet" th:each="cssFile: ${css.lib}"
-        th:href="'/VLT/VLabs/'+${css.dirName}+'/tool/css/lib/'+${cssFile}"/>
-  <link rel="stylesheet" th:each="cssFile: ${css.dev}"
-        th:href="'/VLT/VLabs/'+${css.dirName}+'/tool/css/dev/'+${cssFile}"/>
-  <script type="text/javascript">
-    $(document).ready(function () {
-      Vlab.init();
-    });
-  </script>
-</div>
-
 <div id="generate">
   <div class="panel">
     <span class="button hidden"></span>
@@ -127,33 +134,48 @@
         <table class="table generate-table">
           <tr>
             <td>DefaultCode</td>
-            <td colspan="2"><span id="preText" th:text="${generate.code}"/></td>
+            <td colspan="2"><span id="preText">{{generate.code}}</span></td>
           </tr>
           <tr>
             <td>DefaultText</td>
-            <td colspan="2"><span th:text="${generate.text}"/></td>
+            <td colspan="2"><span>{{generate.text}}</span></td>
           </tr>
           <tr>
             <td>DeafaultInstructions</td>
-            <td colspan="2"><span th:text="${generate.instructions}"/></td>
+            <td colspan="2"><span>{{generate.instructions}}</span></td>
           </tr>
           <tr>
             <td>Algorithm</td>
-            <td colspan="2"><span id="algorithm" th:text="${algorithm}"/></td>
+            <td colspan="2"><span id="algorithm">{{algorithm}}</span></td>
           </tr>
         </table>
       </div>
     </div>
-    <div id="generate-result">
+    <div id="generate-result" ng-show="generate_result != null">
       <div class="panel panel-default">
         <div class="panel-heading">Ответ метода Generate</div>
-        <table class="table generate-table"></table>
+        <table class="table generate-table">
+          <tr>
+            <td>Code</td>
+            <td>{{generate_result.code}}</td>
+          </tr>
+          <tr>
+            <td>Text</td>
+            <td>{{generate_result.text}}</td>
+          </tr>
+          <tr>
+            <td>Instructions</td>
+            <td>
+              <div>{{generate_result.instructions}}</div>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
 
   </div>
 </div>
-<div id="calculate">
+<div id="calculate" ng-show="calculate_result.length">
   <div class="panel">
     <span class="button hidden"></span>
     <div class="panel-heading">Calculate</div>
@@ -164,6 +186,11 @@
         <div class="panel-heading">Ответ пользователя</div>
         <table class="table check-table">
           <tbody>
+          <tr ng-repeat="cl in calculate_result">
+            <td>
+              {{cl.result}}
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -179,6 +206,10 @@
           </tr>
           </thead>
           <tbody>
+          <tr ng-repeat="cl in calculate_result">
+            <td>{{cl.answer.code}}</td>
+            <td>{{cl.answer.text}}</td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -204,17 +235,17 @@
           </tr>
           </thead>
           <tbody>
-          <tr class="check" th:each="ch : ${check}">
-            <td type="id" th:text="${ch.id}"/>
-            <td type="time" th:text="${ch.time}"/>
-            <td type="input" th:text="${ch.input}"/>
-            <td type="output" th:text="${ch.output}"/>
+          <tr ng-repeat="ch in check">
+            <td type="id">{{ch.id}}</td>
+            <td type="time">{{ch.time}}</td>
+            <td type="input">{{ch.input}}</td>
+            <td type="output">{{ch.output}}</td>
           </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div id="check-result">
+    <div id="check-result" ng-show="check_result.length">
       <div class="panel panel-default">
         <div class="panel-heading">Ответ метода Check</div>
         <table class="table check-table">
@@ -227,11 +258,17 @@
           </tr>
           </thead>
           <tbody>
+          <tr ng-repeat="ch in check_result">
+            <td>{{ch.id}}</td>
+            <td>{{ch.time}}</td>
+            <td>{{ch.result}}</td>
+            <td>{{ch.output}}</td>
+          </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div id="check-answer">
+    <div id="check-answer" ng-show="check_answer != null">
       <div class="panel panel-default">
         <div class="panel-heading">Ответ метода Check</div>
         <table class="table check-table">
@@ -241,50 +278,14 @@
           </tr>
           </thead>
           <tbody>
+          <tr>
+            <td>{{check_answer}}</td>
+          </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-  var count = 0;
-  var ANT = new Object();
-
-  ANT.calculate = function () {
-    var result = Vlab.getResults();
-    $.ajax({
-      cache: false,
-      url: "/VLT/getCalculate",
-      global: false,
-      type: "POST",
-      data: (
-      {
-        instructions: result,
-        condition: Vlab.getCondition()
-      }
-      ),
-      dataType: "text",
-      success: function (text) {
-
-        if (count == 0) {
-          $("#calculate").css("display", "block");
-          count++;
-        }
-        $("#calculate-answer").find("table tbody").append("<tr><td>" + result + "</td></tr>");
-        var json = JSON.parse(text);
-        $("#calculate-result").find("table tbody").append("<tr><td>" + json.code + "</td><td>" + json.text + "</td></tr>");
-        $("#calculatedCode").val(json.code);
-        $("#calculatedText").val(json.text);
-        Vlab.calculateHandler(json.code);
-      },
-      error: function () {
-        $(".run-server-button").attr("class", "run-server-button run-server-error");
-      }
-
-    });
-  }
-</script>
 </body>
 </html>

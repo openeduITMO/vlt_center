@@ -34,15 +34,14 @@ public class LaboratoryFrameService {
 
     private enum StaticType {js, css}
 
-    ;
     private Document document;
     private Optional<Node> node;
 
-    private String nameVl;
+    private String dirName;
 
-    public Optional<Document> setNameVl(String nameVl) {
-        this.nameVl = nameVl;
-        document = readLabratoryFame(nameVl);
+    public Optional<Document> setDirName(String dirName) {
+        this.dirName = dirName;
+        document = readLabratoryFame(this.dirName);
         return Optional.ofNullable(document);
     }
 
@@ -57,7 +56,7 @@ public class LaboratoryFrameService {
     }
 
     public VirtLab getVirtLab() {
-        return new VirtLab(new File(new File(System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles"), nameVl), "lab.desc"));
+        return new VirtLab(new File(new File(System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles"), dirName), "lab.desc"));
     }
 
     public LaboratoryFrame getFrame() {
@@ -80,9 +79,9 @@ public class LaboratoryFrameService {
 
     public StaticFile getStatic(String type) {
         if (type.equalsIgnoreCase("js")) {
-            return readStatic(nameVl, StaticType.js);
+            return readStatic(dirName, StaticType.js);
         } else {
-            return readStatic(nameVl, StaticType.css);
+            return readStatic(dirName, StaticType.css);
         }
     }
 

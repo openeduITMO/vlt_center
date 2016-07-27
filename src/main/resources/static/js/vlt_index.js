@@ -52,7 +52,8 @@ jQuery(document).ready(function () {
     $.post("/VLT/getLabratoryFame?name=" + vlName, function (data) {
       if (data.length != 0) {
         $.each(data, function (key, val) {
-          $(".running").find($(".panel-body")).find("table tbody").append("<tr>" +
+          $(".running").find($(".panel-body")).find("table tbody").append(
+            "<tr>" +
             "<td>" + val.id + "</td>" +
             "<td>" + val.sheme + "</td>" +
             "<td>" + val.name + "</td>" +
@@ -77,7 +78,8 @@ jQuery(document).ready(function () {
 
     $(".import").find($(".panel-heading")).find($(".name-vl")).html("\"" + currentTr.find('td').first().html() + "\"");
     var vlName = $(this).attr("dirName");
-    $(".import").find($(".panel-body")).append("<form id='upload_form' method='post' enctype='multipart/form-data' action='/VLT/uploadFile?nameDir=" + vlName + "'>" +
+    $(".import").find($(".panel-body")).append(
+      "<form id='upload_form' method='post' enctype='multipart/form-data' action='/VLT/uploadFile?nameDir=" + vlName + "'>" +
       "<div class='uploader'>" +
       "<label for='uploader' data-file='Выберите файл'></label>" +
       "<input type='file' name='uploadfile' id='uploader'/>" +
