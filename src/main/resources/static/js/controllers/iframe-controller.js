@@ -20,7 +20,7 @@ vl.controller("iFrameCtrl", function ($scope, iFrameService) {
           });
         });
       ifrm.document.write('<div id="jsLab"></div>');
-      ifrm.document.write('<input type="hidden" id="preGeneratedCode" name="preGeneratedCode" ng-value="' + $scope.generate.text + '"/>');
+      ifrm.document.write('<input type="hidden" id="preGeneratedCode" name="preGeneratedCode" ng-value="' + $scope.generate.code + '"/>');
       ifrm.document.write('<input type="hidden" value="calcfake" id="calculatedCode"/>');
       ifrm.document.write('<input type="hidden" value="calcfake" id="calculatedText"/>');
       ifrm.document.write('<input type="hidden" value="prevsolfake" id="previousSolution"/>');

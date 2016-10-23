@@ -1,16 +1,11 @@
 package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +22,7 @@ import static java.nio.file.Files.walk;
 
 @Service
 public class VltService {
-    private static final Logger logger = LogManager.getLogger(VltService.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private Environment env;
 

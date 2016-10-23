@@ -1,7 +1,8 @@
 package com.spring.boot.vlt.mvc.service;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import com.spring.boot.vlt.mvc.controller.UploadFileController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import static java.nio.file.Files.walk;
 
 @Service
 public class UploadFileService {
-    private static final Logger logger = LogManager.getLogger(UploadFileService.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private Environment env;
 

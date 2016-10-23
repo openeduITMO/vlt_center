@@ -26,7 +26,7 @@ public class AppConfig  extends WebMvcConfigurerAdapter{
 
         @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return (container -> container.setPort(8013));
+        return (container -> container.setPort(8012));
     }
 
 }

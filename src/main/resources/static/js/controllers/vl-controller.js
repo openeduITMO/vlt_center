@@ -29,6 +29,8 @@ var vl = angular.module('Vl', [])
     VlService.getGenerate($scope.dirName, $scope.frameId)
       .then(res => {
         $scope.generate = res;
+        $scope.generate_result = res;
+
       });
     VlService.getAlgorithm($scope.dirName, $scope.frameId)
       .then(res => {

@@ -3,8 +3,8 @@ package com.spring.boot.vlt.mvc.service;
 import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @Service
 public class LaboratoryFrameService {
-    private static final Logger logger = LogManager.getLogger(LaboratoryFrameService.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private Environment env;
