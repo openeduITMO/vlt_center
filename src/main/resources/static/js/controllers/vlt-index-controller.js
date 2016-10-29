@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('App', [])
+var app = angular.module('App', ['angularUtils.directives.dirPagination'])
   .controller('IndexCtrl', function ($scope, IndexService) {
     $scope.vlCollection = [];
     $scope.vl = {name: "", dirName: ""};
@@ -128,6 +128,11 @@ var app = angular.module('App', [])
 
     $scope.startVl = function (dir, frameId) {
       window.location.href = '/VLT/start_vl/' + dir + '/' + frameId;
+    }
+
+    $scope.sort = function(keyname){
+      $scope.sortKey = keyname;
+      $scope.reverse = !$scope.reverse;
     }
 
   });

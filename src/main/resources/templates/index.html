@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/VLT/css/vlt_index.css"/>
   <script type="text/javascript" src="/VLT/js/lib/jquery.js"></script>
   <script type="text/javascript" src="/VLT/js/lib/angular.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/dirPagination.js"></script>
   <script type="text/javascript" src="/VLT/js/lib/lodash.min.js"></script>
   <script type="text/javascript" src="/VLT/js/lib/jquery.form.js"></script>
   <script type="text/javascript" src="/VLT/js/lib/jquery.fs.selecter.min.js"></script>
@@ -38,18 +39,27 @@
 
   <div class="vlt">
     <div class="vl-list">
+
       <div class="list-div">
         <div class="panel panel-default">
           <span class="button plusTd" data="Добавить новую ВЛ" ng-click="showAddForm()"></span>
           <div class="panel-heading">Список виртуальных лабораторий</div>
+          <form>
+            <div>
+              <label >Search</label>
+              <input type="text" ng-model="search" placeholder="Search"/>
+            </div>
+          </form>
           <table class="table" id="vl-list">
             <thead>
-            <th class="name">Имя</th>
+            <th ng-click="sort('name')" class="name">Имя
+              <span ng-show="sortKey=='name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
             <th class="commands">Команды</th>
             </thead>
             <tbody>
-            <tr ng-repeat="vl in vlCollection">
-              <td>{{vl.name}}</td>
+            <tr dir-paginate="vl in vlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
+            <td>{{vl.name}}</td>
               <td>
                 <span class="button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>
                 <span class="button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"/>
@@ -60,6 +70,11 @@
           </table>
         </div>
       </div>
+      <dir-pagination-controls
+        max-size="5"
+        direction-links="true"
+        boundary-links="true" >
+      </dir-pagination-controls>
     </div>
 
     <div class="settings-servers" ng-show="!hide.servers" ng-hide="hide.servers">

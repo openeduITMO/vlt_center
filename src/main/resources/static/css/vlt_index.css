@@ -44,6 +44,31 @@ iframe {
   margin-left: 9px;
 }
 
+.pagination li {
+  display: inline;
+  box-sizing: border-box;
+}
+
+.pagination li a, .pagination li span {
+  padding: 6px 12px;
+  margin-left: -1px;
+  color: #000000;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.pagination .active a,
+.pagination .active span,
+.pagination .active a:hover,
+.pagination .active span:hover,
+.pagination .active a:focus,
+.pagination .active span:focus {
+  color: white;
+  background-color: #4fc1e9;
+  border-color: #4fc1e9;
+}
+
 .title-text {
   margin-left: 2%;
   font-size: 30px;
