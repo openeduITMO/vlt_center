@@ -69,6 +69,16 @@ iframe {
   border-color: #4fc1e9;
 }
 
+.search-input{
+  display: inline-block;
+  width: 70%;
+  vertical-align: middle;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 5px;
+}
+
 .title-text {
   margin-left: 2%;
   font-size: 30px;
@@ -602,14 +612,12 @@ input[type='file'] {
 }
 
 .settings {
-  height: 350px;
   width: 400px;
   margin-right: auto;
   margin-left: auto;
 }
 
 .import {
-  height: 170px;
   width: 400px;
   margin-right: auto;
   margin-left: auto;
