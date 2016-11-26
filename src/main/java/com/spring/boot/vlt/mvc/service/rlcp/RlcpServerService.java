@@ -1,11 +1,12 @@
-package com.spring.boot.vlt.mvc.service;
+package com.spring.boot.vlt.mvc.service.rlcp;
 
-import com.spring.boot.vlt.mvc.info.LogStreamReader;
+import com.spring.boot.vlt.config.property.VltSettings;
+import com.spring.boot.vlt.info.LogStreamReader;
 import com.spring.boot.vlt.mvc.model.MapServer;
 import com.spring.boot.vlt.mvc.model.Trial;
 import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
+import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import rlcp.echo.RlcpEchoRequest;
 import rlcp.echo.RlcpEchoRequestBody;
@@ -22,7 +23,7 @@ public class RlcpServerService {
     @Autowired
     LaboratoryFrameService laboratoryFrameService;
     @Autowired
-    private Environment env;
+    private VltSettings vltSettings;
     @Inject
     private MapServer servers;
     @Autowired
@@ -65,7 +66,7 @@ public class RlcpServerService {
         if (!status(trial.getUrl())) {
             File file = new File(
                     System.getProperty("user.dir") + File.separator +
-                            env.getProperty("paths.uploadedFiles") +
+                            vltSettings.getPathsUploadedFiles() +
                             File.separator + trial.getVl().getDirName() + File.separator + "server");
             if (file.exists()) {
                 ProcessBuilder process = new ProcessBuilder("java", "-jar", "-Dfile.encoding=utf-8", new File(file, "server.jar").getAbsolutePath());

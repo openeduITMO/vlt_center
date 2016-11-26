@@ -1,10 +1,9 @@
 package com.spring.boot.vlt.mvc.service;
 
-import com.spring.boot.vlt.mvc.controller.UploadFileController;
+import com.spring.boot.vlt.config.property.VltSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,10 +21,10 @@ import static java.nio.file.Files.walk;
 public class UploadFileService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private Environment env;
+    private VltSettings vltSettings;
 
     public boolean upload(MultipartFile uploadfile, String dir) {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         File vlDir = new File(path, dir);
         if(vlDir.listFiles().length != 0){
             PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");

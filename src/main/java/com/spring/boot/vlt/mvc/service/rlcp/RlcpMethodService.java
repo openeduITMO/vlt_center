@@ -1,4 +1,4 @@
-package com.spring.boot.vlt.mvc.service;
+package com.spring.boot.vlt.mvc.service.rlcp;
 
 import com.spring.boot.vlt.mvc.model.Trial;
 import org.slf4j.Logger;

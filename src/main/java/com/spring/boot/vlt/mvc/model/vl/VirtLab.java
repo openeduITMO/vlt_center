@@ -13,8 +13,6 @@ import java.util.Date;
 
 public class VirtLab implements Serializable{
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private Environment env;
 
     @NotNull
     @Size(min = 1)

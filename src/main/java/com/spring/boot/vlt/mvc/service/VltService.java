@@ -1,10 +1,10 @@
 package com.spring.boot.vlt.mvc.service;
 
+import com.spring.boot.vlt.config.property.VltSettings;
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,10 +24,10 @@ import static java.nio.file.Files.walk;
 public class VltService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private Environment env;
+    private VltSettings vltSettings;
 
     public List<VirtLab> getVirtList() {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");
         List<VirtLab> vlList = new ArrayList<>();
         Path vlabs = Paths.get(path);
@@ -48,7 +48,7 @@ public class VltService {
     }
 
     public VirtLab addVl(VirtLab vl) {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         File vlDir = new File(path, "lab" + System.currentTimeMillis());
         while (vlDir.exists()) {
             vlDir = new File(path, "lab" + System.currentTimeMillis());
@@ -64,27 +64,27 @@ public class VltService {
     }
 
     public VirtLab getPropertyVl(String nameVl) {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         File vlDir = new File(path, nameVl);
         return new VirtLab(new File(vlDir, "lab.desc"));
     }
 
     public VirtLab savePropertyVl(VirtLab vl, String dir) {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         vl.setDirName(dir);
         vl.save(path);
         return vl;
     }
 
     public byte[] getImg(String dir, String name, String suffix) throws IOException {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         final File img = new File(path + File.separator + dir + File.separator + "tool" + File.separator + "img", name + "." + suffix);
         return getStatic(img);
     }
 
 
     public byte[] getImg2(String dir, String name, String suffix) throws IOException {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         final File img = new File(path + File.separator + dir + File.separator + "tool" + File.separator + "img", name + "." + suffix);
         return getStatic(img);
     }

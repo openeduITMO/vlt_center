@@ -1,4 +1,4 @@
-package com.spring.boot.vlt.mvc.info;
+package com.spring.boot.vlt.info;
 
 import java.io.BufferedReader;
 import java.io.IOException;

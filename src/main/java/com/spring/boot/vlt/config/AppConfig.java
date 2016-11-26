@@ -1,4 +1,4 @@
-package com.spring.boot.vlt;
+package com.spring.boot.vlt.config;
 
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +24,9 @@ public class AppConfig  extends WebMvcConfigurerAdapter{
         registry.addResourceHandler("/VLabs/**").addResourceLocations("file:VLabs/").setCachePeriod(0);
     }
 
-        @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return (container -> container.setPort(8012));
-    }
+//    @Bean
+//    public EmbeddedServletContainerCustomizer containerCustomizer() {
+//        return (container -> container.setPort(8012));
+//    }
 
 }

@@ -1,5 +1,6 @@
 package com.spring.boot.vlt.mvc.service;
 
+import com.spring.boot.vlt.config.property.VltSettings;
 import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
 import com.spring.boot.vlt.mvc.model.vl.VirtLab;
@@ -10,7 +11,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import rlcp.check.ConditionForChecking;
 import rlcp.generate.GeneratingResult;
@@ -30,7 +30,7 @@ public class LaboratoryFrameService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private Environment env;
+    private VltSettings vltSettings;
 
     private enum StaticType {js, css}
 
@@ -56,7 +56,7 @@ public class LaboratoryFrameService {
     }
 
     public VirtLab getVirtLab() {
-        return new VirtLab(new File(new File(System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles"), dirName), "lab.desc"));
+        return new VirtLab(new File(new File(System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles(), dirName), "lab.desc"));
     }
 
     public LaboratoryFrame getFrame() {
@@ -138,10 +138,10 @@ public class LaboratoryFrameService {
     }
 
     private Document readLabratoryFame(String nameVl) {
-        final String path = env.getProperty("paths.uploadedFiles");
+        final String path = vltSettings.getPathsUploadedFiles();
         SAXReader saxReader = new SAXReader();
         Document framesXml = null;
-        File xml = new File(path + File.separator + nameVl, "frames" + File.separator + env.getProperty("framesXml"));
+        File xml = new File(path + File.separator + nameVl, "frames" + File.separator + vltSettings.getFramesXml());
         try {
             framesXml = saxReader.read(xml);
         } catch (DocumentException e) {
@@ -153,7 +153,7 @@ public class LaboratoryFrameService {
     }
 
     private StaticFile readStatic(String nameDirVl, StaticType type) {
-        final String path = System.getProperty("user.dir") + File.separator + env.getProperty("paths.uploadedFiles");
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         StaticFile staticFile = new StaticFile(nameDirVl);
         File st = new File(path + File.separator + nameDirVl, "tool" + File.separator + type);
         try {

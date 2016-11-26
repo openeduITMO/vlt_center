@@ -1,6 +1,6 @@
-package com.spring.boot.vlt.mvc.controller;
+package com.spring.boot.vlt.mvc.controller.rlcp;
 
-import com.spring.boot.vlt.mvc.service.RlcpServerService;
+import com.spring.boot.vlt.mvc.service.rlcp.RlcpServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

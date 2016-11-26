@@ -1,0 +1,28 @@
+server:
+  port: 8012
+  context-path: /VLT
+
+vlt.settings:
+  pathsUploadedFiles: VLabs
+  framesXml: LaboratoryFrames.xml
+
+multipart:
+    maxFileSize: 50000KB
+    maxRequestSize: 50000KB
+
+security.token:
+  tokenExpirationTime: 15 # Minutes
+  refreshTokenExpTime: 21 # Minutes
+  tokenIssuer: http://efimchik.com
+  tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
+
+spring.datasource:
+  url: "jdbc:h2:~/testdb"
+  driverClassName: org.h2.Driver
+  username: "sa"
+  password: ""
+
+spring.jpa:
+  show-sql: true
+  database-platform: org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled: true
