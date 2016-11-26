@@ -17,10 +17,10 @@ security.token:
   tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
 
 spring.datasource:
-  url: "jdbc:h2:~/testdb"
+  url: "jdbc:h2:~/vltDB"
   driverClassName: org.h2.Driver
-  username: "sa"
-  password: ""
+  username: "admin"
+  password: "peterthegreat"
 
 spring.jpa:
   show-sql: true
