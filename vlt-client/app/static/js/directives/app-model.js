@@ -1,4 +1,10 @@
-'use strict';
+app.directive('loginForm', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'templates/login.html'
+  };
+});
+
 app.directive('fileModel', ['$parse', function ($parse) {
   return {
     restrict: 'A',

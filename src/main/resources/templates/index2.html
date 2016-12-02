@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html ng-app="Vlt" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>VLT</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" href="/VLT/css/bootflat.css"/>
+  <link rel="stylesheet" href="/VLT/css/vlt_index.css"/>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/angular.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/dirPagination.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/lodash.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.form.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.selecter.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.stepper.min.js"></script>
+  <script type="text/javascript" src="/VLT/js/controllers/vlt-index-controller.js"></script>
+  <script type="text/javascript" src="/VLT/js/controllers/upload-controller.js"></script>
+  <script type="text/javascript" src="/VLT/js/directives/file-model.js"></script>
+  <script type="text/javascript" src="/VLT/js/services/vlt-index-service.js"></script>
+  <script type="text/javascript" src="/VLT/js/services/upload-service.js"></script>
+
+</head>
+<body>
+<script>
+  $(document).on('change', '.uploader :file', function () {
+    var name = $(this).get(0).files[0].name;
+    if (name != "") {
+      $(this).parent().find("label").attr("data-file", name);
+    }
+  });
+</script>
+
+<div ng-controller="IndexCtrl">
+
+  <div class="title-text">
+    Среда тестирования виртуальных лабораторий
+    <span id="setting-server-btn" class="button setting-server-btn" data="Список серверов"
+          ng-click="showServerList()"></span>
+  </div>
+
+  <div class="vlt">
+    <div class="vl-list">
+
+      <div class="list-div">
+        <div class="panel panel-default">
+          <span class="button plusTd" data="Добавить новую ВЛ" ng-click="showAddForm()"></span>
+          <div class="panel-heading">Список виртуальных лабораторий</div>
+          <form>
+            <div>
+              <input type="text" class="search-input" ng-model="search" placeholder="Поиск"/>
+            </div>
+          </form>
+          <table class="table" id="vl-list">
+            <thead>
+            <th ng-click="sort('name')" class="name">Имя
+              <span ng-show="sortKey=='name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+            </th>
+            <th class="commands">Команды</th>
+            </thead>
+            <tbody>
+            <tr dir-paginate="vl in vlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
+            <td>{{vl.name}}</td>
+              <td>
+                <span class="button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>
+                <span class="button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"/>
+                <span class="button import-vl" data="Импрот" ng-click="showImportForm(vl)"/>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <dir-pagination-controls
+        max-size="5"
+        direction-links="true"
+        boundary-links="true" >
+      </dir-pagination-controls>
+    </div>
+
+    <div class="settings-servers" ng-show="!hide.servers" ng-hide="hide.servers">
+      <div class="panel panel-default">
+        <span class="button close" data="Закрыть" ng-click="closeForm('settings-servers')"></span>
+        <span id="update-btn" class="button update-btn" data="Обновить" ng-click="getServersList()"></span>
+        <div class="panel-heading">Список запущенных серверов</div>
+        <table class="table" id="table-servers">
+          <thead>
+          <tr class="table_tit">
+            <th>Название</th>
+            <th>URL</th>
+            <th>Остановить сервер</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-show="!servers.length">
+            <td colspan='3'>
+              <div>Нет запущенных серверов</div>
+            </td>
+          </tr>
+          <tr ng-repeat="server in servers">
+            <td>{{server.name}}</td>
+            <td>{{server.url}}</td>
+            <td><span id='interior-stop-run' class='button interior-stop-btn' data='Остановить сервер' ng-click="stopServer(server.url)"></span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="vl-current">
+      <div id="add-vl-block" class="panel panel-default s-form" ng-show="!hide.addForm" ng-hide="hide.addForm">
+        <span class="button close" data="Закрыть" ng-click="closeForm('add-form')"></span>
+        <div class="panel-heading">Добавить новую ВЛ</div>
+        <div class="panel-body">
+          <div class="add-form col-xs-6">
+            <input id="name-vl" class="form-control input-group" type="text" placeholder="Название ВЛ"
+                   value="" ng-model="vl.name"/>
+            <span class="input-group-btn">
+              <button id="add-vl" class="btn-add btn-primary" ng-click="addVl(vl.name)">Добавить</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default settings" ng-show="!hide.settingsForm" ng-hide="hide.settingsForm">
+        <span class="button close" data="Закрыть" ng-click="closeForm('settings-form')"></span>
+        <div class="panel-heading">Настройка "{{vl.name}}"<span class="name-vl"></span></div>
+        <div class="panel-body">
+          <form id='save-property-vl'>
+            <table>
+              <tr>
+                <td><label>Название лаборатори</label></td>
+                <td><input class='form-control-tune' id='name-current-vl' ng-model='vl.curName'/></td>
+              </tr>
+              <tr>
+                <td><label>Название каталога</label></td>
+                <td><input class='form-control-tune lock' id='dir-current-vl' ng-model='vl.dirName' disabled=""/><br/>
+                </td>
+              </tr>
+              <tr>
+                <td><label>Ширина фрейма</label></td>
+                <td><input class='form-control-tune' id='width-current-vl' ng-model='vl.width' /><br/>
+                </td>
+              </tr>
+              <tr>
+                <td><label>Высота фрейма</label></td>
+                <td><input class='form-control-tune' id='height-current-vl' ng-model='vl.height' /><br/>
+                </td>
+              </tr>
+            </table>
+            <button id='save'><span class='button save-vl' data='Сохранить' ng-click='savePropertyVl(vl)'/></button>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel panel-default import" ng-show="!hide.importForm" ng-hide="hide.importForm">
+        <span class="button close" data="Закрыть" ng-click="closeForm('import-form')"></span>
+        <div class="panel-heading">Импорт "{{vl.name}}"<span class="name-vl"></span></div>
+        <div class="panel-body">
+          <form id='upload_form' ng-controller='uploadCtrl'>
+            <div class='uploader'>
+              <label for='uploader' data-file='Выберите файл'></label>
+              <input type='file' name='uploadfile' id='uploader' file-model='zipVl'/>
+            </div>
+            <button><span class='button import-btn' data='Импорт' ng-click='uploadFile(vl.dirName)'></span></button>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel panel-default running" ng-show="!hide.runningForm" ng-hide="hide.runningForm">
+        <span class="button close" data="Закрыть" ng-click="closeForm('running-form')"></span>
+        <div class="panel-heading">Запуск "{{vl.name}}"<span class="name-vl"></span></div>
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+            <th class="name">ID</th>
+            <th class="status">Схема</th>
+            <th class="commands">Название</th>
+            <th class="commands">Задание</th>
+            <th class="commands">Запуск</th>
+            </thead>
+            <tbody>
+            <tr ng-show="!frameCollection.length">
+              <td colspan='5'>
+                <div class='server-error'>LaboratoryFrames не загружен</div>
+              </td>
+            </tr>
+            <tr ng-repeat="frame in frameCollection">
+              <td>{{frame.id}}</td>
+              <td>{{frame.sheme}}</td>
+              <td>{{frame.name}}</td>
+              <td>{{frame.data}}</td>
+              <td>
+                <button><span class='button start-vl' data='Запуск' ng-click="startVl(currentDir, frame.id)"/></button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

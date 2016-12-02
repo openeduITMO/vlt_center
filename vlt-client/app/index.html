@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="App" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <title>VLT</title>
+
+  <link rel="stylesheet" href="static/css/reset.css">
+  <link rel="stylesheet" href="static/css/login.css">
+  <link rel="stylesheet" href="static/css/vlt_index.css">
+  <link rel="stylesheet" href="bower_components/bootflat/css/bootflat.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/jquery-form/jquery.form.js"></script>
+  <script type="text/javascript" src="bower_components/Selecter/jquery.fs.selecter.min.js"></script>
+  <script type="text/javascript" src="bower_components/Stepper/jquery.fs.stepper.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-utils-pagination/dirPagination.js"></script>
+  <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
+  <script type="text/javascript" src="static/js/app.js"></script>
+  <script type="text/javascript" src="static/js/controllers/user-controller.js"></script>
+  <script type="text/javascript" src="static/js/controllers/vlt-index-controller.js"></script>
+  <script type="text/javascript" src="static/js/controllers/upload-controller.js"></script>
+  <script type="text/javascript" src="static/js/services/user-service.js"></script>
+  <script type="text/javascript" src="static/js/services/vlt-index-service.js"></script>
+  <script type="text/javascript" src="static/js/services/upload-service.js"></script>
+  <script type="text/javascript" src="static/js/directives/app-model.js"></script>
+
+</head>
+<body ng-controller="AppCtrl">
+
+<div ng-controller="UserCtrl">
+  <login-form ng-hide="isAuthorized"></login-form>
+</div>
+
+<div ng-controller="IndexCtrl">
+  <vlt-index ng-show="isAuthorized"></vlt-index>
+</div>
+
+</body>
+</html>

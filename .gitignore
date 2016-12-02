@@ -3,3 +3,5 @@
 *.iml
 target/
 logs/
+vlt-client/node_modules/
+vlt-client/bower_components/

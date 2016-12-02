@@ -1,25 +1,3 @@
-<!DOCTYPE html>
-<html ng-app="App" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>VLT</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <link rel="stylesheet" href="/VLT/css/bootflat.css"/>
-  <link rel="stylesheet" href="/VLT/css/vlt_index.css"/>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/angular.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/dirPagination.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/lodash.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.form.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.selecter.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.stepper.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/controllers/vlt-index-controller.js"></script>
-  <script type="text/javascript" src="/VLT/js/controllers/upload-controller.js"></script>
-  <script type="text/javascript" src="/VLT/js/directives/file-model.js"></script>
-  <script type="text/javascript" src="/VLT/js/services/vlt-index-service.js"></script>
-  <script type="text/javascript" src="/VLT/js/services/upload-service.js"></script>
-
-</head>
-<body>
 <script>
   $(document).on('change', '.uploader :file', function () {
     var name = $(this).get(0).files[0].name;
@@ -29,7 +7,7 @@
   });
 </script>
 
-<div ng-controller="IndexCtrl">
+<div>
 
   <div class="title-text">
     Среда тестирования виртуальных лабораторий
@@ -46,19 +24,20 @@
           <div class="panel-heading">Список виртуальных лабораторий</div>
           <form>
             <div>
-              <input type="text" class="search-input" ng-model="search" placeholder="Search"/>
+              <input type="text" class="search-input" ng-model="search" placeholder="Поиск"/>
             </div>
           </form>
           <table class="table" id="vl-list">
             <thead>
             <th ng-click="sort('name')" class="name">Имя
-              <span ng-show="sortKey=='name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+              <span ng-show="sortKey=='name'"
+                    ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
             </th>
             <th class="commands">Команды</th>
             </thead>
             <tbody>
             <tr dir-paginate="vl in vlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
-            <td>{{vl.name}}</td>
+              <td>{{vl.name}}</td>
               <td>
                 <span class="button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>
                 <span class="button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"/>
@@ -72,7 +51,7 @@
       <dir-pagination-controls
         max-size="5"
         direction-links="true"
-        boundary-links="true" >
+        boundary-links="true">
       </dir-pagination-controls>
     </div>
 
@@ -98,7 +77,8 @@
           <tr ng-repeat="server in servers">
             <td>{{server.name}}</td>
             <td>{{server.url}}</td>
-            <td><span id='interior-stop-run' class='button interior-stop-btn' data='Остановить сервер' ng-click="stopServer(server.url)"></span></td>
+            <td><span id='interior-stop-run' class='button interior-stop-btn' data='Остановить сервер'
+                      ng-click="stopServer(server.url)"></span></td>
           </tr>
           </tbody>
         </table>
@@ -137,12 +117,12 @@
               </tr>
               <tr>
                 <td><label>Ширина фрейма</label></td>
-                <td><input class='form-control-tune' id='width-current-vl' ng-model='vl.width' /><br/>
+                <td><input class='form-control-tune' id='width-current-vl' ng-model='vl.width'/><br/>
                 </td>
               </tr>
               <tr>
                 <td><label>Высота фрейма</label></td>
-                <td><input class='form-control-tune' id='height-current-vl' ng-model='vl.height' /><br/>
+                <td><input class='form-control-tune' id='height-current-vl' ng-model='vl.height'/><br/>
                 </td>
               </tr>
             </table>
@@ -200,6 +180,3 @@
     </div>
   </div>
 </div>
-
-</body>
-</html>

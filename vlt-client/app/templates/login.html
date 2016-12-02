@@ -1,0 +1,76 @@
+<div>
+  <div class="forms">
+    <ul class="form-switcher">
+      <li>
+        <a ng-class="isLogin? 'selected' : ''" ng-click="isLogin=true;resetVariables()" class="selected">Вход</a>
+      </li>
+      <li>
+        <a ng-class="isLogin? '' : 'selected'" ng-click="isLogin=false;resetVariables()">Регистрация</a>
+      </li>
+    </ul>
+    <div id="form-login" ng-class="isLogin? 'is-selected' : ''" class="is-selected">
+      <form class="ng-pristine ng-valid">
+        <p class="field">
+          <span class="fa fa-user user-img"></span>
+          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="user-login" placeholder="Логин"
+                 ng-model="user.login"
+                 ng-style="errors.loginIsError=='' && {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
+                 ng-click="errors.loginIsError=''">
+          <span class="error-msg ng-binding"
+                ng-style="errors.loginIsError=='' && {'visibility': 'hidden'}||{'visibility': ' visible'}">{{errors.loginIsError}}</span>
+        </p>
+        <p class="field">
+          <span class="fa fa-lock key-img"></span>
+          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="user-password" type="password"
+                 placeholder="Пароль" ng-model="user.password"
+                 ng-style="errors.passwordIsError=='' && {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
+                 ng-click="errors.passwordIsError=''">
+          <span class=" error-msg ng-binding"
+          ng-style="errors.passwordIsError=='' && {'visibility': 'hidden'}||{'visibility': ' visible'}">{{errors.passwordIsError}}</span>
+        </p>
+        <p class="field">
+          <input class="full-width" type="submit" value="Войти" ng-click="login()">
+        </p>
+      </form>
+    </div>
+
+    <div id="form-register" ng-class="isLogin? '': 'is-selected'">
+      <form class="ng-pristine ng-valid">
+        <p class="field">
+          <span class="fa fa-user user-img"></span>
+          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="new-user-login" placeholder="Логин"
+                 ng-model="user.login"
+                 ng-style="errors.loginIsError=='' && {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
+                 ng-click="errors.loginIsError=''">
+          <span class="error-msg ng-binding"
+                ng-style="errors.loginIsError=='' && {'visibility': 'hidden'}||{'visibility': ' visible'}">{{errors.loginIsError}}</span>
+        </p>
+        <p class="field">
+          <span class="fa fa-lock key-img"></span>
+          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="new-user-password" type="password"
+                 placeholder="Пароль" ng-model="user.password"
+                 ng-style="errors.passwordIsError=='' &amp;&amp; {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
+                 ng-click="errors.passwordIsError=''">
+          <span class="error-msg ng-binding"
+                ng-style="errors.passwordIsError=='' && {'visibility': 'hidden'}||{'visibility': ' visible'}">{{errors.passwordIsError}}</span>
+        </p>
+        <p class="field">
+          <span class="fa fa-users role-img"></span>
+          <span class="fa fa-caret-down caret-img"></span>
+          <select ng-model="userRole" ng-options="role.name for role in roles"
+                  ng-style="errors.registerRole=='' && {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
+                  ng-click="errors.registerRole=''" class="ng-pristine ng-untouched ng-valid ng-empty">
+            <option disabled="" value="" class="" selected="selected">Выберите роль</option>
+            <option label="Студент" value="object:3">Студент</option>
+            <option label="Разработчик" value="object:4">Разработчик</option>
+          </select>
+          <span class="error-msg ng-binding"
+                ng-style="errors.registerRole=='' && {'visibility': 'hidden'}||{'visibility': ' visible'}">errors.registerRole</span>
+        </p>
+        <p class="field">
+          <input class="full-width" type="submit" value="Регистрация" ng-click="register()">
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

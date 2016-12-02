@@ -10,4 +10,11 @@ java -jar -Dfile.encoding=utf-8 vlt.jar
 
 pidof java
 -- return index
-kill index
+kill index	
+
+
+npm install
+npm start
+npm install -g bower
+bower install
+bower info bootflat
