@@ -1,8 +1,8 @@
 package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.config.property.VltSettings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +19,7 @@ import static java.nio.file.Files.walk;
 
 @Service
 public class UploadFileService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LogManager.getLogger(this.getClass());
     @Autowired
     private VltSettings vltSettings;
 

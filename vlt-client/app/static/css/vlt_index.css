@@ -1,11 +1,5 @@
-@font-face {
-  font-family: Glyphicons Halflings;
-  src: url(fonts/glyphicons-halflings-regular.ttf);
-}
-
 body, html {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-  font-size: 16px !important;
+  font-size: 16px;
 }
 
 iframe {
@@ -65,8 +59,8 @@ iframe {
 .pagination .active a:focus,
 .pagination .active span:focus {
   color: white;
-  background-color: #4fc1e9;
-  border-color: #4fc1e9;
+  background-color: #3bafda;
+  border-color: #3bafda;
 }
 
 .search-input{

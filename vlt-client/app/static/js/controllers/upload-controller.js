@@ -1,4 +1,3 @@
-'use strict';
 app.controller('uploadCtrl', function ($scope, UploadService) {
   $scope.uploadFile = function (dir) {
     var file = $scope.zipVl;

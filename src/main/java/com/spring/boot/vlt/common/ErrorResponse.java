@@ -1,10 +1,11 @@
 package com.spring.boot.vlt.common;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
-public class ErrorResponse {
+public class ErrorResponse extends ResponseEntity {
     // HTTP Response Status Code
     private final HttpStatus status;
 
@@ -17,6 +18,7 @@ public class ErrorResponse {
     private final Date timestamp;
 
     protected ErrorResponse(final String message, final ErrorCode errorCode, HttpStatus status) {
+        super(status);
         this.message = message;
         this.errorCode = errorCode;
         this.status = status;

@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum ErrorCode {
     GLOBAL(2),
 
-    AUTHENTICATION(10), JWT_TOKEN_EXPIRED(11);
+    AUTHENTICATION(10),
+    JWT_TOKEN_EXPIRED(11),
+    USER_EXIST_IN_DARABASE(12),
+    USER_NOT_SAVE(13);
 
     private int errorCode;
 

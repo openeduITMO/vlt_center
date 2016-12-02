@@ -1,8 +1,8 @@
 package com.spring.boot.vlt.mvc.controller;
 
 import com.spring.boot.vlt.mvc.model.Trial;
+import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
-import com.spring.boot.vlt.mvc.model.vl.VirtLab;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
 import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +13,12 @@ import org.springframework.web.servlet.ModelAndView;
 import rlcp.check.ConditionForChecking;
 import rlcp.generate.GeneratingResult;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin
 @RestController
+@RequestMapping(value = "/api")
 public class LabratoryFrameController {
     @Autowired
     LaboratoryFrameService laboratoryFrameService;

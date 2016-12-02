@@ -18,18 +18,17 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 public class RefreshTokenEndpoint {
     @Autowired
@@ -42,12 +41,12 @@ public class RefreshTokenEndpoint {
     private TokenVerifier tokenVerifier;
     @Autowired
     @Qualifier("jwtHeaderTokenExtractor") private TokenExtractor tokenExtractor;
-    
+
     @RequestMapping(value="/auth/token", method= RequestMethod.GET, produces={ MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody
     JwtToken refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String tokenPayload = tokenExtractor.extract(request.getHeader(WebSecurityConfig.JWT_TOKEN_HEADER_PARAM));
-        
+
         RawAccessJwtToken rawToken = new RawAccessJwtToken(tokenPayload);
         RefreshJwtToken refreshToken = RefreshJwtToken.create(rawToken, jwtSettings.getTokenSigningKey()).orElseThrow(() -> new InvalidJwtToken());
 

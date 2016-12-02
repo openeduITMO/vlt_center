@@ -1,28 +1,40 @@
 package com.spring.boot.vlt.mvc.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
-    @Id @Column(name="id")
+    @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name="login")
+
+    @Column(name = "login")
     private String login;
-    
-    @Column(name="password")
+
+    @Column(name = "password")
     private String password;
-    
-    @OneToMany
-    @JoinColumn(name="user_id", referencedColumnName="ID")
-    private List<UserRole> roles;
-    
-    public User() { }
-    
-    public User(Long id, String username, String password, List<UserRole> roles) {
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "ID")
+    private Set<UserRole> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_labs",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "lab_id")})
+    private Set<VirtLab> labs = new HashSet<>();
+
+    public User() {
+    }
+
+    public User(Long id, String username, String password, Set<UserRole> roles) {
         this.id = id;
         this.login = username;
         this.password = password;
@@ -41,7 +53,31 @@ public class User {
         return password;
     }
 
-    public List<UserRole> getRoles() {
+    public Set<UserRole> getRoles() {
         return roles;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<VirtLab> getLabs() {
+        return labs;
+    }
+
+    public void addUserRole(Role role) {
+        this.roles.add(new UserRole(this.id, role));
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

@@ -1,4 +1,3 @@
-'use strict';
 vl.controller('ServerStatusCtrl', function ($scope, ServerStatusService) {
   $scope.interior_server = false;
 

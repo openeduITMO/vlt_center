@@ -26,7 +26,7 @@ public class UserRole {
     
     @EmbeddedId
     Id id = new Id();
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", insertable=false, updatable=false)
     protected Role role;
@@ -35,8 +35,15 @@ public class UserRole {
         return role;
     }
 
+    public Long getUserId() {
+        return id.userId;
+    }
+
     public UserRole(Long userId, Role role) {
         this.id = new Id(userId, role);
         this.role = role;
+    }
+
+    public UserRole() {
     }
 }

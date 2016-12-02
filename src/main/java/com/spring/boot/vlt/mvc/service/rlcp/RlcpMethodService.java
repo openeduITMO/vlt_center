@@ -1,8 +1,8 @@
 package com.spring.boot.vlt.mvc.service.rlcp;
 
 import com.spring.boot.vlt.mvc.model.Trial;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 public class RlcpMethodService {
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = LogManager.getLogger(this.getClass());
     @Autowired
     private Trial trial;
 

@@ -12,7 +12,9 @@ import rlcp.generate.GeneratingResult;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
+@RequestMapping(value = "/api")
 public class RlcpMethodController {
     @Autowired
     private Trial trial;

@@ -9,6 +9,7 @@ import com.spring.boot.vlt.security.auth.token.JwtTokenAuthenticationProvider;
 import com.spring.boot.vlt.security.auth.token.extractor.TokenExtractor;
 import com.spring.boot.vlt.security.auth.token.filter.JwtTokenAuthenticationProcessingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +19,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +35,8 @@ import java.util.List;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
     public static final String FORM_BASED_LOGIN_ENTRY_POINT = "/auth/login";
-    public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/    **";
+    public static final String FORM_BASED_REGISTER_ENTRY_POINT = "/auth/register";
+    public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
     public static final String TOKEN_REFRESH_ENTRY_POINT = "/auth/token";
 
     @Autowired
@@ -88,7 +94,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(this.authenticationEntryPoint)
 
@@ -98,15 +103,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll()
-                .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll()
                 .antMatchers("/console").permitAll()
+                .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll()
+                .antMatchers(FORM_BASED_REGISTER_ENTRY_POINT).permitAll()
+                .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll()
 
                 .and()
                 .authorizeRequests()
                 .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated()
                 .and()
+                .csrf().disable()
+                .addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(buildBasicLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildTokenAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.headers().frameOptions().disable();
     }
+
 }

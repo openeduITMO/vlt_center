@@ -1,11 +1,11 @@
 package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.config.property.VltSettings;
+import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
-import com.spring.boot.vlt.mvc.model.vl.VirtLab;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
@@ -17,7 +17,6 @@ import rlcp.generate.GeneratingResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.PathMatcher;
@@ -25,9 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+;
+
 @Service
 public class LaboratoryFrameService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @Autowired
     private VltSettings vltSettings;
@@ -146,8 +147,6 @@ public class LaboratoryFrameService {
             framesXml = saxReader.read(xml);
         } catch (DocumentException e) {
             logger.error("File " + xml.getAbsolutePath() + " not foud", e.fillInStackTrace());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         }
         return framesXml;
     }

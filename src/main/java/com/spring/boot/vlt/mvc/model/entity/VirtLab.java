@@ -1,28 +1,37 @@
-package com.spring.boot.vlt.mvc.model.vl;
+package com.spring.boot.vlt.mvc.model.entity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class VirtLab implements Serializable{
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+@Entity
+@Table(name="labs")
+public class VirtLab{
+    @Transient
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
-    @NotNull
-    @Size(min = 1)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "dirName", nullable = false, unique = true)
     private String dirName;
+    @Column(name = "width")
     private String width;
+    @Column(name = "height")
     private String height;
-    static String propertyFileName = "lab.desc";
+    @Transient
+    static String propertyFileName;
 
-    public VirtLab() {}
+    public VirtLab() {
+        propertyFileName = "lab.desc";
+    }
 
     public VirtLab(String name) {
         this.name = name;
@@ -67,6 +76,14 @@ public class VirtLab implements Serializable{
         return height;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setHeight(String height) {
         this.height = height;
     }
@@ -107,7 +124,7 @@ public class VirtLab implements Serializable{
     }
 
 
-    public boolean save(String path) {
+    public boolean updatePropertyFile(String path) {
         File desc = new File(path + File.separator + dirName, propertyFileName);
         try {
             desc.createNewFile();

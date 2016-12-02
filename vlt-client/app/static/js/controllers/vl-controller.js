@@ -1,4 +1,3 @@
-'use strict';
 var vl = angular.module('Vl', [])
   .controller('VlCtrl', function ($scope, VlService) {
     $scope.dirName = window.location.pathname.split('/')[3];

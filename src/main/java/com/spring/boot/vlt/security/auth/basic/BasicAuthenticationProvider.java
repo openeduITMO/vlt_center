@@ -1,9 +1,7 @@
 package com.spring.boot.vlt.security.auth.basic;
 
 import com.spring.boot.vlt.mvc.model.UserContext;
-import com.spring.boot.vlt.mvc.model.entity.Role;
 import com.spring.boot.vlt.mvc.model.entity.User;
-import com.spring.boot.vlt.mvc.model.entity.UserRole;
 import com.spring.boot.vlt.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,10 +15,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,23 +32,20 @@ public class BasicAuthenticationProvider implements AuthenticationProvider {
         this.encoder = encoder;
     }
 
+    @Transactional
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Optional.of(authentication).orElseThrow(() -> new IllegalArgumentException("No authentication data provided"));
 
-        String username = (String) authentication.getPrincipal();
+        String login = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
-//        User user = userService.getUserByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        List<UserRole> roles = new ArrayList<>();
-        roles.add(new UserRole(1L, Role.ADMIN));
-        User user = new User(1L, "admin", "password", roles);
-        if (!user.getLogin().equals(username)) throw new IllegalArgumentException("No authentication data provided");
+        User user = userService.getUserByLogin(login).orElseThrow(() -> new UsernameNotFoundException("User not found: " + login));
 
-//        if (!encoder.matches(password, user.getPassword())) {
-//            throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
-//        }
-        if (!user.getPassword().equals(password)) throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
+        }
+        userService.getAllRoleForUser(user.getId()).forEach(user::addUserRole);
 
         if (user.getRoles() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
 

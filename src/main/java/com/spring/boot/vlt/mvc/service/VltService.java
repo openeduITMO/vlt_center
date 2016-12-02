@@ -1,9 +1,9 @@
 package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.config.property.VltSettings;
-import com.spring.boot.vlt.mvc.model.vl.VirtLab;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.spring.boot.vlt.mvc.model.entity.VirtLab;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import static java.nio.file.Files.walk;
 
 @Service
 public class VltService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LogManager.getLogger(this.getClass());
     @Autowired
     private VltSettings vltSettings;
 
@@ -58,7 +58,7 @@ public class VltService {
             logger.info("Create " + vlDir.getAbsolutePath());
         }
         vl.setDirName(vlDir.getName());
-        vl.save(path);
+        vl.updatePropertyFile(path);
         logger.info("Virtual laboratory " + vl.getDirName() + "create!");
         return vl;
     }
@@ -72,7 +72,7 @@ public class VltService {
     public VirtLab savePropertyVl(VirtLab vl, String dir) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         vl.setDirName(dir);
-        vl.save(path);
+        vl.updatePropertyFile(path);
         return vl;
     }
 

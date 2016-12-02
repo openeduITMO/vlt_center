@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@CrossOrigin
 @RestController
+@RequestMapping(value = "/api")
 public class UploadFileController {
     @Autowired
     private UploadFileService uploadFileService;

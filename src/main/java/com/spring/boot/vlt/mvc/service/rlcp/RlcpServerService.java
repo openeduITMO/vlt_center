@@ -2,7 +2,7 @@ package com.spring.boot.vlt.mvc.service.rlcp;
 
 import com.spring.boot.vlt.config.property.VltSettings;
 import com.spring.boot.vlt.info.LogStreamReader;
-import com.spring.boot.vlt.mvc.model.MapServer;
+import com.spring.boot.vlt.mvc.model.vl.MapServer;
 import com.spring.boot.vlt.mvc.model.Trial;
 import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import rlcp.echo.RlcpEchoRequest;
 import rlcp.echo.RlcpEchoRequestBody;
 
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class RlcpServerService {
     LaboratoryFrameService laboratoryFrameService;
     @Autowired
     private VltSettings vltSettings;
-    @Inject
+    @Autowired
     private MapServer servers;
     @Autowired
     private Trial trial;

@@ -5,8 +5,8 @@ import com.spring.boot.vlt.common.WebUtil;
 import com.spring.boot.vlt.exceptions.AuthMethodNotSupportedException;
 import com.spring.boot.vlt.security.auth.basic.LoginRequest;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class BasicLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
-    private static Logger logger = LoggerFactory.getLogger(BasicLoginProcessingFilter.class);
+    private static Logger logger = LogManager.getLogger(BasicLoginProcessingFilter.class);
 
     private final AuthenticationSuccessHandler successHandler;
     private final AuthenticationFailureHandler failureHandler;
@@ -51,13 +51,14 @@ public class BasicLoginProcessingFilter extends AbstractAuthenticationProcessing
 
         LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
 
-        if (StringUtils.isBlank(loginRequest.getUsername()) || StringUtils.isBlank(loginRequest.getPassword())) {
+        if (StringUtils.isBlank(loginRequest.getLogin()) || StringUtils.isBlank(loginRequest.getPassword())) {
             throw new AuthenticationServiceException("Username or Password not provided");
         }
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword());
 
-        return this.getAuthenticationManager().authenticate(token);
+        Authentication authenticate = this.getAuthenticationManager().authenticate(token);
+        return authenticate;
     }
 
     @Override

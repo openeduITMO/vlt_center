@@ -1,7 +1,6 @@
-package com.spring.boot.vlt.mvc.model;
+package com.spring.boot.vlt.mvc.model.vl;
 
-import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
-import com.spring.boot.vlt.mvc.model.vl.VirtLab;
+import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

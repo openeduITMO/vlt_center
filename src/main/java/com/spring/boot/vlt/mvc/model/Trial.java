@@ -1,6 +1,6 @@
 package com.spring.boot.vlt.mvc.model;
 
-import com.spring.boot.vlt.mvc.model.vl.VirtLab;
+import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,6 @@ import rlcp.calculate.CalculatingResult;
 import rlcp.check.ConditionForChecking;
 import rlcp.generate.GeneratingResult;
 
-import javax.annotation.PreDestroy;
 import java.util.List;
 
 @Component
