@@ -57,8 +57,7 @@ public class BasicLoginProcessingFilter extends AbstractAuthenticationProcessing
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword());
 
-        Authentication authenticate = this.getAuthenticationManager().authenticate(token);
-        return authenticate;
+        return this.getAuthenticationManager().authenticate(token);
     }
 
     @Override

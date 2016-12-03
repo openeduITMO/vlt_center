@@ -1,4 +1,4 @@
-app.controller('UserCtrl', function ($scope, $cookieStore, UserService) {
+app.controller('UserCtrl', function ($scope, store, UserService) {
     $scope.isLogin = true;
     $scope.errors = {
       loginIsError: '',
@@ -27,10 +27,12 @@ app.controller('UserCtrl', function ($scope, $cookieStore, UserService) {
       if ($scope.user.login != '' && $scope.user.password != '') {
         UserService.login($scope.user)
           .then(res => {
-              $cookieStore.put('refreshJwtToken', res.refreshJwtToken);
-              $cookieStore.put('token', res.token);
-              $scope.isAuthorized = true;
-
+              store.set('refreshJwtToken', res.refreshJwtToken);
+              store.set('token', res.token);
+              //$cookieStore.put('refreshJwtToken', res.refreshJwtToken);
+              //$cookieStore.put('token', res.token);
+              $scope.$parent.isAuthorized = true;
+              console.log(res.token);
             }, err => {
             $scope.errors.loginIsError='Некорректные логин или пароль';
             $scope.errors.passwordIsError='Некорректные логин или пароль';

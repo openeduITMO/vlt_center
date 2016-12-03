@@ -1,9 +1,9 @@
-body, html {
-  font-size: 16px;
-}
-
 iframe {
   border: none;
+}
+
+.non-display{
+  display: none;
 }
 
 .vlt {
@@ -159,7 +159,6 @@ iframe {
 .vlt .button, #generate .button, #check .button, #calculate .button, .start .button, #frame .button, .title-text .button {
   text-align: center;
   cursor: pointer;
-  font-family: 'Glyphicons Halflings';
 }
 
 .vlt .button:hover, .title-text .button:hover, #generate .button:hover, #check .button:hover, #calculate:hover .button:hover, #frame .button:hover, .run-vl-button .button:hover {
@@ -175,18 +174,6 @@ iframe {
 
 .setting-server-btn {
   margin-right: 100px;
-}
-
-.plusTd::before {
-  content: "\002b";
-}
-
-.setting-server-btn:before {
-  content: "\e012";
-}
-
-.vl-current .close::before, .settings-servers .close::before {
-  content: "\e014";
 }
 
 .run-vl {
@@ -243,14 +230,6 @@ iframe {
 .run-vl, .tune-vl, .start-vl, .hidden, .import-vl {
   box-sizing: border-box;
   font-size: 18px;
-}
-
-.import-vl:before {
-  content: "\e169";
-}
-
-.run-vl::before, .start-vl::before {
-  content: "\e072";
 }
 
 .run-vl-button {
@@ -339,10 +318,6 @@ iframe {
   content: "\e237";
 }
 
-.interior-stop-btn::before {
-  content: "\e074";
-}
-
 .check-btn::before {
   content: "\e013";
 }
@@ -359,9 +334,6 @@ iframe {
   content: "\e091";
 }
 
-.update-btn::before {
-  content: "\e031";
-}
 
 .button:hover, .wrapper-btn:hover {
   position: relative;
@@ -400,10 +372,6 @@ iframe {
   margin-left: 20%;
 }
 
-.tune-vl::before {
-  content: "\e019";
-}
-
 .settings button,
 .settings button:active,
 .settings button:focus,
@@ -417,17 +385,9 @@ iframe {
   margin-top: 10px;
 }
 
-.import-btn::before {
-  content: "\e169";
-}
-
 .save-vl, .import-btn {
   box-sizing: border-box;
   font-size: 35px;
-}
-
-.save-vl::before {
-  content: "\e172";
 }
 
 #generate .hidden, #calculate .hidden, #check .hidden, #generate .show, #calculate .show, #check .show, #frame .hidden, #frame .show {
@@ -543,7 +503,6 @@ label[for='uploader'] {
 }
 
 label[for='uploader']:before {
-  font-family: 'Glyphicons Halflings';
   content: '\e118';
   position: absolute;
   top: 0px;

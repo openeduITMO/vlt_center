@@ -11,8 +11,8 @@ multipart:
     maxRequestSize: 50000KB
 
 security.token:
-  tokenExpirationTime: 15 # Minutes
-  refreshTokenExpTime: 21 # Minutes
+  tokenExpirationTime: 30 # Minutes
+  refreshTokenExpTime: 1440 # Minutes
   tokenIssuer: http://efimchik.com
   tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
 

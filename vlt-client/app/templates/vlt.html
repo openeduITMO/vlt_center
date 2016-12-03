@@ -8,10 +8,9 @@
 </script>
 
 <div>
-
   <div class="title-text">
     Среда тестирования виртуальных лабораторий
-    <span id="setting-server-btn" class="button setting-server-btn" data="Список серверов"
+    <span id="setting-server-btn" class="fa fa-th-list button setting-server-btn" data="Список серверов"
           ng-click="showServerList()"></span>
   </div>
 
@@ -20,7 +19,7 @@
 
       <div class="list-div">
         <div class="panel panel-default">
-          <span class="button plusTd" data="Добавить новую ВЛ" ng-click="showAddForm()"></span>
+          <span class="fa fa-plus button plusTd" data="Добавить новую ВЛ" ng-click="showAddForm()"></span>
           <div class="panel-heading">Список виртуальных лабораторий</div>
           <form>
             <div>
@@ -39,9 +38,9 @@
             <tr dir-paginate="vl in vlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
               <td>{{vl.name}}</td>
               <td>
-                <span class="button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>
-                <span class="button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"/>
-                <span class="button import-vl" data="Импрот" ng-click="showImportForm(vl)"/>
+                <span class="fa fa-play button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>
+                <span class="fa fa-cog button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"/>
+                <span class="fa fa-upload button import-vl" data="Импрот" ng-click="showImportForm(vl)"/>
               </td>
             </tr>
             </tbody>
@@ -57,8 +56,8 @@
 
     <div class="settings-servers" ng-show="!hide.servers" ng-hide="hide.servers">
       <div class="panel panel-default">
-        <span class="button close" data="Закрыть" ng-click="closeForm('settings-servers')"></span>
-        <span id="update-btn" class="button update-btn" data="Обновить" ng-click="getServersList()"></span>
+        <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('settings-servers')"></span>
+        <span id="update-btn" class="fa fa-refresh button update-btn" data="Обновить" ng-click="getServersList()"></span>
         <div class="panel-heading">Список запущенных серверов</div>
         <table class="table" id="table-servers">
           <thead>
@@ -77,7 +76,7 @@
           <tr ng-repeat="server in servers">
             <td>{{server.name}}</td>
             <td>{{server.url}}</td>
-            <td><span id='interior-stop-run' class='button interior-stop-btn' data='Остановить сервер'
+            <td><span id='interior-stop-run' class='fa fa-stop button interior-stop-btn' data='Остановить сервер'
                       ng-click="stopServer(server.url)"></span></td>
           </tr>
           </tbody>
@@ -87,7 +86,7 @@
 
     <div class="vl-current">
       <div id="add-vl-block" class="panel panel-default s-form" ng-show="!hide.addForm" ng-hide="hide.addForm">
-        <span class="button close" data="Закрыть" ng-click="closeForm('add-form')"></span>
+        <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('add-form')"></span>
         <div class="panel-heading">Добавить новую ВЛ</div>
         <div class="panel-body">
           <div class="add-form col-xs-6">
@@ -101,7 +100,7 @@
       </div>
 
       <div class="panel panel-default settings" ng-show="!hide.settingsForm" ng-hide="hide.settingsForm">
-        <span class="button close" data="Закрыть" ng-click="closeForm('settings-form')"></span>
+        <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('settings-form')"></span>
         <div class="panel-heading">Настройка "{{vl.name}}"<span class="name-vl"></span></div>
         <div class="panel-body">
           <form id='save-property-vl'>
@@ -126,13 +125,13 @@
                 </td>
               </tr>
             </table>
-            <button id='save'><span class='button save-vl' data='Сохранить' ng-click='savePropertyVl(vl)'/></button>
+            <button id='save'><span class='fa fa-floppy-o button save-vl' data='Сохранить' ng-click='savePropertyVl(vl)'/></button>
           </form>
         </div>
       </div>
 
       <div class="panel panel-default import" ng-show="!hide.importForm" ng-hide="hide.importForm">
-        <span class="button close" data="Закрыть" ng-click="closeForm('import-form')"></span>
+        <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('import-form')"></span>
         <div class="panel-heading">Импорт "{{vl.name}}"<span class="name-vl"></span></div>
         <div class="panel-body">
           <form id='upload_form' ng-controller='uploadCtrl'>
@@ -140,13 +139,13 @@
               <label for='uploader' data-file='Выберите файл'></label>
               <input type='file' name='uploadfile' id='uploader' file-model='zipVl'/>
             </div>
-            <button><span class='button import-btn' data='Импорт' ng-click='uploadFile(vl.dirName)'></span></button>
+            <button><span class='fa fa-upload button import-btn' data='Импорт' ng-click='uploadFile(vl.dirName)'></span></button>
           </form>
         </div>
       </div>
 
       <div class="panel panel-default running" ng-show="!hide.runningForm" ng-hide="hide.runningForm">
-        <span class="button close" data="Закрыть" ng-click="closeForm('running-form')"></span>
+        <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('running-form')"></span>
         <div class="panel-heading">Запуск "{{vl.name}}"<span class="name-vl"></span></div>
         <div class="panel-body">
           <table class="table">
@@ -169,7 +168,7 @@
               <td>{{frame.name}}</td>
               <td>{{frame.data}}</td>
               <td>
-                <button><span class='button start-vl' data='Запуск' ng-click="startVl(currentDir, frame.id)"/></button>
+                <button><span class='fa fa-play button start-vl' data='Запуск' ng-click="startVl(currentDir, frame.id)"/></button>
               </td>
             </tr>
             </tbody>

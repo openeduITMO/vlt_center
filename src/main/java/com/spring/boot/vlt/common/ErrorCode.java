@@ -8,7 +8,8 @@ public enum ErrorCode {
     AUTHENTICATION(10),
     JWT_TOKEN_EXPIRED(11),
     USER_EXIST_IN_DARABASE(12),
-    USER_NOT_SAVE(13);
+    USER_NOT_SAVE(13),
+    NOT_ACCESS_RIGHT(14);
 
     private int errorCode;
 

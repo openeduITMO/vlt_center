@@ -1,10 +1,8 @@
-app.factory('IndexService', function ($http, $cookieStore, $q) {
+app.factory('IndexService', function ($http, $q) {
   var SERVER_HOST = 'http://localhost:8012';
   $http.defaults.headers.common["Accept"] = "application/json";
   $http.defaults.headers.common["Content-Type"] = "application/json";
-  $http.defaults.headers.common["Cache-Control"] = "Cache-Control";
-  $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-  $http.defaults.headers.common["X-Authorization"] = $cookieStore.get('token');
+  //$http.defaults.headers.common["X-Authorization"] = "Bearer "+store.get('token');
 
   return {
     getVlList: () => {

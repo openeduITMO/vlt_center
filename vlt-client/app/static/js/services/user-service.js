@@ -24,16 +24,6 @@ app.factory('UserService', function ($http, $q) {
           err => {
             return $q.reject(err);
           });
-    },
-
-    getVlList: () => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_list_vl')
-        .then(res => {
-            return res.data;
-          },
-          err => {
-            return $q.reject(err);
-          });
     }
   }
 });

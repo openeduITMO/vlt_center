@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     private String login;
 
     @Column(name = "password")
@@ -25,7 +25,7 @@ public class User {
     @JoinColumn(name = "user_id", referencedColumnName = "ID")
     private Set<UserRole> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_labs",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "lab_id")})
@@ -71,6 +71,10 @@ public class User {
 
     public void addUserRole(Role role) {
         this.roles.add(new UserRole(this.id, role));
+    }
+
+    public void addLab(VirtLab vl) {
+        this.labs.add(vl);
     }
 
     @Override

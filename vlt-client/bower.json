@@ -22,10 +22,11 @@
     "Stepper": "3.0.8",
     "iCheck": "1.0.2",
     "angular": "1.5.4",
+    "angular-jwt": "0.1.8",
+    "a0-angular-storage": "0.0.15",
     "angular-cookies": "1.5.3",
     "angular-utils-pagination": "0.11.1",
     "lodash": "3.8.0",
-    "bootflat": "",
     "font-awesome": "4.5.0"
   },
   "resolutions": {

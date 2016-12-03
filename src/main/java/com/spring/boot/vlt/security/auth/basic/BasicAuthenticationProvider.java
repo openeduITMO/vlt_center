@@ -40,7 +40,7 @@ public class BasicAuthenticationProvider implements AuthenticationProvider {
         String login = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
-        User user = userService.getUserByLogin(login).orElseThrow(() -> new UsernameNotFoundException("User not found: " + login));
+        User user = userService.getUserByLogin(login);
 
         if (!encoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");

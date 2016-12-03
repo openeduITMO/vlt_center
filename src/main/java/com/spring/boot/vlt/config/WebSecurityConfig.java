@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.vlt.security.RestAuthenticationEntryPoint;
 import com.spring.boot.vlt.security.auth.basic.BasicAuthenticationProvider;
 import com.spring.boot.vlt.security.auth.basic.filter.BasicLoginProcessingFilter;
-import com.spring.boot.vlt.security.auth.token.SkipPathRequestMatcher;
 import com.spring.boot.vlt.security.auth.token.JwtTokenAuthenticationProvider;
+import com.spring.boot.vlt.security.auth.token.SkipPathRequestMatcher;
 import com.spring.boot.vlt.security.auth.token.extractor.TokenExtractor;
 import com.spring.boot.vlt.security.auth.token.filter.JwtTokenAuthenticationProcessingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +22,9 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +32,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
+    public static final String JWT_TOKEN_HEADER_PARAM = "Authorization";
     public static final String FORM_BASED_LOGIN_ENTRY_POINT = "/auth/login";
     public static final String FORM_BASED_REGISTER_ENTRY_POINT = "/auth/register";
     public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
@@ -80,6 +79,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("DELETE");
+        config.addAllowedMethod("OPTIONS");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
 
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(basicAuthenticationProvider);
@@ -102,6 +117,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
+                .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .authorizeRequests()
                 .antMatchers("/console").permitAll()
                 .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll()
@@ -113,7 +129,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated()
                 .and()
                 .csrf().disable()
-                .addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class)
+
                 .addFilterBefore(buildBasicLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildTokenAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
         http.headers().frameOptions().disable();

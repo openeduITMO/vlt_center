@@ -1,19 +1,22 @@
 package com.spring.boot.vlt.mvc.controller;
 
+import com.spring.boot.vlt.common.AccessUtils;
+import com.spring.boot.vlt.common.ErrorCode;
+import com.spring.boot.vlt.common.ErrorResponse;
+import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.service.VltService;
+import com.spring.boot.vlt.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -23,23 +26,42 @@ public class VltController {
     private VltService vltService;
 
     @RequestMapping(value = "/get_list_vl", method = RequestMethod.GET)
-    public ResponseEntity<List<VirtLab>> getVlList() {
-        return new ResponseEntity(vltService.getVirtList(), HttpStatus.OK);
+    public ResponseEntity<Set<VirtLab>> getVlList(JwtAuthenticationToken token) {
+        UserContext userContext = (UserContext) token.getPrincipal();
+        // add check user's role
+        Set<VirtLab> virtList = vltService.getVirtList(userContext.getUsername());
+        return new ResponseEntity(virtList, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/add_vl", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<VirtLab> addVl(@RequestBody String name) {
-        return new ResponseEntity(vltService.addVl(new VirtLab(name)), HttpStatus.OK);
+    public ResponseEntity<VirtLab> addVl(JwtAuthenticationToken token, @RequestBody String name) {
+        UserContext userContext = (UserContext) token.getPrincipal();
+        return AccessUtils.isDeveloperOrAdmin(userContext) ?
+                new ResponseEntity(vltService.addVl(new VirtLab(name), userContext.getUsername()), HttpStatus.OK) :
+                ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value = "/get_property_vl/{name}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<VirtLab> getPropertyVl(@PathVariable("name") String nameVl) {
-        return new ResponseEntity(vltService.getPropertyVl(nameVl), HttpStatus.OK);
+    @RequestMapping(value = "/get_property_vl/{dirName}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<VirtLab> getPropertyVl(JwtAuthenticationToken token,
+                                                 @PathVariable("dirName") String nameVl) {
+        UserContext userContext = (UserContext) token.getPrincipal();
+        return AccessUtils.isDeveloper(userContext) ?
+                new ResponseEntity(vltService.getPropertyVl(nameVl, userContext.getUsername()), HttpStatus.OK) :
+                AccessUtils.isAdmin(userContext) ?
+                        new ResponseEntity(vltService.getPropertyVl(nameVl), HttpStatus.OK) :
+                        ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/save_property_vl/{dir}", method = RequestMethod.POST)
-    public ResponseEntity<VirtLab> savePropertyVl(@Valid @RequestBody VirtLab vl, @PathVariable("dir") String dir, BindingResult bindResult) {
-        return new ResponseEntity(vltService.savePropertyVl(vl, dir), HttpStatus.OK);
+    public ResponseEntity<VirtLab> savePropertyVl(JwtAuthenticationToken token,
+                                                  @Valid @RequestBody VirtLab vl,
+                                                  @PathVariable("dir") String dir) {
+        UserContext userContext = (UserContext) token.getPrincipal();
+        return AccessUtils.isDeveloper(userContext) ?
+                new ResponseEntity(vltService.savePropertyVl(vl, dir, userContext.getUsername()), HttpStatus.OK) :
+                AccessUtils.isAdmin(userContext) ?
+                        new ResponseEntity(vltService.savePropertyVl(vl, dir), HttpStatus.OK) :
+                        ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/start_vl/{dir}/img/{name}.{suffix}", method = RequestMethod.GET)

@@ -47,7 +47,7 @@ public class UserRegisterEndPoint {
         if (StringUtils.isBlank(login) || StringUtils.isBlank(password))
             throw new IllegalArgumentException("Username or Password is blank: " + user.toString());
 
-        Optional<User> userByLogin = userService.getUserByLogin(login);
+        Optional<User> userByLogin = userService.getUserByLoginisPresent(login);
         if (userByLogin.isPresent())
             return ErrorResponse.of("login already occupied", ErrorCode.USER_EXIST_IN_DARABASE, HttpStatus.UNAUTHORIZED);
 
