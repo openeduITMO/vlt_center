@@ -26,6 +26,10 @@ public class VirtLab{
     private String width;
     @Column(name = "height")
     private String height;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User author;
     @Transient
     static String propertyFileName;
 
@@ -86,6 +90,14 @@ public class VirtLab{
 
     public void setHeight(String height) {
         this.height = height;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     private void readFile(File desc) {

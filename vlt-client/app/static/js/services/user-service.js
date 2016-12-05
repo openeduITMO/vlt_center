@@ -6,8 +6,8 @@ app.factory('UserService', function ($http, $q) {
   $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
   return {
-    register: (user) => {
-      return $http.post(SERVER_HOST+'/VLT/auth/register', user)
+    register: (user, userRole) => {
+      return $http.post(SERVER_HOST+'/VLT/auth/register/' + userRole, user)
         .then(res => {
             return res.data;
           },

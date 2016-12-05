@@ -33,4 +33,41 @@ var app = angular.module('App', ['angular-jwt', 'angular-storage', 'angularUtils
       }
     }
     $httpProvider.interceptors.push('jwtInterceptor');
-  }]);
+  }])
+  .factory('AppService', function ($http, $q) {
+    var SERVER_HOST = 'http://localhost:8012';
+    $http.defaults.headers.common["Accept"] = "application/json";
+    $http.defaults.headers.common["Content-Type"] = "application/json";
+    $http.defaults.headers.common["Cache-Control"] = "Cache-Control";
+    $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+    return {
+      testConnect: (dir, frame) => {
+        return $http.get(SERVER_HOST + '/VLT/api/test_connect/')
+          .then(res => {
+              return res.data;
+            },
+            err => {
+              return $q.reject(err);
+            });
+      }
+    }
+  })
+  .controller('AppCtrl', function ($scope, store, AppService) {
+    $scope.isAuthorized = false;
+
+    if (store.get('refreshJwtToken') != null && store.get('token') != null) {
+      AppService.testConnect()
+        .then(res => {
+            $scope.isAuthorized = true;
+          },
+          err => {
+            $scope.isAuthorized = false;
+            store.remove('token');
+            store.remove('refreshJwtToken');
+          })
+    } else {
+      $scope.isAuthorized = false;
+    }
+
+  });
+;

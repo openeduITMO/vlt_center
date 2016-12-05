@@ -12,6 +12,7 @@ app.controller('IndexCtrl', function ($scope, IndexService) {
         $scope.vlCollection = res;
       });
 
+
     $scope.closeForm = function (type) {
       switch (type) {
         case "all-form":

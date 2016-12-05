@@ -1,4 +1,4 @@
-<div>
+<div >
   <div class="forms">
     <ul class="form-switcher">
       <li>
@@ -65,7 +65,7 @@
             <option label="Разработчик" value="object:4">Разработчик</option>
           </select>
           <span class="error-msg ng-binding"
-                ng-style="errors.registerRole=='' && {'visibility': 'hidden'}||{'visibility': ' visible'}">errors.registerRole</span>
+                ng-style="errors.registerRole=='' && {'visibility': 'hidden'}||{'visibility': ' visible'}">{{errors.registerRole}}</span>
         </p>
         <p class="field">
           <input class="full-width" type="submit" value="Регистрация" ng-click="register()">

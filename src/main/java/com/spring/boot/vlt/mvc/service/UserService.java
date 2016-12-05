@@ -35,9 +35,8 @@ public class UserService {
         return saveUser.isPresent();
     }
 
-    public boolean setRoleForUser(Long userId, Role role) {
-        Optional.ofNullable(userRepository.findOne(userId)).orElseThrow(() -> new NullPointerException("User with id {" + userId + "} not found"));
-        UserRole userRole = new UserRole(userId, role);
+    public boolean setRoleForUser(String login, Role role) {
+        UserRole userRole = new UserRole(getUserByLogin(login).getId(), role);
         return Optional.ofNullable(userRoleRepository.save(userRole)).isPresent();
     }
 
@@ -51,10 +50,10 @@ public class UserService {
     }
 
     @Transactional
-    public VirtLab foundVlUnderUser(String userLogin, VirtLab vl){
+    public VirtLab foundVlByDirUnderUser(String userLogin, String dirName){
         User user = getUserByLogin(userLogin);
-        return user.getLabs().stream().filter(vl::equals).findFirst().orElseThrow(() ->
-                new NullPointerException("User with login = " + userLogin + " not contain vl = " + vl.toString()));
+        return user.getLabs().stream().filter(vl -> dirName.equals(vl.getDirName())).findFirst().orElseThrow(() ->
+                new NullPointerException("User with login = " + userLogin + " not contain vl = " + dirName));
     }
 
 }

@@ -11,6 +11,7 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.PathMatcher;
 import java.util.Enumeration;
+import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -22,31 +23,35 @@ public class UploadFileService {
     private final Logger logger = LogManager.getLogger(this.getClass());
     @Autowired
     private VltSettings vltSettings;
+    @Autowired
+    private UserService userService;
 
-    public boolean upload(MultipartFile uploadfile, String dir) {
-        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        File vlDir = new File(path, dir);
-        if(vlDir.listFiles().length != 0){
-            PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");
-            Stream.of(vlDir.listFiles()).filter(p -> !requestPathMatcher.matches(p.toPath())).forEach(f -> deleteFile(f));
-        }
-        String name = uploadfile.getOriginalFilename();
-        name.lastIndexOf('.');
-        File newLabZip = new File(vlDir, uploadfile.getOriginalFilename());
-        String ex = name.substring(name.lastIndexOf('.') + 1);
-        if (ex.equalsIgnoreCase("zip")) {
-            if (!uploadfile.isEmpty()) {
-                if (uploadedFiles(uploadfile, newLabZip)) {
-                    if (unZipFile(newLabZip)) {
-                        newLabZip.delete();
-                        return true;
+    public boolean upload(String login, MultipartFile uploadfile, String dir) {
+        if (Optional.ofNullable(userService.foundVlByDirUnderUser(login, dir)).isPresent()) {
+            final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
+            File vlDir = new File(path, dir);
+            if (vlDir.listFiles().length != 0) {
+                PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");
+                Stream.of(vlDir.listFiles()).filter(p -> !requestPathMatcher.matches(p.toPath())).forEach(f -> deleteFile(f));
+            }
+            String name = uploadfile.getOriginalFilename();
+            name.lastIndexOf('.');
+            File newLabZip = new File(vlDir, uploadfile.getOriginalFilename());
+            String ex = name.substring(name.lastIndexOf('.') + 1);
+            if (ex.equalsIgnoreCase("zip")) {
+                if (!uploadfile.isEmpty()) {
+                    if (uploadedFiles(uploadfile, newLabZip)) {
+                        if (unZipFile(newLabZip)) {
+                            newLabZip.delete();
+                            return true;
+                        }
                     }
+                } else {
+                    logger.error("Empty zip file " + uploadfile.getName());
                 }
             } else {
-                logger.error("Empty zip file " + uploadfile.getName());
+                logger.error("Invalid file extension expected 'zip', actually '" + ex + "'");
             }
-        } else {
-            logger.error("Invalid file extension expected 'zip', actually '" + ex + "'");
         }
         return false;
     }
@@ -108,13 +113,13 @@ public class UploadFileService {
     private void deleteFile(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i=0; i<children.length; i++) {
+            for (int i = 0; i < children.length; i++) {
                 File f = new File(dir, children[i]);
                 deleteFile(f);
             }
             dir.delete();
             logger.info("Delete dir " + dir.getAbsolutePath());
-        } else{
+        } else {
             dir.delete();
             logger.info("Delete file " + dir.getAbsolutePath());
         }

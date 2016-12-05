@@ -14,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.nio.file.Files.walk;
 
@@ -30,7 +32,8 @@ public class VltService {
     private VlRepository vlRepository;
 
     public Set<VirtLab> getVirtList(String userLogin) {
-        return userService.getUserVirtLabs(userLogin);
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
+        return userService.getUserVirtLabs(userLogin).stream().filter(vl -> (new File(path, "lab" + vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -46,18 +49,15 @@ public class VltService {
         }
         vl.setDirName(vlDir.getName());
         vl.updatePropertyFile(path);
-        vlRepository.save(vl);
         User user = userService.getUserByLogin(userLogin);
-        if (!user.getLabs().contains(vl)) {
-            user.addLab(vl);
-            userService.saveUser(user);
-        }
+        vl.setAuthor(user);
+        vlRepository.save(vl);
         logger.info("Virtual laboratory " + vl.getDirName() + "create!");
         return vl;
     }
 
     public VirtLab getPropertyVl(String vlDir, String userLogin) {
-        return userService.foundVlUnderUser(userLogin, getPropertyVl(vlDir));
+        return userService.foundVlByDirUnderUser(userLogin, vlDir);
     }
 
     public VirtLab getPropertyVl(String vlDir) {

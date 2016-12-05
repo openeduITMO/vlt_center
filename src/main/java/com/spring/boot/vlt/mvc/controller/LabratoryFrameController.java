@@ -4,6 +4,7 @@ import com.spring.boot.vlt.mvc.model.Trial;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
+import com.spring.boot.vlt.mvc.service.UserService;
 import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class LabratoryFrameController {
     private Trial trial;
 
     @RequestMapping(value = "/get_labratory_fame/{dir}", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<List> getLabratoryFrme(@PathVariable("dir") String dir) {
+    public ResponseEntity<List> getLabratoryFrame(@PathVariable("dir") String dir) {
         Optional<Document> documentOptional = laboratoryFrameService.setDirName(dir);
         if (!documentOptional.isPresent()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -47,9 +48,6 @@ public class LabratoryFrameController {
         laboratoryFrameService.setFrameId(frameId);
         VirtLab virtLab = laboratoryFrameService.getVirtLab();
         trial.setVl(virtLab);
-//        return new ResponseEntity("{\"name\":" + virtLab.getName() + "," +
-//                "\"width\":" + virtLab.getWidth() + ","+
-//                "\"height\":" + virtLab.getHeight() + "}", HttpStatus.OK);
         return new ResponseEntity(virtLab, HttpStatus.OK);
     }
 

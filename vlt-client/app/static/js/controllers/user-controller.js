@@ -6,8 +6,8 @@ app.controller('UserCtrl', function ($scope, store, UserService) {
       registerRole: ''
     };
     $scope.roles = [
-      {name: 'Студент'},
-      {name: 'Разработчик'}
+      {name: 'STUDENT'},
+      {name: 'DEVELOPER'}
     ];
     $scope.user = {
       login: '',
@@ -29,10 +29,7 @@ app.controller('UserCtrl', function ($scope, store, UserService) {
           .then(res => {
               store.set('refreshJwtToken', res.refreshJwtToken);
               store.set('token', res.token);
-              //$cookieStore.put('refreshJwtToken', res.refreshJwtToken);
-              //$cookieStore.put('token', res.token);
               $scope.$parent.isAuthorized = true;
-              console.log(res.token);
             }, err => {
             $scope.errors.loginIsError='Некорректные логин или пароль';
             $scope.errors.passwordIsError='Некорректные логин или пароль';
@@ -49,14 +46,22 @@ app.controller('UserCtrl', function ($scope, store, UserService) {
     }
 
     $scope.register = function () {
-      if ($scope.user.login != '' && $scope.user.password != '') {
-        UserService.register($scope.user);
+      if ($scope.user.login != '' && $scope.user.password != '' && $scope.userRole != null) {
+        UserService.register($scope.user, $scope.userRole.name)
+          .then(res => {
+            store.set('refreshJwtToken', res.refreshJwtToken);
+            store.set('token', res.token);
+            $scope.$parent.isAuthorized = true;
+          });
       } else {
         if ($scope.user.login == '') {
           $scope.errors.loginIsError = "Заполните поле"
         }
         if ($scope.user.password == '') {
           $scope.errors.passwordIsError = "Заполните поле"
+        }
+        if ($scope.userRole == null) {
+          $scope.errors.registerRole = "Заполните поле"
         }
       }
     }

@@ -1,6 +1,9 @@
 package com.spring.boot.vlt.mvc.controller;
 
+import com.spring.boot.vlt.common.AccessUtils;
+import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.service.UploadFileService;
+import com.spring.boot.vlt.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +19,15 @@ public class UploadFileController {
 
     @RequestMapping(value = "/upload-file/{dir}", method = RequestMethod.POST)
     public ResponseEntity<String> uploadFile(
-            @RequestParam("uploadfile") MultipartFile uploadfile, @PathVariable("dir") String dir) {
-        boolean upload = uploadFileService.upload(uploadfile, dir);
-        if (upload) {
-            return new ResponseEntity(HttpStatus.OK);
+            JwtAuthenticationToken token,
+            @RequestParam("uploadfile") MultipartFile uploadfile,
+            @PathVariable("dir") String dir) {
+        UserContext userContext = (UserContext) token.getPrincipal();
+        if (AccessUtils.isDeveloperOrAdmin(userContext)) {
+            boolean upload = uploadFileService.upload(userContext.getUsername(), uploadfile, dir);
+            if (upload) {
+                return new ResponseEntity(HttpStatus.OK);
+            }
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
