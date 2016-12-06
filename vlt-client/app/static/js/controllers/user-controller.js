@@ -29,7 +29,7 @@ app.controller('UserCtrl', function ($scope, store, UserService) {
           .then(res => {
               store.set('refreshJwtToken', res.refreshJwtToken);
               store.set('token', res.token);
-              $scope.$parent.isAuthorized = true;
+              // $scope.$parent.isAuthorized = true;
             }, err => {
             $scope.errors.loginIsError='Некорректные логин или пароль';
             $scope.errors.passwordIsError='Некорректные логин или пароль';

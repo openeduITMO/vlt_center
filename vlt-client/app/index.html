@@ -14,24 +14,27 @@
   <script type="text/javascript" src="bower_components/Selecter/jquery.fs.selecter.min.js"></script>
   <script type="text/javascript" src="bower_components/Stepper/jquery.fs.stepper.min.js"></script>
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script type="text/javascript" src="bower_components/a0-angular-storage/dist/angular-storage.min.js"></script>
   <script type="text/javascript" src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
   <script type="text/javascript" src="bower_components/angular-utils-pagination/dirPagination.js"></script>
   <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
   <script type="text/javascript" src="static/js/app.js"></script>
   <script type="text/javascript" src="static/js/controllers/user-controller.js"></script>
+
   <script type="text/javascript" src="static/js/controllers/vlt-index-controller.js"></script>
   <script type="text/javascript" src="static/js/controllers/upload-controller.js"></script>
   <script type="text/javascript" src="static/js/services/user-service.js"></script>
   <script type="text/javascript" src="static/js/services/vlt-index-service.js"></script>
   <script type="text/javascript" src="static/js/services/upload-service.js"></script>
-  <script type="text/javascript" src="static/js/directives/app-model.js"></script>
+  <!--<script type="text/javascript" src="static/js/directives/app-model.js"></script>-->
 
 </head>
 <body ng-controller="AppCtrl">
 
-<login-form ng-if="!isAuthorized"></login-form>
-<vlt-index ng-if="isAuthorized"></vlt-index>
+<!--<login-form ng-if="!isAuthorized"></login-form>-->
+<!--<vlt-index ng-if="isAuthorized"></vlt-index>-->
+<ui-view></ui-view>
 
 </body>
 </html>

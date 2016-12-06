@@ -22,6 +22,7 @@
     "Stepper": "3.0.8",
     "iCheck": "1.0.2",
     "angular": "1.5.4",
+    "angular-ui-router": "0.3.2",
     "angular-jwt": "0.1.8",
     "a0-angular-storage": "0.0.15",
     "angular-utils-pagination": "0.11.1",
