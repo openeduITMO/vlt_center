@@ -45,14 +45,14 @@ public class UserService {
         return userRoleRepository.findAllRoleForUser(userId);
     }
 
+    @Transactional
     public Set<VirtLab> getUserVirtLabs(String userLogin){
         return userRepository.getUserVirtLabs(userLogin);
     }
 
     @Transactional
     public VirtLab foundVlByDirUnderUser(String userLogin, String dirName){
-        User user = getUserByLogin(userLogin);
-        return user.getLabs().stream().filter(vl -> dirName.equals(vl.getDirName())).findFirst().orElseThrow(() ->
+        return getUserVirtLabs(userLogin).stream().filter(vl -> dirName.equals(vl.getDirName())).findFirst().orElseThrow(() ->
                 new NullPointerException("User with login = " + userLogin + " not contain vl = " + dirName));
     }
 

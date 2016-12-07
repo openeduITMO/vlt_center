@@ -1,4 +1,4 @@
-vl.factory('VlService', function ($http, $q) {
+app.factory('VlService', function ($http, $q) {
   var SERVER_HOST = 'http://localhost:8012';
   $http.defaults.headers.common["Accept"] = "application/json";
   $http.defaults.headers.common["Content-Type"] = "application/json";
@@ -37,7 +37,7 @@ vl.factory('VlService', function ($http, $q) {
     },
 
     getGenerate: (dir, frame) => {
-      return $http.get(SERVER_HOST='/VLT/api/get_generate/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST+'/VLT/api/get_generate/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },

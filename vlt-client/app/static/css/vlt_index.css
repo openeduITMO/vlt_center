@@ -165,14 +165,14 @@ iframe {
   color: #3bafda;
 }
 
-.plusTd, .close, .setting-server-btn, .update-btn {
+.plusTd, .close, .setting-server-btn, .update-btn, .logout {
   float: right;
   box-sizing: border-box;
   font-size: 24px;
   padding: 4.5px 15px;
 }
 
-.setting-server-btn {
+.logout {
   margin-right: 100px;
 }
 
@@ -294,10 +294,6 @@ iframe {
   display: none;
 }
 
-.check-status-server-btn::before {
-  content: "\e135";
-}
-
 .server-status .server-check p {
   padding-top: 22px;
 }
@@ -309,31 +305,6 @@ iframe {
 .server-status p {
   margin-bottom: 0;
 }
-
-.start-btn::before {
-  content: "\e072";
-}
-
-.interior-start-btn::before, .interior-start-run::before {
-  content: "\e237";
-}
-
-.check-btn::before {
-  content: "\e013";
-}
-
-.repeat-btn::before {
-  content: "\e030";
-}
-
-.refresh-btn:before {
-  content: "\e031";
-}
-
-.back-btn::before {
-  content: "\e091";
-}
-
 
 .button:hover, .wrapper-btn:hover {
   position: relative;
@@ -395,14 +366,6 @@ iframe {
   box-sizing: border-box;
   font-size: 24px;
   padding: 4.5px 15px;
-}
-
-#generate .hidden::before, #calculate .hidden::before, #check .hidden::before, #frame .hidden::before {
-  content: "\e113";
-}
-
-#generate .show::before, #calculate .show::before, #check .show::before, #frame .show::before {
-  content: "\e114";
 }
 
 .s-form {
@@ -503,7 +466,6 @@ label[for='uploader'] {
 }
 
 label[for='uploader']:before {
-  content: '\e118';
   position: absolute;
   top: 0px;
   left: 0px;

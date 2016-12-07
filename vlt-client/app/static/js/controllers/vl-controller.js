@@ -1,7 +1,6 @@
-var vl = angular.module('Vl', [])
-  .controller('VlCtrl', function ($scope, VlService) {
-    $scope.dirName = window.location.pathname.split('/')[3];
-    $scope.frameId = window.location.pathname.split('/')[4];
+app.controller('VlCtrl', function ($scope, $location, VlService) {
+    $scope.dirName = $location.path().split('/')[2];
+    $scope.frameId = $location.path().split('/')[3];
     $scope.nameVL = "";
     $scope.algorithm = "";
     $scope.url = "";

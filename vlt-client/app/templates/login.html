@@ -1,4 +1,4 @@
-<div>
+<div class="login-register">
   <div class="forms">
     <ul class="form-switcher">
       <li>
@@ -9,10 +9,10 @@
       </li>
     </ul>
     <div id="form-login" ng-class="isLogin? 'is-selected' : ''" class="is-selected">
-      <form class="ng-pristine ng-valid">
+      <form class="">
         <p class="field">
           <span class="fa fa-user user-img"></span>
-          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="user-login" placeholder="Логин"
+          <input class="" id="user-login" placeholder="Логин"
                  ng-model="user.login"
                  ng-style="errors.loginIsError=='' && {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
                  ng-click="errors.loginIsError=''">
@@ -21,7 +21,7 @@
         </p>
         <p class="field">
           <span class="fa fa-lock key-img"></span>
-          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="user-password" type="password"
+          <input class="" id="user-password" type="password"
                  placeholder="Пароль" ng-model="user.password"
                  ng-style="errors.passwordIsError=='' && {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
                  ng-click="errors.passwordIsError=''">
@@ -35,10 +35,10 @@
     </div>
 
     <div id="form-register" ng-class="isLogin? '': 'is-selected'">
-      <form class="ng-pristine ng-valid">
+      <form class="">
         <p class="field">
           <span class="fa fa-user user-img"></span>
-          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="new-user-login" placeholder="Логин"
+          <input class="" id="new-user-login" placeholder="Логин"
                  ng-model="user.login"
                  ng-style="errors.loginIsError=='' && {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
                  ng-click="errors.loginIsError=''">
@@ -47,7 +47,7 @@
         </p>
         <p class="field">
           <span class="fa fa-lock key-img"></span>
-          <input class="ng-pristine ng-untouched ng-valid ng-empty" id="new-user-password" type="password"
+          <input class="" id="new-user-password" type="password"
                  placeholder="Пароль" ng-model="user.password"
                  ng-style="errors.passwordIsError=='' &amp;&amp; {'border-color': '#d2d8d8'}||{'border-color': '#db7575'}"
                  ng-click="errors.passwordIsError=''">

@@ -33,7 +33,7 @@ public class VltService {
 
     public Set<VirtLab> getVirtList(String userLogin) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        return userService.getUserVirtLabs(userLogin).stream().filter(vl -> (new File(path, "lab" + vl.getDirName())).exists()).collect(Collectors.toSet());
+        return userService.getUserVirtLabs(userLogin).stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -52,6 +52,7 @@ public class VltService {
         User user = userService.getUserByLogin(userLogin);
         vl.setAuthor(user);
         vlRepository.save(vl);
+        userService.saveUser(user);
         logger.info("Virtual laboratory " + vl.getDirName() + "create!");
         return vl;
     }

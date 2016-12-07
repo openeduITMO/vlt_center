@@ -1,16 +1,16 @@
-vl.controller('ServerStatusCtrl', function ($scope, ServerStatusService) {
+app.controller('ServerStatusCtrl', function ($scope, ServerStatusService) {
   $scope.interior_server = false;
 
-    var first_load = true;
-    if (first_load) {
-      ServerStatusService.checkTypeServer()
-        .then(res => {
-          $('#check-checkbox').prop("checked", res);
-
-          $scope.setCheckBox();
-        });
-      first_load = false;
-    }
+    //var first_load = true;
+    //if (first_load) {
+    //  ServerStatusService.checkTypeServer()
+    //    .then(res => {
+    //      $('#check-checkbox').prop("checked", res);
+    //
+    //      $scope.setCheckBox();
+    //    });
+    //  first_load = false;
+    //}
 
     $scope.checkServerStatus = function () {
       ServerStatusService.checkServerStatus()

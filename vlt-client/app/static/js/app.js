@@ -1,20 +1,4 @@
-var app = angular.module('App', ['ui.router',  'angular-storage', 'angular-jwt', 'angularUtils.directives.dirPagination'])
-  .config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider) {
-      $stateProvider.state('main', {
-        url: '/',
-        controller: 'UserCtrl',
-        templateUrl: 'templates/login.html'
-      })
-        .state('vlt', {
-          url: '/vlt',
-          controller: 'IndexCtrl',
-          templateUrl: 'templates/vlt.html'
-        });
-
-      $urlRouterProvider.otherwise('/');
-    }]
-  )
+var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 'angularUtils.directives.dirPagination'])
   .config(['jwtOptionsProvider', 'jwtInterceptorProvider', '$httpProvider',
     function (jwtOptionsProvider, jwtInterceptorProvider, $httpProvider) {
       jwtOptionsProvider.config({
@@ -51,39 +35,40 @@ var app = angular.module('App', ['ui.router',  'angular-storage', 'angular-jwt',
       };
       $httpProvider.interceptors.push('jwtInterceptor');
     }])
-  .factory('AppService', function ($http, $q) {
-    var SERVER_HOST = 'http://localhost:8012';
-    $http.defaults.headers.common["Accept"] = "application/json";
-    $http.defaults.headers.common["Content-Type"] = "application/json";
-    $http.defaults.headers.common["Cache-Control"] = "Cache-Control";
-    $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-    return {
-      testConnect: (dir, frame) => {
-        return $http.get(SERVER_HOST + '/VLT/api/test_connect/')
-          .then(res => {
-              return res.data;
-            },
-            err => {
-              return $q.reject(err);
-            });
-      }
-    }
-  })
-  .controller('AppCtrl', function ($scope, store, AppService) {
-    // $scope.isAuthorized = false;
-    //
-    // if (store.get('refreshJwtToken') != null && store.get('token') != null) {
-    //   AppService.testConnect()
-    //     .then(res => {
-    //         $scope.isAuthorized = true;
-    //       },
-    //       err => {
-    //         $scope.isAuthorized = false;
-    //         store.remove('token');
-    //         store.remove('refreshJwtToken');
-    //       })
-    // } else {
-    //   $scope.isAuthorized = false;
-    // }
+  .config(['$stateProvider', '$urlRouterProvider',
+    function ($stateProvider, $urlRouterProvider) {
+      $stateProvider.state('main', {
+          url: '/login',
+          controller: 'UserCtrl',
+          templateUrl: 'templates/login.html'
+        })
+        .state('vlt', {
+          url: '/vlt',
+          controller: 'IndexCtrl',
+          templateUrl: 'templates/vlt.html'
+        })
+        .state('vl', {
+          url: '/start_vl/:dir/:frame',
+          controller: 'VlCtrl',
+          templateUrl: 'templates/vl.html'
+        });
 
-  });
+      $urlRouterProvider.otherwise('/login');
+    }])
+  .run(['$rootScope', '$location', 'AuthProvider', function ($rootScope, $location, AuthProvider) {
+    $rootScope.$on('$stateChangeStart', function (event) {
+      if ($location.path() != '/login') {
+        if (!AuthProvider.isAuthorized()) {
+          console.log('DENY : Redirecting to Login');
+          event.preventDefault();
+          $location.path('/login');
+        } else {
+          if (!AuthProvider.testConnect()) {
+            console.log('DENY : Redirecting to Login');
+            event.preventDefault();
+            $location.path('/login');
+          }
+        }
+      }
+    });
+  }]);

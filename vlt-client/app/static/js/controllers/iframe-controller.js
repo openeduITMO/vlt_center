@@ -1,22 +1,23 @@
-vl.controller("iFrameCtrl", function ($scope, iFrameService) {
+app.controller("iFrameCtrl", function ($scope, iFrameService) {
   var ifrm = $('iframe')[0].contentWindow;
+  var SERVER_HOST = 'http://localhost:8012';
   iFrameService.getJs($scope.dirName, $scope.frameId)
     .then(res => {
-      ifrm.document.write('<script type="text/javascript" src="/VLT/js/lib/jquery.js"></script>');
-      ifrm.document.write('<script type="text/javascript" src="/VLT/js/rlcp-ant.js"></script>');
+      ifrm.document.write('<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>');
+      ifrm.document.write('<script type="text/javascript" src="static/js/rlcp-ant.js"></script>');
       res.lib.forEach(function (name) {
-        ifrm.document.write('<script type="text/javascript" src="/VLT/VLabs/' + res.dirName + '/tool/js/lib/' + name + '"></script>');
+        ifrm.document.write('<script type="text/javascript" src="' + SERVER_HOST + '/VLT/VLabs/' + res.dirName + '/tool/js/lib/' + name + '"></script>');
       });
       res.dev.forEach(function (name) {
-        ifrm.document.write('<script type="text/javascript" src="/VLT/VLabs/' + res.dirName + '/tool/js/dev/' + name + '"></script>');
+        ifrm.document.write('<script type="text/javascript" src="' + SERVER_HOST + '/VLT/VLabs/' + res.dirName + '/tool/js/dev/' + name + '"></script>');
       });
       iFrameService.getCss($scope.dirName, $scope.frameId)
         .then(res => {
           res.lib.forEach(function (name) {
-            ifrm.document.write('<link rel="stylesheet" href="/VLT/VLabs/' + res.dirName + '/tool/css/lib/' + name + '"/>');
+            ifrm.document.write('<link rel="stylesheet" href="' + SERVER_HOST + '/VLT/VLabs/' + res.dirName + '/tool/css/lib/' + name + '"/>');
           });
           res.dev.forEach(function (name) {
-            ifrm.document.write('<link rel="stylesheet" href="/VLT/VLabs/' + res.dirName + '/tool/css/dev/' + name + '"/>');
+            ifrm.document.write('<link rel="stylesheet" href="' + SERVER_HOST + '/VLT/VLabs/' + res.dirName + '/tool/css/dev/' + name + '"/>');
           });
         });
       ifrm.document.write('<div id="jsLab"></div>');

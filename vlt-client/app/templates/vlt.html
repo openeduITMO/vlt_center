@@ -9,6 +9,8 @@
 
 <div class="title-text">
   Среда тестирования виртуальных лабораторий
+  <span id="logout" class="fa fa-sign-out button logout" data="Выход"
+        ng-click="logout()"></span>
     <span id="setting-server-btn" class="fa fa-th-list button setting-server-btn" data="Список серверов"
           ng-click="showServerList()"></span>
 </div>
@@ -136,7 +138,7 @@
       <div class="panel-body">
         <form id='upload_form' ng-controller='uploadCtrl'>
           <div class='uploader'>
-            <label for='uploader' data-file='Выберите файл'></label>
+            <label class="fa fa-folder-open" for='uploader' data-file='Выберите файл'></label>
             <input type='file' name='uploadfile' id='uploader' file-model='zipVl'/>
           </div>
           <button><span class='fa fa-upload button import-btn' data='Импорт' ng-click='uploadFile(vl.dirName)'></span>

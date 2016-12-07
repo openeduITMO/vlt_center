@@ -1,5 +1,6 @@
 package com.spring.boot.vlt.mvc.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +30,7 @@ public class VirtLab{
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User author;
     @Transient
     static String propertyFileName;

@@ -1,4 +1,4 @@
-app.controller('IndexCtrl', function ($scope, IndexService) {
+app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
     $scope.vlCollection = [];
     $scope.vl = {name: "", dirName: ""};
     $scope.hide = {addForm: true, settingsForm: true, importForm: true, runningForm: true, servers: true};
@@ -11,6 +11,12 @@ app.controller('IndexCtrl', function ($scope, IndexService) {
       .then(res => {
         $scope.vlCollection = res;
       });
+
+  $scope.logout = function(){
+    store.remove('token');
+    store.remove('refreshJwtToken');
+    $location.path('/login');
+  };
 
 
     $scope.closeForm = function (type) {
@@ -126,7 +132,7 @@ app.controller('IndexCtrl', function ($scope, IndexService) {
     };
 
     $scope.startVl = function (dir, frameId) {
-      window.location.href = '/VLT/api/start_vl/' + dir + '/' + frameId;
+      $location.path('/start_vl/' + dir + '/' + frameId);
     }
 
     $scope.sort = function(keyname){

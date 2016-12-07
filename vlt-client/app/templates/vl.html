@@ -1,33 +1,10 @@
-<!DOCTYPE html>
-<html ng-app="Vl" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>VLT</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <link rel="stylesheet" href="/VLT/css/bootflat.css"/>
-  <link rel="stylesheet" href="/VLT/css/vlt_index.css"/>
-  <link rel="stylesheet" href="/VLT/css/loader.css"/>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/angular.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/lodash.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.form.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.selecter.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/jquery.fs.stepper.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/lib/icheck.min.js"></script>
-  <script type="text/javascript" src="/VLT/js/controllers/vl-controller.js"></script>
-  <script type="text/javascript" src="/VLT/js/controllers/server-status-controller.js"></script>
-  <script type="text/javascript" src="/VLT/js/services/vl-service.js"></script>
-  <script type="text/javascript" src="/VLT/js/services/server-status-service.js"></script>
-  <script type="text/javascript" src="/VLT/js/controllers/iframe-controller.js"></script>
-  <script type="text/javascript" src="/VLT/js/services/iframe-service.js"></script>
-  <script>
-    function setCalculateResult(res, calculate) {
-      var vlCtrl = angular.element($("body")).scope();
-      vlCtrl.calculate_result.push({'result': res, 'answer': calculate});
-      vlCtrl.$apply();
-    }
-  </script>
-</head>
-<body ng-controller="VlCtrl">
+<script>
+  function setCalculateResult(res, calculate) {
+    var vlCtrl = angular.element($("body")).scope();
+    vlCtrl.calculate_result.push({'result': res, 'answer': calculate});
+    vlCtrl.$apply();
+  }
+</script>
 <div class="start">
   <div class="run-server-button" ng-controller="ServerStatusCtrl">
     <div class="server-div">
@@ -40,14 +17,14 @@
       </div>
       <div class="server-status">
         <div class='server-run' ng-show="interior_server">
-          <span id='interior-start-btn' class='button interior-start-btn' data='Запустить сервер'
+          <span id='interior-start-btn' class='fa fa-play button interior-start-btn' data='Запустить сервер'
                 ng-click='runInteriorServer()'></span>
-          <span id='interior-stop-btn' class='button interior-stop-btn' data='Остановить сервер'
+          <span id='interior-stop-btn' class='fa fa-stop button interior-stop-btn' data='Остановить сервер'
                 ng-click='stopInteriorServer(url)'></span>
           <p>Внутренний сервер</p>
         </div>
         <div class='server-check' ng-show="!interior_server">
-          <span id='check-status-server-btn' class='button check-status-server-btn'
+          <span id='check-status-server-btn' class='fa fa-globe button check-status-server-btn'
                 data='Проверить статус сервера' ng-click="checkServerStatus()"></span>
           <p>Внешний сервер</p>
         </div>
@@ -60,11 +37,11 @@
   </div>
   <div class="title-text">{{nameVL}}</div>
   <div class="run-vl-button">
-    <span id="back-btn" class="button back-btn" data="Выход" ng-click="home()"></span>
-    <span id="start-btn-wain-run-server" class="button start-btn" data="Запустить" ng-click="generateFn()"></span>
-    <span id="check-btn" class="button check-btn" data="Проверить" ng-click="checkFn()"></span>
-    <span id="repeat-btn" class="button repeat-btn" data="Повторить с текущим вариантом" ng-click="repeatFn()"></span>
-    <span id="refresh-btn" class="button refresh-btn" data="Перезапустить с новым вариантом" ng-click="generateFn()"></span>
+    <span id="back-btn" class="fa fa-arrow-left button back-btn" data="Выход" ng-click="home()"></span>
+    <span id="start-btn-wain-run-server" class="fa fa-play button start-btn" data="Запустить" ng-click="generateFn()"></span>
+    <span id="check-btn" class="fa fa-check button check-btn" data="Проверить" ng-click="checkFn()"></span>
+    <span id="repeat-btn" class="fa fa-repeat button repeat-btn" data="Повторить с текущим вариантом" ng-click="repeatFn()"></span>
+    <span id="refresh-btn" class="fa fa-refresh button refresh-btn" data="Перезапустить с новым вариантом" ng-click="generateFn()"></span>
   </div>
 </div>
 <div id="generate_text">
@@ -77,7 +54,7 @@
 
 <div id="frame">
   <div class="panel">
-    <span class="button hidden"></span>
+    <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Информация о виртуальном стенде</div>
   </div>
   <div class="info-all">
@@ -123,7 +100,7 @@
 </div>
 <div id="generate">
   <div class="panel">
-    <span class="button hidden"></span>
+    <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Generate</div>
   </div>
   <div class="info-all">
@@ -176,7 +153,7 @@
 </div>
 <div id="calculate" ng-show="calculate_result.length">
   <div class="panel">
-    <span class="button hidden"></span>
+    <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Calculate</div>
   </div>
   <div class="info-all">
@@ -217,7 +194,7 @@
 </div>
 <div id="check">
   <div class="panel">
-    <span class="button hidden"></span>
+    <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Check</div>
   </div>
   <div class="info-all">
@@ -286,5 +263,3 @@
     </div>
   </div>
 </div>
-</body>
-</html>

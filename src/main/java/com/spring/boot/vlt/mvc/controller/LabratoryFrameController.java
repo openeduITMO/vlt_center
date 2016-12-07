@@ -1,10 +1,12 @@
 package com.spring.boot.vlt.mvc.controller;
 
 import com.spring.boot.vlt.mvc.model.Trial;
+import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
 import com.spring.boot.vlt.mvc.service.UserService;
+import com.spring.boot.vlt.security.JwtAuthenticationToken;
 import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +25,15 @@ import java.util.Optional;
 public class LabratoryFrameController {
     @Autowired
     LaboratoryFrameService laboratoryFrameService;
+    @Autowired
+    UserService userService;
 
     @Autowired
     private Trial trial;
 
     @RequestMapping(value = "/get_labratory_fame/{dir}", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<List> getLabratoryFrame(@PathVariable("dir") String dir) {
+    public ResponseEntity<List> getLabratoryFrame(JwtAuthenticationToken token, @PathVariable("dir") String dir) {
+        UserContext userContext = (UserContext) token.getPrincipal();
         Optional<Document> documentOptional = laboratoryFrameService.setDirName(dir);
         if (!documentOptional.isPresent()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -37,7 +42,7 @@ public class LabratoryFrameController {
     }
 
     @RequestMapping(value = "/start_vl/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
-    public ModelAndView startVl(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
+    public ModelAndView startVl(JwtAuthenticationToken token, @PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
         trial.setFraimeId(frameId);
         return new ModelAndView("startVl");
     }

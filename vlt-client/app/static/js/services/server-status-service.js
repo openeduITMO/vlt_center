@@ -1,4 +1,4 @@
-vl.factory('ServerStatusService', function ($http, $q) {
+app.factory('ServerStatusService', function ($http, $q) {
   var SERVER_HOST = 'http://localhost:8012';
   $http.defaults.headers.common["Accept"] = "application/json";
   $http.defaults.headers.common["Content-Type"] = "application/json";
