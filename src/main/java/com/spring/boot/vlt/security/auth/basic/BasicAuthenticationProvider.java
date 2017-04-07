@@ -3,6 +3,8 @@ package com.spring.boot.vlt.security.auth.basic;
 import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.model.entity.User;
 import com.spring.boot.vlt.mvc.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 @Component
 public class BasicAuthenticationProvider implements AuthenticationProvider {
     private final BCryptPasswordEncoder encoder;
+    private final Logger logger = LogManager.getLogger(this.getClass());
+
 
     @Autowired
     UserService userService;
@@ -41,6 +44,7 @@ public class BasicAuthenticationProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
 
         User user = userService.getUserByLogin(login);
+        logger.debug("start authenticate for user: " + user);
 
         if (!encoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");

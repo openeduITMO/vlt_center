@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class BasicLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
-    private static Logger logger = LogManager.getLogger(BasicLoginProcessingFilter.class);
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     private final AuthenticationSuccessHandler successHandler;
     private final AuthenticationFailureHandler failureHandler;

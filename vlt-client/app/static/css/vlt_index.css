@@ -274,7 +274,6 @@ iframe {
 .settings-servers .interior-stop-btn {
   margin-left: 38%;
   margin-top: -15px;
-  padding: 0;
 }
 
 .settings-servers table th {
@@ -436,7 +435,7 @@ iframe {
 .btn-add {
   color: white;
   display: inline-block;
-  height: 48px;
+  height: 62px;
   margin-left: -1px;
   padding: 6px 12px;
   margin-bottom: 0;

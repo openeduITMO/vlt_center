@@ -1,6 +1,7 @@
 app.controller('VlCtrl', function ($scope, $location, VlService) {
     $scope.dirName = $location.path().split('/')[2];
     $scope.frameId = $location.path().split('/')[3];
+    $scope.session = "";
     $scope.nameVL = "";
     $scope.algorithm = "";
     $scope.url = "";
@@ -9,10 +10,15 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
     $scope.generate_result = null;
     $scope.test = 'test';
     $scope.calculate_result = [];
-    $scope.check_result = [];
+    $scope.check_result;
     $scope.check_answer = null;
     $scope.check = null;
     var frame = frames['vl-frame'];
+
+
+  $scope.$on('pushCalculateResult', function (event, data) {
+    $scope.calculate_result.push(data);
+  });
 
     VlService.getProperty($scope.dirName, $scope.frameId)
       .then(res => {
@@ -44,13 +50,13 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
       });
 
     $scope.home = function () {
-      window.location.href = "/VLT/"
+      window.location.href = "/#/vlt"
     };
 
     $scope.runInteriorServer = function () {
       $(".loader-div").css("display", "block");
       $("#interior-start-btn").attr("id", "wait-start-btn");
-      VlService.runInteriorServer()
+      VlService.runInteriorServer($scope.dirName, $scope.frameId)
         .then(res => {
           waitStartServer();
         });
@@ -64,11 +70,13 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
     }
 
     $scope.generateFn = function () {
-      VlService.generate($scope.algorithm)
+      VlService.generate($scope.dirName, $scope.algorithm)
         .then(res => {
             showBtn();
             clearTable();
-            setGenerate(res);
+            setGenerate(res.response);
+            $scope.session = res.session;
+            frame.setSession($scope.session);
             frame.Vlab.init();
           },
           err => {
@@ -77,13 +85,14 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
     }
 
     $scope.repeatFn = function () {
-      VlService.repeat()
+      VlService.repeat($scope.session)
         .then(res => {
             showBtn();
             clearTable();
-            setGenerate(res);
+            setGenerate(res.response);
+            $scope.session = res.session;
+            frame.setSession($scope.session);
             frame.Vlab.init();
-            //setFrameSize();
           },
           err => {
             $(".run-server-button").attr("class", "run-server-button run-server-error");
@@ -92,7 +101,7 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
 
     $scope.checkFn = function () {
       var result = frame.Vlab.getResults();
-      VlService.check(result)
+      VlService.check($scope.dirName, $scope.frameId, $scope.session, result)
         .then(res => {
             frame.setPreviousSolution(result);
             $(".refresh-btn").css("display", "none");
@@ -100,7 +109,9 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
             $("#start-btn-start").attr("id", "start-btn");
             $("#check-answer").css("display", "inline-block");
             $scope.check_answer = result;
-            $scope.check_result = res;
+            $scope.check_result = res.response;
+            $scope.session = res.session;
+            frame.setSession($scope.session);
           },
           err => {
             $(".run-server-button").attr("class", "run-server-button run-server-error");
@@ -109,7 +120,7 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
 
     var waitStartServer = function () {
       wait(2000);
-      VlService.getServerStatus()
+      VlService.getServerStatus($scope.dirName)
         .then(res => {
             setStyleForRunningInteriorServer();
           },

@@ -11,6 +11,6 @@ import java.util.Set;
 
 public interface UserRoleRepository extends CrudRepository<UserRole, UserRole.Id> {
     @Query("select u_r.role from UserRole u_r where u_r.id.userId = :userId")
-    public Set<Role> findAllRoleForUser(@Param("userId") Long userId);
+    Set<Role> findAllRoleForUser(@Param("userId") Long userId);
 
 }

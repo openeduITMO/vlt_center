@@ -3,9 +3,9 @@ package com.spring.boot.vlt.mvc.service.rlcp;
 import com.spring.boot.vlt.config.property.VltSettings;
 import com.spring.boot.vlt.info.LogStreamReader;
 import com.spring.boot.vlt.mvc.model.vl.MapServer;
-import com.spring.boot.vlt.mvc.model.Trial;
 import com.spring.boot.vlt.mvc.model.vl.InteriorServer;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
+import com.spring.boot.vlt.mvc.service.VltService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rlcp.echo.RlcpEchoRequest;
@@ -26,14 +26,14 @@ public class RlcpServerService {
     @Autowired
     private MapServer servers;
     @Autowired
-    private Trial trial;
+    private VltService vltService;
 
-    public boolean getStatusExternalServer() {
-        return status(trial.getUrl());
+    public boolean getStatusExternalServer(String dirName) {
+        return status(vltService.getUrl(dirName));
     }
 
-    public boolean isInteriorServer() {
-        Optional<InteriorServer> isInteriorServer = Optional.ofNullable(servers.getMapServers().get(trial.getUrl()));
+    public boolean isInteriorServer(String dirName) {
+        Optional<InteriorServer> isInteriorServer = Optional.ofNullable(servers.getMapServers().get(vltService.getUrl(dirName)));
         if (isInteriorServer.isPresent()) {
             return true;
         }
@@ -59,14 +59,13 @@ public class RlcpServerService {
         }
     }
 
-    public Boolean runInteriorServer() throws InterruptedException {
-        laboratoryFrameService.setDirName(trial.getVl().getDirName());
-        laboratoryFrameService.setFrameId(trial.getFraimeId());
-        if (!status(trial.getUrl())) {
+    public Boolean runInteriorServer(String dirNmae, String frameId) throws InterruptedException {
+        laboratoryFrameService.setPreCondition(dirNmae, frameId);
+        if (!status(laboratoryFrameService.getUrl())) {
             File file = new File(
                     System.getProperty("user.dir") + File.separator +
                             vltSettings.getPathsUploadedFiles() +
-                            File.separator + trial.getVl().getDirName() + File.separator + "server");
+                            File.separator + dirNmae + File.separator + "server");
             if (file.exists()) {
                 ProcessBuilder process = new ProcessBuilder("java", "-jar", "-Dfile.encoding=utf-8", new File(file, "server.jar").getAbsolutePath());
                 process.directory(file);
@@ -75,7 +74,7 @@ public class RlcpServerService {
                     LogStreamReader lsr = new LogStreamReader(p.getInputStream());
                     Thread thread = new Thread(lsr, "LogStreamReader");
                     thread.start();
-                    servers.put(trial.getVl(), laboratoryFrameService.getUrl(), p);
+                    servers.put(vltService.getVl(dirNmae), laboratoryFrameService.getUrl(), p);
                 } catch (IOException e) {
                     e.printStackTrace();
                     return false;

@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Scope(value = "singleton")
 @Component
-@Scope(value = "application")
 public class MapServer {
     private Map<String, InteriorServer> mapServers;
 

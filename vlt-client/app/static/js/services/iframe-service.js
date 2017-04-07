@@ -7,7 +7,7 @@ app.factory('iFrameService', function ($http, $q) {
 
   return{
     getJs: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_js/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST+'/VLT/api/frame/get_js/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },
@@ -17,7 +17,7 @@ app.factory('iFrameService', function ($http, $q) {
     },
 
     getCss: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_css/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST+'/VLT/api/frame/get_css/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },

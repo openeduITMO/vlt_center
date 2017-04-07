@@ -27,6 +27,8 @@ public class VirtLab{
     private String width;
     @Column(name = "height")
     private String height;
+    @Column(name = "url")
+    private String url;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -92,6 +94,14 @@ public class VirtLab{
 
     public void setHeight(String height) {
         this.height = height;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public User getAuthor() {

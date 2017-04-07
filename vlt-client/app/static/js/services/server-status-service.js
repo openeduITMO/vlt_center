@@ -6,8 +6,8 @@ app.factory('ServerStatusService', function ($http, $q) {
   $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
   return {
-    checkTypeServer: () => {
-      return $http.post(SERVER_HOST+'/VLT/api/get_type_server')
+    checkTypeServer: (dir) => {
+      return $http.post(SERVER_HOST+'/VLT/api/'+dir+'/get_type_server')
         .then(res => {
             return res.data;
           },
@@ -16,8 +16,8 @@ app.factory('ServerStatusService', function ($http, $q) {
           });
     },
 
-    checkServerStatus: () => {
-      return $http.post(SERVER_HOST+'/VLT/api/get_server_status')
+    checkServerStatus: (dir) => {
+      return $http.post(SERVER_HOST+'/VLT/api/'+dir+'/get_server_status')
         .then(res => {
             return res.data;
           },

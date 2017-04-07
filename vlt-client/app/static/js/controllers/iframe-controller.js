@@ -25,10 +25,12 @@ app.controller("iFrameCtrl", function ($scope, iFrameService) {
       ifrm.document.write('<input type="hidden" value="calcfake" id="calculatedCode"/>');
       ifrm.document.write('<input type="hidden" value="calcfake" id="calculatedText"/>');
       ifrm.document.write('<input type="hidden" value="prevsolfake" id="previousSolution"/>');
+      ifrm.document.write('<input type="hidden" value="session" id="session"/>');
       ifrm.document.write('<script type="text/javascript">' +
         'Vlab.init();' +
         'function setGenerateCode(val){$("#preGeneratedCode").val(val) };' +
         'function setPreviousSolution(val){$("#previousSolution").val(val) };' +
+        'function setSession(val){$("#session").val(val)};' +
         '</script>');
     });
 });

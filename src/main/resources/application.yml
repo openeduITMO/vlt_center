@@ -6,14 +6,16 @@ vlt.settings:
   pathsUploadedFiles: VLabs
   framesXml: LaboratoryFrames.xml
 
-multipart:
-    maxFileSize: 50000KB
-    maxRequestSize: 50000KB
+spring:
+  http:
+       multipart:
+           max-file-size: 512MB
+           max-request-size: 5124MB
 
 security.token:
   tokenExpirationTime: 30 # Minutes
   refreshTokenExpTime: 1440 # Minutes
-  tokenIssuer: http://efimchik.com
+  tokenIssuer: http://efimchick.com
   tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
 
 spring.datasource:

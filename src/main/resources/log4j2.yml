@@ -1,0 +1,56 @@
+Configutation:
+  name: Default
+
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+
+  Appenders:
+
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+
+    File:
+      - name: AUTH
+        fileName: ${log-path}/auth.log
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: RLCP_METHOD
+        fileName: ${log-path}/rlcp_metchod.log
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: VLT_FILE
+        fileName: ${log-path}/vlt_file.log
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: VLT_SERVICE
+        fileName: ${log-path}/vlt_service.log
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+
+  Loggers:
+      Root:
+        level: debug
+        AppenderRef:
+          - ref: Console_Appender
+      Logger:
+        - name: com.spring.boot.vlt.security
+          level: debug
+          AppenderRef:
+            - ref: AUTH
+        - name: com.spring.boot.vlt.mvc.service.rlcp.RlcpMethodService
+          level: debug
+          AppenderRef:
+            - ref: RLCP_METHOD
+        - name: com.spring.boot.vlt.mvc.service.UploadFileService
+          level: debug
+          AppenderRef:
+            - ref: VLT_FILE
+        - name: com.spring.boot.vlt.mvc.service.VltService
+          level: debug
+          AppenderRef:
+            - ref: VLT_SERVICE

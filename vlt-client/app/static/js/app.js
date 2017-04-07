@@ -37,7 +37,8 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
     }])
   .config(['$stateProvider', '$urlRouterProvider',
     function ($stateProvider, $urlRouterProvider) {
-      $stateProvider.state('main', {
+      $stateProvider
+        .state('main', {
           url: '/login',
           controller: 'UserCtrl',
           templateUrl: 'templates/login.html'

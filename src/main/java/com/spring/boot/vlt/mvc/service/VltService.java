@@ -52,6 +52,7 @@ public class VltService {
         User user = userService.getUserByLogin(userLogin);
         vl.setAuthor(user);
         vlRepository.save(vl);
+        user.addLab(vl);
         userService.saveUser(user);
         logger.info("Virtual laboratory " + vl.getDirName() + "create!");
         return vl;
@@ -61,7 +62,7 @@ public class VltService {
         return userService.foundVlByDirUnderUser(userLogin, vlDir);
     }
 
-    public VirtLab getPropertyVl(String vlDir) {
+    public VirtLab getVl(String vlDir) {
         return Optional.ofNullable(vlRepository.findByDirName(vlDir)).orElseThrow(() ->
                 new NullPointerException("vl with dir name = " + vlDir + " not found"));
     }
@@ -78,13 +79,26 @@ public class VltService {
 
     public VirtLab savePropertyVl(VirtLab vl, String dir) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        VirtLab vlFromDB = Optional.ofNullable(vlRepository.findByDirName(dir)).orElseThrow(() ->
-                new NullPointerException("vl with dir name = " + dir + " not found"));
+        VirtLab vlFromDB = getVl(dir);
         vlFromDB.setName(vl.getName());
         vlFromDB.setHeight(vl.getHeight());
         vlFromDB.setWidth(vl.getWidth());
+//        chekAndSaveUrl(vlFromDB, vl.getUrl());
         vl.updatePropertyFile(path);
         return vlRepository.save(vlFromDB);
+    }
+
+    public boolean chekAndSaveUrl(VirtLab vl, String url){
+        if (vlRepository.findByUrl(url) == null) {
+            vl.setUrl(url);
+            vlRepository.save(vl);
+            return true;
+        }
+        return false;
+    }
+
+    public String getUrl(String dir){
+        return getVl(dir).getUrl();
     }
 
     public byte[] getImg(String dir, String name, String suffix) throws IOException {

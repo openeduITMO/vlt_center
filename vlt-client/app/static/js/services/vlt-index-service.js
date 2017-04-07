@@ -46,7 +46,7 @@ app.factory('IndexService', function ($http, $q) {
     },
 
     getLabratoryFame: (dir) => {
-      return $http.post(SERVER_HOST+'/VLT/api/get_labratory_fame/' + dir)
+      return $http.post(SERVER_HOST+'/VLT/api/frame/get_labratory/' + dir)
         .then(res => {
             return res.data;
           },
@@ -66,7 +66,7 @@ app.factory('IndexService', function ($http, $q) {
     },
 
     stopServer: (url) => {
-      return $http.post(SERVER_HOST+'/VLT/stop_interior_server', url)
+      return $http.post(SERVER_HOST+'/VLT/api/stop_interior_server', url)
         .then(res => {
             return res.data;
           },

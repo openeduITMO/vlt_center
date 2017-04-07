@@ -8,14 +8,11 @@ import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.service.VltService;
 import com.spring.boot.vlt.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Set;
 
 @CrossOrigin
@@ -30,14 +27,16 @@ public class VltController {
         UserContext userContext = (UserContext) token.getPrincipal();
         // add check user's role
         Set<VirtLab> virtList = vltService.getVirtList(userContext.getUsername());
-        return new ResponseEntity(virtList, HttpStatus.OK);
+        return new ResponseEntity<>(virtList, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/add_vl", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<VirtLab> addVl(JwtAuthenticationToken token, @RequestBody String name) {
         UserContext userContext = (UserContext) token.getPrincipal();
         return AccessUtils.isDeveloperOrAdmin(userContext) ?
-                new ResponseEntity(vltService.addVl(new VirtLab(name), userContext.getUsername()), HttpStatus.OK) :
+                new ResponseEntity(
+                        vltService.addVl(new VirtLab(name), userContext.getUsername()),
+                        HttpStatus.OK) :
                 ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 
@@ -48,7 +47,7 @@ public class VltController {
         return AccessUtils.isDeveloper(userContext) ?
                 new ResponseEntity(vltService.getPropertyVl(nameVl, userContext.getUsername()), HttpStatus.OK) :
                 AccessUtils.isAdmin(userContext) ?
-                        new ResponseEntity(vltService.getPropertyVl(nameVl), HttpStatus.OK) :
+                        new ResponseEntity(vltService.getVl(nameVl), HttpStatus.OK) :
                         ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 
@@ -64,17 +63,4 @@ public class VltController {
                         ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value = "/start_vl/{dir}/img/{name}.{suffix}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getImg(@PathVariable("dir") String dir, @PathVariable("name") String name, @PathVariable("suffix") String suffix) throws IOException {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        return new ResponseEntity<>(vltService.getImg(dir, name, suffix), headers, HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "/VLabs/{dir}/tool/css/{d-l}/img/{name}.{suffix}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getImg2(@PathVariable("dir") String dir, @PathVariable("name") String name, @PathVariable("suffix") String suffix) throws IOException {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        return new ResponseEntity<>(vltService.getImg2(dir, name, suffix), headers, HttpStatus.CREATED);
-    }
 }

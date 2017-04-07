@@ -1,5 +1,7 @@
-app.controller('ServerStatusCtrl', function ($scope, ServerStatusService) {
+app.controller('ServerStatusCtrl', function ($scope, $location, ServerStatusService) {
   $scope.interior_server = false;
+  $scope.dirName = $location.path().split('/')[2];
+  $scope.frameId = $location.path().split('/')[3];
 
     //var first_load = true;
     //if (first_load) {
@@ -13,7 +15,7 @@ app.controller('ServerStatusCtrl', function ($scope, ServerStatusService) {
     //}
 
     $scope.checkServerStatus = function () {
-      ServerStatusService.checkServerStatus()
+      ServerStatusService.checkServerStatus($scope.dirName)
         .then(res => {
             $("#start-btn-wain-run-server").attr("id", "start-btn");
             if (res) {

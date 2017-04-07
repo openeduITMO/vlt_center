@@ -15,12 +15,12 @@ public class RlcpServerController {
     @Autowired
     private RlcpServerService rlcpServerService;
 
-    @RequestMapping(value = "/get_server_status", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> getStatusExternalServer() throws InterruptedException {
-        if (rlcpServerService.getStatusExternalServer()) {
-            return new ResponseEntity<>(rlcpServerService.isInteriorServer(), HttpStatus.OK);
+    @RequestMapping(value = "/{dir}/get_server_status", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> getStatusExternalServer(@PathVariable("dir") String dir) throws InterruptedException {
+        if (rlcpServerService.getStatusExternalServer(dir)) {
+            return new ResponseEntity<>(rlcpServerService.isInteriorServer(dir), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(rlcpServerService.isInteriorServer(), HttpStatus.SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>(rlcpServerService.isInteriorServer(dir), HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -29,14 +29,14 @@ public class RlcpServerController {
         return new ResponseEntity<>(rlcpServerService.getServersList(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/get_type_server", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> getTypeServer() {
-        return new ResponseEntity<>(rlcpServerService.isInteriorServer(), HttpStatus.OK);
+    @RequestMapping(value = "/{dir}/get_type_server", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> getTypeServer(@PathVariable("dir") String dir) {
+        return new ResponseEntity<>(rlcpServerService.isInteriorServer(dir), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/run_interior_server", method = RequestMethod.POST)
-    public ResponseEntity<String> runInteriorServer() throws InterruptedException {
-        if (rlcpServerService.runInteriorServer()) {
+    @RequestMapping(value = "/{dir}/{frameId}/run_interior_server", method = RequestMethod.POST)
+    public ResponseEntity<String> runInteriorServer(@PathVariable("dir") String dir, @PathVariable("frameId") String frameId) throws InterruptedException {
+        if (rlcpServerService.runInteriorServer(dir, frameId)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);

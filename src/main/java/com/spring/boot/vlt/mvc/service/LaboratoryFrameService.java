@@ -40,14 +40,12 @@ public class LaboratoryFrameService {
 
     private String dirName;
 
-    public Optional<Document> setDirName(String dirName) {
+    public Optional<Document> setPreCondition(String dirName, String frameId) {
         this.dirName = dirName;
-        document = readLabratoryFame(this.dirName);
-        return Optional.ofNullable(document);
-    }
+        this.document = readLabratoryFame(this.dirName);
 
-    public void setFrameId(String frameId) {
-        node = findFrameById(document.selectNodes("//FrameIndex"), frameId);
+        this.node = findFrameById(document.selectNodes("//FrameIndex"), frameId);
+        return Optional.ofNullable(document);
     }
 
     public List getLaboratoryFrame() {
@@ -135,7 +133,9 @@ public class LaboratoryFrameService {
     }
 
     private Optional<Node> findFrameById(List<Node> frameIndex, String frameId) {
-        return frameIndex.stream().filter((node) -> node.valueOf("@FrameID").equals(frameId)).findFirst();
+        return frameId != null?
+                frameIndex.stream().filter((node) -> node.valueOf("@FrameID").equals(frameId)).findFirst() :
+                frameIndex.stream().findFirst();
     }
 
     private Document readLabratoryFame(String nameVl) {

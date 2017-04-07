@@ -27,10 +27,10 @@ public class UploadFileService {
     private UserService userService;
 
     public boolean upload(String login, MultipartFile uploadfile, String dir) {
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
         if (Optional.ofNullable(userService.foundVlByDirUnderUser(login, dir)).isPresent()) {
-            final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
             File vlDir = new File(path, dir);
-            if (vlDir.listFiles().length != 0) {
+            if (vlDir.listFiles() != null && vlDir.listFiles().length != 0) {
                 PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");
                 Stream.of(vlDir.listFiles()).filter(p -> !requestPathMatcher.matches(p.toPath())).forEach(f -> deleteFile(f));
             }

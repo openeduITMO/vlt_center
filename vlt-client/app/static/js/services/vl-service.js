@@ -1,4 +1,4 @@
-app.factory('VlService', function ($http, $q) {
+app.factory('VlService', function ($http, $q, $httpParamSerializerJQLike) {
   var SERVER_HOST = 'http://localhost:8012';
   $http.defaults.headers.common["Accept"] = "application/json";
   $http.defaults.headers.common["Content-Type"] = "application/json";
@@ -7,7 +7,7 @@ app.factory('VlService', function ($http, $q) {
 
   return {
     getProperty: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_property/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST + '/VLT/api/frame/get_property/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },
@@ -17,7 +17,7 @@ app.factory('VlService', function ($http, $q) {
     },
 
     getUrl: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_url/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST + '/VLT/api/frame/get_url/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },
@@ -27,7 +27,7 @@ app.factory('VlService', function ($http, $q) {
     },
 
     getFrame: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_frame/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST + '/VLT/api/frame/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },
@@ -37,7 +37,7 @@ app.factory('VlService', function ($http, $q) {
     },
 
     getGenerate: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_generate/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST + '/VLT/api/frame/get_generate/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },
@@ -47,7 +47,7 @@ app.factory('VlService', function ($http, $q) {
     },
 
     getAlgorithm: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_algorithm/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST + '/VLT/api/frame/get_algorithm/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },
@@ -57,7 +57,7 @@ app.factory('VlService', function ($http, $q) {
     },
 
     getCheck: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_check/' + dir + '/' + frame)
+      return $http.get(SERVER_HOST + '/VLT/api/frame/get_check/' + dir + '/' + frame)
         .then(res => {
             return res.data;
           },
@@ -66,8 +66,8 @@ app.factory('VlService', function ($http, $q) {
           });
     },
 
-    getServerStatus: () => {
-      return $http.post(SERVER_HOST+'/VLT/api/get_server_status')
+    getServerStatus: (dir) => {
+      return $http.post(SERVER_HOST + '/VLT/api/' + dir + '/get_server_status')
         .then(res => {
             return res.data;
           },
@@ -77,7 +77,7 @@ app.factory('VlService', function ($http, $q) {
     },
 
     stopInteriorServer: (url) => {
-      return $http.post(SERVER_HOST+'/VLT/api/stop_interior_server', url)
+      return $http.post(SERVER_HOST + '/VLT/api/stop_interior_server', url)
         .then(res => {
             return res.data;
           },
@@ -86,8 +86,8 @@ app.factory('VlService', function ($http, $q) {
           });
     },
 
-    runInteriorServer: () => {
-      return $http.post(SERVER_HOST+'/VLT/api/run_interior_server')
+    runInteriorServer: (dir, frameId) => {
+      return $http.post(SERVER_HOST + '/VLT/api/' + dir + '/' + frameId + '/run_interior_server')
         .then(res => {
             return res.data;
           },
@@ -96,8 +96,10 @@ app.factory('VlService', function ($http, $q) {
           });
     },
 
-    generate: (algorithm) => {
-      return $http.post(SERVER_HOST+'/VLT/api/get_generate', algorithm)
+    generate: (dir, algorithm) => {
+      return $http.get(SERVER_HOST + '/VLT/public/resources/' + dir + '/get_generate', {
+          params: {algorithm: algorithm}
+      })
         .then(res => {
             return res.data;
           },
@@ -106,8 +108,10 @@ app.factory('VlService', function ($http, $q) {
           });
     },
 
-    repeat: () => {
-      return $http.post(SERVER_HOST+'/VLT/api/repeat')
+    repeat: (session) => {
+      return $http.get(SERVER_HOST + '/VLT/public/resources/repeat', {
+          params: {session: session}
+        })
         .then(res => {
             return res.data;
           },
@@ -116,8 +120,10 @@ app.factory('VlService', function ($http, $q) {
           });
     },
 
-    check: (result) => {
-      return $http.post(SERVER_HOST+'/VLT/api/get_check', result)
+    check: (dir, frameId, session, result) => {
+      return $http.get(SERVER_HOST + '/VLT/public/resources/' + dir + '/' + frameId + '/get_check', {
+          params: {session: session, instructions: result}
+        })
         .then(res => {
             return res.data;
           },

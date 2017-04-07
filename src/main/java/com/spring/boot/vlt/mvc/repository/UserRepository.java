@@ -13,8 +13,8 @@ import java.util.Set;
 public interface UserRepository extends CrudRepository<User, Long>{
 
     @Query("select u from User u where u.login = :login")
-    public User findByLogin(@Param("login") String login);
+    User findByLogin(@Param("login") String login);
 
     @Query("select u.labs from User u where u.login = :login")
-    public Set<VirtLab> getUserVirtLabs(@Param("login") String login);
+    Set<VirtLab> getUserVirtLabs(@Param("login") String login);
 }

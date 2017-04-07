@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String FORM_BASED_REGISTER_ENTRY_POINT = "/auth/register";
     public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
     public static final String TOKEN_REFRESH_ENTRY_POINT = "/auth/token";
+    public static final String PUBLIC_RESOURCES = "/public/resources";
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -116,6 +117,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .authorizeRequests()
                 .antMatchers("/console").permitAll()
+                .antMatchers(PUBLIC_RESOURCES).permitAll()
                 .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll()
                 .antMatchers(FORM_BASED_REGISTER_ENTRY_POINT).permitAll()
                 .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll()
