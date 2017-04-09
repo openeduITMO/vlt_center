@@ -49,13 +49,12 @@ public class BasicAuthenticationProvider implements AuthenticationProvider {
         if (!encoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
         }
-        userService.getAllRoleForUser(user.getId()).forEach(user::addUserRole);
 
-        if (user.getRoles() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
+        if (user.getRole() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
 
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getRole().authority()))
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority(user.getRole().authority())
+        );
 
         UserContext userContext = UserContext.create(user.getLogin(), authorities);
 

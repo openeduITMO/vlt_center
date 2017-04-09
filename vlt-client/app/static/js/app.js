@@ -1,4 +1,14 @@
 var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 'angularUtils.directives.dirPagination'])
+  .constant(
+    'USER_ROLES', {
+      all: '*',
+      admin: 'ROLE_ADMIN',
+      developer: 'ROLE_DEVELOPER',
+      student: 'ROLE_STUDENT'
+    })
+  .constant(
+    'SERVER_HOST', 'http://localhost:8012'
+  )
   .config(['jwtOptionsProvider', 'jwtInterceptorProvider', '$httpProvider',
     function (jwtOptionsProvider, jwtInterceptorProvider, $httpProvider) {
       jwtOptionsProvider.config({
@@ -20,33 +30,49 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
               }
             })
               .then(res => {
-                  store.set('token', res.data.token);
-                  return res.data.token;
+                  jwt = res.data.token;
                 },
                 err => {
+                  store.remove('role');
                   store.remove('token');
                   store.remove('refreshJwtToken');
                 })
-            return refreshToken;
+            jwt = refreshToken;
           } else {
+            store.set('role', jwtHelper.decodeToken(jwt)['scopes'][0]);
+            store.set('token', jwt);
             return jwt;
           }
         }
       };
       $httpProvider.interceptors.push('jwtInterceptor');
     }])
-  .config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider) {
+  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'USER_ROLES',
+    function ($stateProvider, $urlRouterProvider, $locationProvider, USER_ROLES) {
       $stateProvider
         .state('main', {
           url: '/login',
           controller: 'UserCtrl',
-          templateUrl: 'templates/login.html'
+          templateUrl: 'templates/login.html',
+          data: {
+            authorizedRoles: [USER_ROLES.all]
+          }
         })
-        .state('vlt', {
-          url: '/vlt',
+        .state('dev_vlt', {
+          url: '/vlt/dev',
           controller: 'IndexCtrl',
-          templateUrl: 'templates/vlt.html'
+          templateUrl: 'templates/dev_vlt.html',
+          data: {
+            authorizedRoles: [USER_ROLES.admin, USER_ROLES.developer]
+          }
+        })
+        .state('student_vlt', {
+          url: '/vlt/student',
+          controller: 'IndexCtrl',
+          templateUrl: 'templates/student_vlt.html',
+          data: {
+            authorizedRoles: [USER_ROLES.student]
+          }
         })
         .state('vl', {
           url: '/start_vl/:dir/:frame',
@@ -55,18 +81,24 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
         });
 
       $urlRouterProvider.otherwise('/login');
+
+       /*
+       Удаляет # из url. '/#/test' -> '/test', но при попытке обновить страницу '/test' - ошибка 404
+       TODO: удалить # из url
+       */
+      //$locationProvider.html5Mode(true);
     }])
   .run(['$rootScope', '$location', 'AuthProvider', function ($rootScope, $location, AuthProvider) {
-    $rootScope.$on('$stateChangeStart', function (event) {
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      var authorizedRoles = next.data.authorizedRoles;
       if ($location.path() != '/login') {
-        if (!AuthProvider.isAuthorized()) {
+        console.log(AuthProvider.isAuthorized(authorizedRoles));
+        if (!AuthProvider.isAuthorized(authorizedRoles)) {
           console.log('DENY : Redirecting to Login');
-          event.preventDefault();
           $location.path('/login');
         } else {
           if (!AuthProvider.testConnect()) {
             console.log('DENY : Redirecting to Login');
-            event.preventDefault();
             $location.path('/login');
           }
         }

@@ -2,10 +2,11 @@
 <html ng-app="App">
 <head>
   <meta charset="UTF-8">
+  <base href="/">
   <title>VLT</title>
 
-  <link rel="stylesheet" href="static/css/lib/bootflat.css">
   <link rel="stylesheet" href="static/css/lib/loader.css">
+  <link rel="stylesheet" href="bower_components/Bootflat/bootflat/css/bootflat.css">
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="static/css/login.css">
   <link rel="stylesheet" href="static/css/vlt_index.css">
@@ -40,12 +41,11 @@
   <script type="text/javascript" src="static/js/services/iframe-service.js"></script>
 
   <script type="text/javascript" src="static/js/directives/app-model.js"></script>
+  <script type="text/javascript" src="static/js/directives/vl_list.js"></script>
 
 </head>
 <body ng-controller="AppCtrl">
 
-<!--<login-form ng-if="!isAuthorized"></login-form>-->
-<!--<vlt-index ng-if="isAuthorized"></vlt-index>-->
 <ui-view></ui-view>
 
 </body>

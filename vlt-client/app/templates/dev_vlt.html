@@ -1,0 +1,55 @@
+<script>
+  $(document).on('change', '.uploader :file', function () {
+    var name = $(this).get(0).files[0].name;
+    if (name != "") {
+      $(this).parent().find("label").attr("data-file", name);
+    }
+  });
+</script>
+
+<div class="title-text">
+  Среда тестирования виртуальных лабораторий
+  <span id="logout" class="fa fa-sign-out button logout" data="Выход"
+        ng-click="logout()"></span>
+    <span id="setting-server-btn" class="fa fa-th-list button setting-server-btn" data="Список серверов"
+          ng-click="showServerList()"></span>
+</div>
+
+
+<div class="vlt">
+
+  <vl-available></vl-available>
+
+  <div class="settings-servers" ng-show="!hide.servers" ng-hide="hide.servers">
+    <div class="panel panel-default">
+      <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('settings-servers')"></span>
+      <span id="update-btn" class="fa fa-refresh button update-btn" data="Обновить" ng-click="getServersList()"></span>
+      <div class="panel-heading">Список запущенных серверов</div>
+      <table class="table" id="table-servers">
+        <thead>
+        <tr class="table_tit">
+          <th>Название</th>
+          <th>URL</th>
+          <th>Остановить сервер</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-show="!servers.length">
+          <td colspan='3'>
+            <div>Нет запущенных серверов</div>
+          </td>
+        </tr>
+        <tr ng-repeat="server in servers">
+          <td>{{server.name}}</td>
+          <td>{{server.url}}</td>
+          <td><span id='interior-stop-run' class='fa fa-stop button interior-stop-btn' data='Остановить сервер'
+                    ng-click="stopServer(server.url)"></span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <vl-current></vl-current>
+
+</div>

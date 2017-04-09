@@ -1,0 +1,41 @@
+<div class="vl-list">
+
+  <div class="list-div">
+    <div class="panel panel-default">
+      <span class="fa fa-plus button plusTd" data="Добавить новую ВЛ" ng-click="showAddForm()"
+            ng-if="isAuthorized([userRoles.admin,userRoles.developer])"></span>
+      <div class="panel-heading">Доступные виртуальнех лаборатории</div>
+      <form>
+        <div>
+          <input type="text" class="search-input" ng-model="search" placeholder="Поиск"/>
+        </div>
+      </form>
+      <table class="table" id="vl-list">
+        <thead>
+        <th ng-click="sort('name')" class="name">Имя
+              <span ng-show="sortKey=='name'"
+                    ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+        </th>
+        <th class="commands">Команды</th>
+        </thead>
+        <tbody>
+        <tr dir-paginate="vl in vlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
+          <td>{{vl.name}}</td>
+          <td>
+            <span class="fa fa-play button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>
+            <span class="fa fa-cog button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"
+                  ng-if="isAuthorized([userRoles.admin,userRoles.developer])"/>
+            <span class="fa fa-upload button import-vl" data="Импрот" ng-click="showImportForm(vl)"
+                  ng-if="isAuthorized([userRoles.admin,userRoles.developer])"/>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <dir-pagination-controls
+    max-size="5"
+    direction-links="true"
+    boundary-links="true">
+  </dir-pagination-controls>
+</div>

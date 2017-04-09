@@ -1,4 +1,4 @@
-app.controller('UserCtrl', function ($scope, $location, store, UserService, AuthProvider) {
+app.controller('UserCtrl', function ($scope, $location, store, UserService, AuthProvider, USER_ROLES, jwtHelper) {
   $scope.isLogin = true;
   $scope.errors = {
     loginIsError: '',
@@ -27,14 +27,10 @@ app.controller('UserCtrl', function ($scope, $location, store, UserService, Auth
     if ($scope.user.login != '' && $scope.user.password != '') {
       UserService.login($scope.user)
         .then(res => {
-            store.set('refreshJwtToken', res.refreshJwtToken);
-            store.set('token', res.token);
-            AuthProvider.setAuthorized(true);
-            $location.path('/vlt');
+            AuthProvider.setStore(res.token, res.refreshJwtToken);
+            reLocation(res.token);
           }, err => {
-            AuthProvider.setAuthorized(false);
-            store.remove('token');
-            store.remove('refreshJwtToken');
+          AuthProvider.destroy();
             $scope.errors.loginIsError = 'Некорректные логин или пароль';
             $scope.errors.passwordIsError = 'Некорректные логин или пароль';
           }
@@ -53,9 +49,8 @@ app.controller('UserCtrl', function ($scope, $location, store, UserService, Auth
     if ($scope.user.login != '' && $scope.user.password != '' && $scope.userRole != null) {
       UserService.register($scope.user, $scope.userRole.name)
         .then(res => {
-          store.set('refreshJwtToken', res.refreshJwtToken);
-          store.set('token', res.token);
-          $scope.$parent.isAuthorized = true;
+          AuthProvider.setStore(res.token, res.refreshJwtToken);
+          reLocation(res.token);
         });
     } else {
       if ($scope.user.login == '') {
@@ -68,6 +63,20 @@ app.controller('UserCtrl', function ($scope, $location, store, UserService, Auth
         $scope.errors.registerRole = "Заполните поле"
       }
     }
+  }
+
+  reLocation = function(jwt){
+    var role = store.get('role');
+    if (USER_ROLES.student == role){
+      $location.path('/vlt/student');
+    } else if (
+      USER_ROLES.admin == role ||
+      USER_ROLES.developer == role){
+      $location.path('/vlt/dev');
+    } else{
+      $location.path('/login');
+    }
+
   }
 
 });

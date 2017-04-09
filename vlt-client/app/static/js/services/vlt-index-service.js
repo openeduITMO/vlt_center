@@ -1,12 +1,11 @@
-app.factory('IndexService', function ($http, $q) {
-  var SERVER_HOST = 'http://localhost:8012';
+app.factory('IndexService', function ($http, $q, SERVER_HOST) {
   $http.defaults.headers.common["Accept"] = "application/json";
   $http.defaults.headers.common["Content-Type"] = "application/json";
   //$http.defaults.headers.common["X-Authorization"] = "Bearer "+store.get('token');
 
   return {
     getVlList: () => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_list_vl')
+      return $http.get(SERVER_HOST + '/VLT/api/get_list_vl')
         .then(res => {
             return res.data;
           },
@@ -15,8 +14,12 @@ app.factory('IndexService', function ($http, $q) {
           });
     },
 
+    getAllVl: () => {
+      return $http.get()
+    },
+
     addVl: (name) => {
-      return $http.post(SERVER_HOST+'/VLT/api/add_vl', name)
+      return $http.post(SERVER_HOST + '/VLT/api/add_vl', name)
         .then(res => {
             return res.data;
           },
@@ -26,7 +29,7 @@ app.factory('IndexService', function ($http, $q) {
     },
 
     getPropertyVl: (dir) => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_property_vl/' + dir)
+      return $http.get(SERVER_HOST + '/VLT/api/get_property_vl/' + dir)
         .then(res => {
             return res.data;
           },
@@ -36,7 +39,7 @@ app.factory('IndexService', function ($http, $q) {
     },
 
     savePropertyVl: (dir, vl) => {
-      return $http.post(SERVER_HOST+'/VLT/api/save_property_vl/' + dir, vl)
+      return $http.post(SERVER_HOST + '/VLT/api/save_property_vl/' + dir, vl)
         .then(res => {
             return res.data;
           },
@@ -46,7 +49,7 @@ app.factory('IndexService', function ($http, $q) {
     },
 
     getLabratoryFame: (dir) => {
-      return $http.post(SERVER_HOST+'/VLT/api/frame/get_labratory/' + dir)
+      return $http.post(SERVER_HOST + '/VLT/api/frame/get_labratory/' + dir)
         .then(res => {
             return res.data;
           },
@@ -56,7 +59,7 @@ app.factory('IndexService', function ($http, $q) {
     },
 
     getServersList: () => {
-      return $http.get(SERVER_HOST+'/VLT/api/get_servers_list/')
+      return $http.get(SERVER_HOST + '/VLT/api/get_servers_list/')
         .then(res => {
             return res.data;
           },
@@ -66,7 +69,7 @@ app.factory('IndexService', function ($http, $q) {
     },
 
     stopServer: (url) => {
-      return $http.post(SERVER_HOST+'/VLT/api/stop_interior_server', url)
+      return $http.post(SERVER_HOST + '/VLT/api/stop_interior_server', url)
         .then(res => {
             return res.data;
           },

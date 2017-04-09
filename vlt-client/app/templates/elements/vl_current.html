@@ -1,0 +1,103 @@
+<div class="vl-current">
+
+  <div id="add-vl-block" class="panel panel-default s-form"
+       ng-show="!hide.addForm" ng-hide="hide.addForm"
+       ng-if="isAuthorized([userRoles.admin,userRoles.developer])">
+    <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('add-form')"></span>
+    <div class="panel-heading">Добавить новую ВЛ</div>
+    <div class="panel-body">
+      <div class="add-form col-xs-6">
+        <input id="name-vl" class="form-control input-group" type="text" placeholder="Название ВЛ"
+               value="" ng-model="vl.name"/>
+            <span class="input-group-btn">
+              <button id="add-vl" class="btn-add btn-primary" ng-click="addVl(vl.name)">Добавить</button>
+            </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default settings"
+       ng-show="!hide.settingsForm" ng-hide="hide.settingsForm"
+       ng-if="isAuthorized([userRoles.admin,userRoles.developer])">
+    <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('settings-form')"></span>
+    <div class="panel-heading">Настройка "{{vl.name}}"<span class="name-vl"></span></div>
+    <div class="panel-body">
+      <form id='save-property-vl'>
+        <table>
+          <tr>
+            <td><label>Название лаборатори</label></td>
+            <td><input class='form-control-tune' id='name-current-vl' ng-model='vl.curName'/></td>
+          </tr>
+          <tr>
+            <td><label>Название каталога</label></td>
+            <td><input class='form-control-tune lock' id='dir-current-vl' ng-model='vl.dirName' disabled=""/><br/>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Ширина фрейма</label></td>
+            <td><input class='form-control-tune' id='width-current-vl' ng-model='vl.width'/><br/>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Высота фрейма</label></td>
+            <td><input class='form-control-tune' id='height-current-vl' ng-model='vl.height'/><br/>
+            </td>
+          </tr>
+        </table>
+        <button id='save'><span class='fa fa-floppy-o button save-vl' data='Сохранить' ng-click='savePropertyVl(vl)'/>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-default import"
+       ng-show="!hide.importForm" ng-hide="hide.importForm"
+       ng-if="isAuthorized([userRoles.admin,userRoles.developer])">
+    <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('import-form')"></span>
+    <div class="panel-heading">Импорт "{{vl.name}}"<span class="name-vl"></span></div>
+    <div class="panel-body">
+      <form id='upload_form' ng-controller='uploadCtrl'>
+        <div class='uploader'>
+          <label class="fa fa-folder-open" for='uploader' data-file='Выберите файл'></label>
+          <input type='file' name='uploadfile' id='uploader' file-model='zipVl'/>
+        </div>
+        <button><span class='fa fa-upload button import-btn' data='Импорт' ng-click='uploadFile(vl.dirName)'></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-default running" ng-show="!hide.runningForm" ng-hide="hide.runningForm">
+    <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('running-form')"></span>
+    <div class="panel-heading">Запуск "{{vl.name}}"<span class="name-vl"></span></div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+        <th class="name">ID</th>
+        <th class="status">Схема</th>
+        <th class="commands">Название</th>
+        <th class="commands">Задание</th>
+        <th class="commands">Запуск</th>
+        </thead>
+        <tbody>
+        <tr ng-show="!frameCollection.length">
+          <td colspan='5'>
+            <div class='server-error'>LaboratoryFrames не загружен</div>
+          </td>
+        </tr>
+        <tr ng-repeat="frame in frameCollection">
+          <td>{{frame.id}}</td>
+          <td>{{frame.sheme}}</td>
+          <td>{{frame.name}}</td>
+          <td>{{frame.data}}</td>
+          <td>
+            <button><span class='fa fa-play button start-vl' data='Запуск' ng-click="startVl(currentDir, frame.id)"/>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

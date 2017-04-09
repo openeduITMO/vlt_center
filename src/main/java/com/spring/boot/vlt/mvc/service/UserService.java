@@ -2,10 +2,8 @@ package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.mvc.model.entity.Role;
 import com.spring.boot.vlt.mvc.model.entity.User;
-import com.spring.boot.vlt.mvc.model.entity.UserRole;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.repository.UserRepository;
-import com.spring.boot.vlt.mvc.repository.UserRoleRepository;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +16,6 @@ import java.util.Set;
 public class UserService {
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    UserRoleRepository userRoleRepository;
 
     public Optional<User> getUserByLoginisPresent(String login) {
         return Optional.ofNullable(userRepository.findByLogin(login));
@@ -35,14 +31,11 @@ public class UserService {
         return saveUser.isPresent();
     }
 
-    public boolean setRoleForUser(String login, Role role) {
-        UserRole userRole = new UserRole(getUserByLogin(login).getId(), role);
-        return Optional.ofNullable(userRoleRepository.save(userRole)).isPresent();
-    }
 
-    public Set<Role> getAllRoleForUser(Long userId){
-        Optional.ofNullable(userRepository.findOne(userId)).orElseThrow(() -> new NullPointerException("User with id {" + userId + "} not found"));
-        return userRoleRepository.findAllRoleForUser(userId);
+    public Role getRoleForUser(Long userId){
+        User user = userRepository.findOne(userId);
+        Optional.ofNullable(user).orElseThrow(() -> new NullPointerException("User with id {" + userId + "} not found"));
+        return user.getRole();
     }
 
     @Transactional

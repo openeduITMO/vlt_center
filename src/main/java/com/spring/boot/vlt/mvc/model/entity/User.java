@@ -18,9 +18,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "ID")
-    private Set<UserRole> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    protected Role role;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_labs",
@@ -31,11 +31,11 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String username, String password, Set<UserRole> roles) {
+    public User(Long id, String username, String password, Role role) {
         this.id = id;
         this.login = username;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 
     public Long getId() {
@@ -50,8 +50,8 @@ public class User {
         return password;
     }
 
-    public Set<UserRole> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
     public void setLogin(String login) {
@@ -66,8 +66,8 @@ public class User {
         return labs;
     }
 
-    public void addUserRole(Role role) {
-        this.roles.add(new UserRole(this.id, role));
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void addLab(VirtLab vl) {

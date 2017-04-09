@@ -28,6 +28,6 @@ spring.jpa:
   database: H2
   show-sql: true
   database-platform: org.hibernate.dialect.H2Dialect
-  hibernate.ddl-auto: none # use "create" for auto create data base
+  hibernate.ddl-auto: create # use "create" for auto create data base
 
 spring.h2.console.enabled: true

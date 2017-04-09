@@ -47,12 +47,11 @@ public class UserRegisterEndPoint {
         if (userByLogin.isPresent())
             return ErrorResponse.of("login already occupied", ErrorCode.USER_EXIST_IN_DARABASE, HttpStatus.UNAUTHORIZED);
         user.setPassword(encoder.encode(password));
-
-        if (!userService.saveUser(user) ||
-                !userService.setRoleForUser(login, userRole))
+        user.setRole(userRole);
+        if (!userService.saveUser(user))
             return ErrorResponse.of("user not updatePropertyFile", ErrorCode.USER_NOT_SAVE, HttpStatus.UNAUTHORIZED);
 
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(Role.STUDENT.authority()));
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(userRole.authority()));
         UserContext userContext = UserContext.create(user.getLogin(), authorities);
 
         JwtToken accessJwtToken = jwtTokenFactory.createAccessJwtToken(userContext);

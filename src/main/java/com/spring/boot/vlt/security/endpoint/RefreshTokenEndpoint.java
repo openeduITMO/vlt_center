@@ -13,11 +13,9 @@ import com.spring.boot.vlt.security.auth.token.extractor.TokenExtractor;
 import com.spring.boot.vlt.security.auth.token.verifier.TokenVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -58,10 +56,10 @@ public class RefreshTokenEndpoint {
         String subject = refreshToken.getSubject();
         User user = userService.getUserByLogin(subject);
 
-        if (user.getRoles() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getRole().authority()))
-                .collect(Collectors.toList());
+        if (user.getRole() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
+        List<GrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority(user.getRole().authority())
+        );
 
         UserContext userContext = UserContext.create(user.getLogin(), authorities);
 
