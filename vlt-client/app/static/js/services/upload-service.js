@@ -1,6 +1,4 @@
-app.factory('UploadService', function ($compile, $templateRequest, $http, $q) {
-  var SERVER_HOST = 'http://localhost:8012';
-
+app.factory('UploadService', function ($compile, $templateRequest, $http, $q, SERVER_HOST) {
   return {
     uploadFileToUrl: (file, dir) => {
       var fd = new FormData();

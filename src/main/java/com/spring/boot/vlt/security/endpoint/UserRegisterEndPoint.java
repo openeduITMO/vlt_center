@@ -34,12 +34,11 @@ public class UserRegisterEndPoint {
         this.encoder = encoder;
     }
 
-    @RequestMapping(value = "/auth/register/{userRole}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/auth/register/{login}/{userRole}", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
-    ResponseEntity<Map<String, String>> register(@PathVariable("userRole") Role userRole, @RequestBody User user) throws ServletException {
-        String login = user.getLogin();
-        String password = user.getPassword();
+    ResponseEntity<Map<String, String>> register(@PathVariable("login") String login, @PathVariable("userRole") Role userRole, @RequestBody String password) throws ServletException {
+        User user = new User(login, password);
         if (StringUtils.isBlank(login) || StringUtils.isBlank(password))
             throw new IllegalArgumentException("Username or Password is blank: " + user.toString());
 

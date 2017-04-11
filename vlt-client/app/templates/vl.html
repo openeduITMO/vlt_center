@@ -6,7 +6,8 @@
   }
 </script>
 <div class="start">
-  <div class="run-server-button" ng-controller="ServerStatusCtrl">
+  <div class="run-server-button" ng-controller="ServerStatusCtrl"
+       ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
     <div class="server-div">
       <div class="server-setting">
         <label>Выбирите сервер:</label>
@@ -33,26 +34,28 @@
     <div class="loader-div">
       <div class="loader">Loading...</div>
     </div>
-
   </div>
+
   <div class="title-text">{{nameVL}}</div>
   <div class="run-vl-button">
     <span id="back-btn" class="fa fa-arrow-left button back-btn" data="Выход" ng-click="home()"></span>
     <span id="start-btn-wain-run-server" class="fa fa-play button start-btn" data="Запустить" ng-click="generateFn()"></span>
     <span id="check-btn" class="fa fa-check button check-btn" data="Проверить" ng-click="checkFn()"></span>
-    <span id="repeat-btn" class="fa fa-repeat button repeat-btn" data="Повторить с текущим вариантом" ng-click="repeatFn()"></span>
-    <span id="refresh-btn" class="fa fa-refresh button refresh-btn" data="Перезапустить с новым вариантом" ng-click="generateFn()"></span>
+    <span id="repeat-btn" class="fa fa-repeat button repeat-btn" data="Повторить с текущим вариантом"
+          ng-click="repeatFn()" ng-if="isAuthorized([userRoles.admin, userRoles.developer])"></span>
+    <span id="refresh-btn" class="fa fa-refresh button refresh-btn" data="Перезапустить с новым вариантом"
+          ng-click="generateFn()" ng-if="isAuthorized([userRoles.admin, userRoles.developer])"></span>
   </div>
 </div>
 <div id="generate_text">
   Задание: <span class="text">{{generate_result.text}}</span>
 </div>
-<div ng-app="iFrame" ng-controller="iFrameCtrl">
+<div ng-controller="iFrameCtrl">
   <iframe id="labFrame" name="vl-frame"></iframe>
 </div>
 
 
-<div id="frame">
+<div id="frame" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
   <div class="panel">
     <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Информация о виртуальном стенде</div>
@@ -98,7 +101,7 @@
     </div>
   </div>
 </div>
-<div id="generate">
+<div id="generate" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
   <div class="panel">
     <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Generate</div>
@@ -151,7 +154,7 @@
 
   </div>
 </div>
-<div id="calculate" ng-show="calculate_result.length">
+<div id="calculate" ng-show="calculate_result.length" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
   <div class="panel">
     <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Calculate</div>
@@ -192,7 +195,7 @@
     </div>
   </div>
 </div>
-<div id="check">
+<div id="check" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
   <div class="panel">
     <span class="fa fa-angle-up button hidden"></span>
     <div class="panel-heading">Check</div>

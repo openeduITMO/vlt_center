@@ -15,6 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long>{
     @Query("select u from User u where u.login = :login")
     User findByLogin(@Param("login") String login);
 
-    @Query("select u.labs from User u where u.login = :login")
-    Set<VirtLab> getUserVirtLabs(@Param("login") String login);
+    @Query("select u.declaration from User u where u.login = :login")
+    Set<VirtLab> getUsersVirtLabs(@Param("login") String login);
 }

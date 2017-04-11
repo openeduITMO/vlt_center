@@ -2,7 +2,7 @@
 
   <div id="add-vl-block" class="panel panel-default s-form"
        ng-show="!hide.addForm" ng-hide="hide.addForm"
-       ng-if="isAuthorized([userRoles.admin,userRoles.developer])">
+       ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
     <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('add-form')"></span>
     <div class="panel-heading">Добавить новую ВЛ</div>
     <div class="panel-body">
@@ -41,6 +41,15 @@
           <tr>
             <td><label>Высота фрейма</label></td>
             <td><input class='form-control-tune' id='height-current-vl' ng-model='vl.height'/><br/>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Опубликовать</label></td>
+            <td>
+              <label class="toggle">
+                <input id="is-public-vl" type="checkbox" ng-model="vl.public" class="ng-pristine ng-untouched ng-valid ng-empty">
+                <span class="handle"></span>
+              </label>
             </td>
           </tr>
         </table>

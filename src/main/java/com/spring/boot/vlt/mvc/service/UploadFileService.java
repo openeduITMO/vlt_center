@@ -24,11 +24,11 @@ public class UploadFileService {
     @Autowired
     private VltSettings vltSettings;
     @Autowired
-    private UserService userService;
+    private VltService vltService;
 
     public boolean upload(String login, MultipartFile uploadfile, String dir) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        if (Optional.ofNullable(userService.foundVlByDirUnderUser(login, dir)).isPresent()) {
+        if (Optional.ofNullable(vltService.foundVlByDirUnderUser(login, dir)).isPresent()) {
             File vlDir = new File(path, dir);
             if (vlDir.listFiles() != null && vlDir.listFiles().length != 0) {
                 PathMatcher requestPathMatcher = FileSystems.getDefault().getPathMatcher("glob:**.desc");

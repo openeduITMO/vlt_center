@@ -18,18 +18,18 @@
               <span ng-show="sortKey=='developer'"
                     ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
         </th>
-        <th class="commands">Команды</th>
+        <th class="commands">Заявки</th>
         </thead>
         <tbody>
-        <tr dir-paginate="vl in vlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
+        <tr dir-paginate="vl in otherVlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
           <td>{{vl.name}}</td>
-          <!--<td>-->
+          <td>{{vl.author.login}}</td>
+          <td>
+            <span class="fa fa-bug button run-vl" data="Записаться на тестирование" ng-click="sendDeclaration(vl)"/>
             <!--<span class="fa fa-play button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>-->
             <!--<span class="fa fa-cog button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"-->
                   <!--ng-if="isAuthorized([userRoles.admin,userRoles.developer])"/>-->
-            <!--<span class="fa fa-upload button import-vl" data="Импрот" ng-click="showImportForm(vl)"-->
-                  <!--ng-if="isAuthorized([userRoles.admin,userRoles.developer])"/>-->
-          <!--</td>-->
+          </td>
         </tr>
         </tbody>
       </table>

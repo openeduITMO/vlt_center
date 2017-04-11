@@ -1,19 +1,18 @@
-app.factory('AuthProvider', function ($http, $q, store, jwtHelper) {
-  var SERVER_HOST = 'http://localhost:8012';
-  $http.defaults.headers.common["Accept"] = "application/json";
-  $http.defaults.headers.common["Content-Type"] = "application/json";
-  $http.defaults.headers.common["Cache-Control"] = "Cache-Control";
-  $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+app.factory('AuthProvider', function ($http, $q, store, jwtHelper, SERVER_HOST) {
   return {
     isAuthenticated: function () {
       return store.get('refreshJwtToken') != null && store.get('token') != null && store.get('role') != null;
     },
     isAuthorized: function (authorizedRoles) {
-      if (!angular.isArray(authorizedRoles)) {
+      if (!_.isArray(authorizedRoles)) {
         authorizedRoles = [authorizedRoles];
       }
-      return (this.isAuthenticated() &&
-      authorizedRoles.indexOf(store.get('role')) !== -1);
+      return (
+        this.isAuthenticated() &&
+        (
+          _.indexOf(authorizedRoles, store.get('role')) !== -1 || _.indexOf(authorizedRoles, '*') !== -1
+        )
+      );
     },
     testConnect: () => {
       return $http.get(SERVER_HOST + '/VLT/api/test_connect/')

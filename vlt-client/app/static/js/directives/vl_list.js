@@ -16,10 +16,11 @@ app.directive('vlCurrent', function () {
   };
 });
 
-app.directive('vlAll', function () {
+app.directive('vlOther', function () {
   return {
+    controller: 'otherController',
     restrict: 'E',
-    templateUrl: 'templates/elements/vl_all.html',
+    templateUrl: 'templates/elements/vl_other.html',
     replace: true,
     scope: true
   };

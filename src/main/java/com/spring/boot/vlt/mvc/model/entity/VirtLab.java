@@ -8,11 +8,14 @@ import javax.persistence.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name="labs")
-public class VirtLab{
+@Table(name = "labs")
+public class VirtLab implements Serializable {
     @Transient
+    @JsonIgnore
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     @Id
@@ -29,30 +32,37 @@ public class VirtLab{
     private String height;
     @Column(name = "url")
     private String url;
+    @Column (name = "public")
+    private boolean isPublic;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "labs_author")
     private User author;
+
     @Transient
     static String propertyFileName;
 
     public VirtLab() {
+
         propertyFileName = "lab.desc";
+        isPublic = false;
     }
 
     public VirtLab(String name) {
         this.name = name;
+        this.isPublic = false;
     }
 
     public VirtLab(String name, String dirName) {
         this.name = name;
         this.dirName = dirName;
+        this.isPublic = false;
     }
 
     public VirtLab(File file) {
         readFile(file);
         dirName = file.getParentFile().getName();
+        this.isPublic = false;
 
     }
 
@@ -104,6 +114,14 @@ public class VirtLab{
         this.url = url;
     }
 
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
     public User getAuthor() {
         return author;
     }
@@ -132,7 +150,7 @@ public class VirtLab{
                 in.close();
             }
         } catch (IOException e) {
-            logger.error("RuntimeException when trying to read "  + dirName + File.separator + propertyFileName);
+            logger.error("RuntimeException when trying to read " + dirName + File.separator + propertyFileName);
             throw new RuntimeException(e);
         }
     }

@@ -1,7 +1,6 @@
 app.factory('IndexService', function ($http, $q, SERVER_HOST) {
   $http.defaults.headers.common["Accept"] = "application/json";
   $http.defaults.headers.common["Content-Type"] = "application/json";
-  //$http.defaults.headers.common["X-Authorization"] = "Bearer "+store.get('token');
 
   return {
     getVlList: () => {
@@ -14,8 +13,24 @@ app.factory('IndexService', function ($http, $q, SERVER_HOST) {
           });
     },
 
-    getAllVl: () => {
-      return $http.get()
+    getOtherVl: () => {
+      return $http.get(SERVER_HOST + '/VLT/api/get_other_list_vl')
+        .then(res => {
+            return res.data;
+          },
+          err => {
+            return $q.reject(err);
+          });
+    },
+
+    declaration: (dirName) => {
+      return $http.post(SERVER_HOST + '/VLT/api/declaration/' + dirName)
+        .then(res => {
+            return res.data;
+          },
+          err => {
+            return $q.reject(err);
+          });
     },
 
     addVl: (name) => {

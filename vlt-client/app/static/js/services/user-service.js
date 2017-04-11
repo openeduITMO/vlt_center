@@ -1,5 +1,4 @@
-app.factory('UserService', function ($http, $q) {
-  var SERVER_HOST = 'http://localhost:8012';
+app.factory('UserService', function ($http, $q, SERVER_HOST) {
   $http.defaults.headers.common["Accept"] = "application/json";
   $http.defaults.headers.common["Content-Type"] = "application/json";
   $http.defaults.headers.common["Cache-Control"] = "Cache-Control";
@@ -7,7 +6,7 @@ app.factory('UserService', function ($http, $q) {
 
   return {
     register: (user, userRole) => {
-      return $http.post(SERVER_HOST+'/VLT/auth/register/' + userRole, user)
+      return $http.post(SERVER_HOST+'/VLT/auth/register/' + user.login + '/' + userRole, user.password)
         .then(res => {
             return res.data;
           },

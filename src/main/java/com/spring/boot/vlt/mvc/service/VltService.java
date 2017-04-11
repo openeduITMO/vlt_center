@@ -3,7 +3,6 @@ package com.spring.boot.vlt.mvc.service;
 import com.spring.boot.vlt.config.property.VltSettings;
 import com.spring.boot.vlt.mvc.model.entity.User;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
-import com.spring.boot.vlt.mvc.repository.UserRepository;
 import com.spring.boot.vlt.mvc.repository.VlRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.nio.file.Files.walk;
@@ -31,9 +28,30 @@ public class VltService {
     @Autowired
     private VlRepository vlRepository;
 
-    public Set<VirtLab> getVirtList(String userLogin) {
+    public Set<VirtLab> getVirtListByAuthor(String userLogin) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        return userService.getUserVirtLabs(userLogin).stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
+        return vlRepository.findByAuthor(userLogin)
+                .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
+    }
+
+    public Set<VirtLab> getAvailableVarList(String userLogin) {
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
+        return userService.getUserVirtLabs(userLogin)
+                .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
+    }
+
+    public Set<VirtLab> getPublicVlList(String userLogin) {
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
+        return vlRepository.getPublicVlList(userLogin)
+                .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
+    }
+
+    public VirtLab declarationOnVL(String dirName, String login){
+        User user = userService.getUserByLogin(login);
+        VirtLab virtLab = vlRepository.findByDirName(dirName);
+        user.addDeclaration(virtLab);
+        userService.saveUser(user);
+        return virtLab;
     }
 
     @Transactional
@@ -52,14 +70,17 @@ public class VltService {
         User user = userService.getUserByLogin(userLogin);
         vl.setAuthor(user);
         vlRepository.save(vl);
-        user.addLab(vl);
-        userService.saveUser(user);
         logger.info("Virtual laboratory " + vl.getDirName() + "create!");
         return vl;
     }
 
-    public VirtLab getPropertyVl(String vlDir, String userLogin) {
-        return userService.foundVlByDirUnderUser(userLogin, vlDir);
+    public Set<VirtLab> getVirtLabsByAuthor(String userLogin){
+        return vlRepository.findByAuthor(userLogin);
+    }
+
+    public VirtLab foundVlByDirUnderUser(String userLogin, String dirName){
+        return getVirtLabsByAuthor(userLogin).stream().filter(vl -> dirName.equals(vl.getDirName())).findFirst().orElseThrow(() ->
+                new NullPointerException("User with login = " + userLogin + " not contain vl = " + dirName));
     }
 
     public VirtLab getVl(String vlDir) {
@@ -69,8 +90,8 @@ public class VltService {
 
     @Transactional
     public VirtLab savePropertyVl(VirtLab vl, String dir, String userLogin) {
-        User user = userService.getUserByLogin(userLogin);
-        if (user.getLabs().stream().filter(vl::equals).findFirst().isPresent()) {
+        VirtLab virtLabsByAuthor = foundVlByDirUnderUser(userLogin, dir);
+        if (virtLabsByAuthor != null) {
             return savePropertyVl(vl, dir);
         } else {
             throw new NullPointerException("User with login = " + userLogin + " not contain vl = " + vl.toString());
@@ -83,12 +104,13 @@ public class VltService {
         vlFromDB.setName(vl.getName());
         vlFromDB.setHeight(vl.getHeight());
         vlFromDB.setWidth(vl.getWidth());
+        vlFromDB.setPublic(vl.isPublic());
 //        chekAndSaveUrl(vlFromDB, vl.getUrl());
         vl.updatePropertyFile(path);
         return vlRepository.save(vlFromDB);
     }
 
-    public boolean chekAndSaveUrl(VirtLab vl, String url){
+    public boolean chekAndSaveUrl(VirtLab vl, String url) {
         if (vlRepository.findByUrl(url) == null) {
             vl.setUrl(url);
             vlRepository.save(vl);
@@ -97,7 +119,7 @@ public class VltService {
         return false;
     }
 
-    public String getUrl(String dir){
+    public String getUrl(String dir) {
         return getVl(dir).getUrl();
     }
 

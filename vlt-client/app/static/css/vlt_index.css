@@ -588,9 +588,14 @@ input[type='file'] {
   margin-left: 10px;
 }
 
-.toggle {
+.server-setting .toggle {
   margin-top: -23px;
   margin-left: 160px;
+  display: block;
+}
+
+#save-property-vl .toggle{
+  margin-top: 0px;
   display: block;
 }
 

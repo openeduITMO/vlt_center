@@ -12,8 +12,8 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
       $scope.vlCollection = res;
     });
 
-  $scope.getAllVl = function(){
-    return IndexService.getAllVl();
+  $scope.getOtherVl = function(){
+    return IndexService.getOtherVl();
   }
 
   $scope.logout = function () {
@@ -76,7 +76,7 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
 
     IndexService.getPropertyVl(vl.dirName)
       .then(res => {
-        $scope.vl = {name: res.name, dirName: res.dirName, curName: res.name, width: res.width, height: res.height};
+        $scope.vl = {name: res.name, dirName: res.dirName, curName: res.name, width: res.width, height: res.height, public: res.public};
 
       });
   };

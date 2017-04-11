@@ -77,7 +77,10 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
         .state('vl', {
           url: '/start_vl/:dir/:frame',
           controller: 'VlCtrl',
-          templateUrl: 'templates/vl.html'
+          templateUrl: 'templates/vl.html',
+          data: {
+            authorizedRoles: [USER_ROLES.all]
+          }
         });
 
       $urlRouterProvider.otherwise('/login');
@@ -92,7 +95,6 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
     $rootScope.$on('$stateChangeStart', function (event, next) {
       var authorizedRoles = next.data.authorizedRoles;
       if ($location.path() != '/login') {
-        console.log(AuthProvider.isAuthorized(authorizedRoles));
         if (!AuthProvider.isAuthorized(authorizedRoles)) {
           console.log('DENY : Redirecting to Login');
           $location.path('/login');

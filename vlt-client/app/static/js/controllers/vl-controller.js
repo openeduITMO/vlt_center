@@ -1,4 +1,4 @@
-app.controller('VlCtrl', function ($scope, $location, VlService) {
+app.controller('VlCtrl', function ($scope, $location, VlService, store) {
     $scope.dirName = $location.path().split('/')[2];
     $scope.frameId = $location.path().split('/')[3];
     $scope.session = "";
@@ -50,7 +50,7 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
       });
 
     $scope.home = function () {
-      window.location.href = "/#/vlt"
+      $scope.reLocation();
     };
 
     $scope.runInteriorServer = function () {
