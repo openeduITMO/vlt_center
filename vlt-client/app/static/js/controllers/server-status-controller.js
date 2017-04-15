@@ -3,16 +3,16 @@ app.controller('ServerStatusCtrl', function ($scope, $location, ServerStatusServ
   $scope.dirName = $location.path().split('/')[2];
   $scope.frameId = $location.path().split('/')[3];
 
-    //var first_load = true;
-    //if (first_load) {
-    //  ServerStatusService.checkTypeServer()
-    //    .then(res => {
-    //      $('#check-checkbox').prop("checked", res);
-    //
-    //      $scope.setCheckBox();
-    //    });
-    //  first_load = false;
-    //}
+    var first_load = true;
+    if (first_load) {
+      ServerStatusService.checkTypeServer($scope.dirName)
+        .then(res => {
+          $('#check-checkbox').prop("checked", res);
+
+          $scope.setCheckBox();
+        });
+      first_load = false;
+    }
 
     $scope.checkServerStatus = function () {
       ServerStatusService.checkServerStatus($scope.dirName)

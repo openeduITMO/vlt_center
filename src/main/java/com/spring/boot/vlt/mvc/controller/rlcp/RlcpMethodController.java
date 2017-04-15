@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/public/resources")
+@RequestMapping(value = "/api")
 public class RlcpMethodController {
     @Autowired
     private RlcpMethodService rlcpMethodService;

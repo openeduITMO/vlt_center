@@ -96,7 +96,7 @@ app.factory('VlService', function ($http, $q, SERVER_HOST) {
     },
 
     generate: (dir, algorithm) => {
-      return $http.get(SERVER_HOST + '/VLT/public/resources/' + dir + '/get_generate', {
+      return $http.get(SERVER_HOST + '/VLT/api/' + dir + '/get_generate', {
           params: {algorithm: algorithm}
       })
         .then(res => {
@@ -120,7 +120,7 @@ app.factory('VlService', function ($http, $q, SERVER_HOST) {
     },
 
     check: (dir, frameId, session, result) => {
-      return $http.get(SERVER_HOST + '/VLT/public/resources/' + dir + '/' + frameId + '/get_check', {
+      return $http.get(SERVER_HOST + '/VLT/api' + dir + '/' + frameId + '/get_check', {
           params: {session: session, instructions: result}
         })
         .then(res => {

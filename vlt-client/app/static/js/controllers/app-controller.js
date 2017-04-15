@@ -4,7 +4,7 @@ app.controller('AppCtrl', function ($scope, $location, USER_ROLES, store, AuthPr
   $scope.isAuthenticated = AuthProvider.isAuthenticated;
   $scope.isAuthorized = AuthProvider.isAuthorized;
 
-  $scope.pushCalculateResult= function(data){
+  $scope.pushCalculateResult = function(data){
     $scope.$broadcast('pushCalculateResult', data);
   }
 

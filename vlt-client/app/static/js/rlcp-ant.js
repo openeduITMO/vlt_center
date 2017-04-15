@@ -6,30 +6,14 @@ var ANT = {
     var condition = Vlab.getCondition();
     var session = $("#session").val();
     var dirName = window.location.href.split('/')[5];
-    $.ajax({
-      cache: false,
-      url: this.SERVER_HOST + "/VLT/public/resources/" + dirName + "/get_calculate",
-      global: false,
-      type: "GET",
-      data: (
-      {
-        session: session,
-        instructions: result,
-        condition: condition
-      }
-      ),
-      dataType: "text",
-      success: function (text) {
-        var json = JSON.parse(text);
-        parent.setCalculateResult(result, json);
-        $("#calculatedCode").val(json.code);
-        $("#calculatedText").val(json.text);
-        Vlab.calculateHandler(json.code);
-      },
-      error: function () {
-        $(".run-server-button").attr("class", "run-server-button run-server-error");
-      }
 
-    });
+    var parent_angular = parent.angular.element(parent.$('#iFrameCtrl')).scope();
+    parent_angular.calculate(session, result, condition)
+      .then(data => {
+          $("#calculatedCode").val(data.code);
+          $("#calculatedText").val(data.text);
+          Vlab.calculateHandler(data.code);
+        }
+      );
   }
 }

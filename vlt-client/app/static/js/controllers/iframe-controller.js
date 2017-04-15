@@ -1,9 +1,10 @@
-app.controller("iFrameCtrl", function ($scope, iFrameService) {
+app.controller("iFrameCtrl", function ($scope, $location, iFrameService) {
   var ifrm = $('iframe')[0].contentWindow;
   var SERVER_HOST = 'http://localhost:8012';
   iFrameService.getJs($scope.dirName, $scope.frameId)
     .then(res => {
       ifrm.document.write('<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>');
+      ifrm.document.write('<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>');
       ifrm.document.write('<script type="text/javascript" src="static/js/rlcp-ant.js"></script>');
       res.lib.forEach(function (name) {
         ifrm.document.write('<script type="text/javascript" src="' + SERVER_HOST + '/VLT/VLabs/' + res.dirName + '/tool/js/lib/' + name + '"></script>');
@@ -33,4 +34,18 @@ app.controller("iFrameCtrl", function ($scope, iFrameService) {
         'function setSession(val){$("#session").val(val)};' +
         '</script>');
     });
+
+  $scope.calculate = function (session, result, condition) {
+    var dirName = $location.path().split('/')[2];
+    return iFrameService.calculate(dirName, session, result, condition)
+      .then(res => {
+          $scope.pushCalculateResult({'result': result, 'answer': res});
+        return res;
+        },
+        err => {
+          $(".run-server-button").attr("class", "run-server-button run-server-error");
+        });
+  };
+
+
 });

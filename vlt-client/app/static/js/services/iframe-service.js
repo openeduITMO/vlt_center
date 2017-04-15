@@ -24,5 +24,17 @@ app.factory('iFrameService', function ($http, $q, SERVER_HOST) {
             return $q.reject(err);
           });
     },
+
+    calculate: (dir, session, result, condition) => {
+      return $http.get(SERVER_HOST + '/VLT/api/' + dir + '/get_calculate', {
+          params: {session: session, instructions: result, condition: condition}
+        })
+        .then(res => {
+            return res.data;
+          },
+          err => {
+            return $q.reject(err);
+          });
+    }
   }
 });

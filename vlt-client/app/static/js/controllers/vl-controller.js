@@ -1,4 +1,4 @@
-app.controller('VlCtrl', function ($scope, $location, VlService, store) {
+app.controller('VlCtrl', function ($scope, $location, VlService) {
     $scope.dirName = $location.path().split('/')[2];
     $scope.frameId = $location.path().split('/')[3];
     $scope.session = "";
@@ -26,24 +26,29 @@ app.controller('VlCtrl', function ($scope, $location, VlService, store) {
         $("#labFrame").css('width', res.width);
         $("#labFrame").css('height', res.height);
       });
+
     VlService.getFrame($scope.dirName, $scope.frameId)
       .then(res => {
         $scope.frame = res;
       });
+
     VlService.getGenerate($scope.dirName, $scope.frameId)
       .then(res => {
         $scope.generate = res;
         $scope.generate_result = res;
 
       });
+
     VlService.getAlgorithm($scope.dirName, $scope.frameId)
       .then(res => {
         $scope.algorithm = res;
       });
+
     VlService.getCheck($scope.dirName, $scope.frameId)
       .then(res => {
         $scope.check = res;
       });
+
     VlService.getUrl($scope.dirName, $scope.frameId)
       .then(res => {
         $scope.url = res;
