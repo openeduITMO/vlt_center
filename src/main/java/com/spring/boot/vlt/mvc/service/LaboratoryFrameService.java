@@ -2,7 +2,7 @@ package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.config.property.VltSettings;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
-import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
+import com.spring.boot.vlt.mvc.model.staticFile.LaboratoryFrame;
 import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

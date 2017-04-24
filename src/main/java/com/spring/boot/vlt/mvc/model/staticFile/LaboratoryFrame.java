@@ -1,4 +1,4 @@
-package com.spring.boot.vlt.mvc.model.frames;
+package com.spring.boot.vlt.mvc.model.staticFile;
 
 public class LaboratoryFrame {
     private int id;

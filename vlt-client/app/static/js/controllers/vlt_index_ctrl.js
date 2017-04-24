@@ -1,10 +1,12 @@
 app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
   $scope.vlCollection = [];
+  $scope.studentCollection = [];
   $scope.vl = {name: "", dirName: ""};
   $scope.hide = {addForm: true, settingsForm: true, importForm: true, runningForm: true, servers: true};
   $scope.currentDir = "";
   $scope.servers = [];
   $scope.frameCollection = [];
+  $scope.session;
 
   //init vlt
   IndexService.getVlList()
@@ -137,6 +139,10 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
 
   $scope.startVl = function (dir, frameId) {
     $location.path('/start_vl/' + dir + '/' + frameId);
+  }
+
+  $scope.showSession = function(dir, session){
+    $location.path('/show/' + session);
   }
 
   $scope.sort = function (keyname) {

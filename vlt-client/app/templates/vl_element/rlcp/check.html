@@ -1,0 +1,71 @@
+<div id="check" ng-if="isAuthorized([userRoles.all])">
+  <div class="panel">
+    <span class="fa fa-angle-up button hidden"></span>
+    <div class="panel-heading">Check</div>
+  </div>
+  <div class="info-all">
+    <div id="check-test" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
+      <div class="panel panel-default">
+        <div class="panel-heading"> Список тестовых наборов</div>
+        <table class="table check-table">
+          <thead>
+          <tr class="table_tit">
+            <th>ID</th>
+            <th>Ограничение по времени</th>
+            <th>Входной набор</th>
+            <th>Выходной набор</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="ch in check">
+            <td type="id">{{ch.id}}</td>
+            <td type="time">{{ch.time}}</td>
+            <td type="input">{{ch.input}}</td>
+            <td type="output">{{ch.output}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="check-result" ng-show="check_result != null" ng-if="isAuthorized([userRoles.all])">
+      <div class="panel panel-default">
+        <div class="panel-heading">Ответ метода Check</div>
+        <table class="table check-table">
+          <thead>
+          <tr class="table_tit">
+            <th>ID</th>
+            <th>Занятое время</th>
+            <th>Итог</th>
+            <th>Комментарий сервера</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{check_result.id}}</td>
+            <td>{{check_result.time}}</td>
+            <td>{{check_result.result}}</td>
+            <td>{{check_result.output}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="check-answer" ng-show="check_answer != null" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
+      <div class="panel panel-default">
+        <div class="panel-heading">Ответ метода Check</div>
+        <table class="table check-table">
+          <thead>
+          <tr class="table_tit">
+            <th>Ответ пользователя</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{check_answer}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

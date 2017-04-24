@@ -1,8 +1,11 @@
 package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.config.property.VltSettings;
+import com.spring.boot.vlt.mvc.model.pojo_response.DeclarationForVl;
+import com.spring.boot.vlt.mvc.model.entity.Attempts;
 import com.spring.boot.vlt.mvc.model.entity.User;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
+import com.spring.boot.vlt.mvc.repository.UserRepository;
 import com.spring.boot.vlt.mvc.repository.VlRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,10 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static java.nio.file.Files.walk;
 
 @Service
 public class VltService {
@@ -26,7 +28,11 @@ public class VltService {
     @Autowired
     private UserService userService;
     @Autowired
+    private AttemptsService attemptsService;
+    @Autowired
     private VlRepository vlRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public Set<VirtLab> getVirtListByAuthor(String userLogin) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
@@ -34,9 +40,30 @@ public class VltService {
                 .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
+    public VirtLab foundVlByDirUnderUser(String userLogin, String dirName) {
+        return vlRepository.findByAuthor(userLogin)
+                .stream().filter(vl -> dirName.equals(vl.getDirName())).findFirst().orElseThrow(() ->
+                        new NullPointerException("User with login = " + userLogin + " not contain vl = " + dirName));
+    }
+
+    public Attempts saveAttempt(String login, String dir) {
+        Attempts attempt = new Attempts(
+                userService.getUserByLogin(login),
+                getVl(dir),
+                attemptsService.generateSession());
+
+        attemptsService.saveAttempt(attempt);
+        return attempt;
+    }
+
+    public Attempts findAttemptBySession(String session) {
+        return attemptsService.foundBySession(session).get();
+    }
+
+
     public Set<VirtLab> getAvailableVarList(String userLogin) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        return userService.getUserVirtLabs(userLogin)
+        return userService.getAvailableVirtLabs(userLogin)
                 .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
@@ -46,12 +73,18 @@ public class VltService {
                 .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
-    public VirtLab declarationOnVL(String dirName, String login){
+    public VirtLab declarationOnVL(String dirName, String login) {
         User user = userService.getUserByLogin(login);
         VirtLab virtLab = vlRepository.findByDirName(dirName);
         user.addDeclaration(virtLab);
         userService.saveUser(user);
         return virtLab;
+    }
+
+    public Set<DeclarationForVl> getDeclarationUsers(String dir) {
+        //сменить и не вызывать userRepository
+        Set<DeclarationForVl> studentForVl = userRepository.getStudentForVl(dir);
+        return studentForVl;
     }
 
     @Transactional
@@ -68,19 +101,10 @@ public class VltService {
         vl.setDirName(vlDir.getName());
         vl.updatePropertyFile(path);
         User user = userService.getUserByLogin(userLogin);
-        vl.setAuthor(user);
+        vl.addAuthor(user);
         vlRepository.save(vl);
         logger.info("Virtual laboratory " + vl.getDirName() + "create!");
         return vl;
-    }
-
-    public Set<VirtLab> getVirtLabsByAuthor(String userLogin){
-        return vlRepository.findByAuthor(userLogin);
-    }
-
-    public VirtLab foundVlByDirUnderUser(String userLogin, String dirName){
-        return getVirtLabsByAuthor(userLogin).stream().filter(vl -> dirName.equals(vl.getDirName())).findFirst().orElseThrow(() ->
-                new NullPointerException("User with login = " + userLogin + " not contain vl = " + dirName));
     }
 
     public VirtLab getVl(String vlDir) {

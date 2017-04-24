@@ -32,12 +32,14 @@ public class VirtLab implements Serializable {
     private String height;
     @Column(name = "url")
     private String url;
-    @Column (name = "public")
+    @Column(name = "public")
     private boolean isPublic;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "labs_author")
-    private User author;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "authors",
+            joinColumns = @JoinColumn(name = "labs_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> authors = new HashSet<>();
 
     @Transient
     static String propertyFileName;
@@ -122,12 +124,16 @@ public class VirtLab implements Serializable {
         isPublic = aPublic;
     }
 
-    public User getAuthor() {
-        return author;
+    public Set<User> getAuthor() {
+        return authors;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void addAuthor(User author) {
+        this.authors.add(author);
+    }
+
+    public void deleteAuthor(User author) {
+        this.authors.remove(author);
     }
 
     private void readFile(File desc) {

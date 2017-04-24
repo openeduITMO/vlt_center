@@ -1,0 +1,16 @@
+<div class="start">
+  <div class="title-text">{{nameVL}}</div>
+  <div class="run-vl-button">
+    <span id="back-btn" class="fa fa-arrow-left button back-btn" data="Выход" ng-click="home()"></span>
+  </div>
+</div>
+
+<div id ="iFrameCtrl" ng-controller="iFrameCtrl">
+  <iframe id="labFrame" name="vl-frame"></iframe>
+</div>
+
+<rlcp-generate></rlcp-generate>
+
+<rlcp-calculate></rlcp-calculate>
+
+<rlcp-check></rlcp-check>

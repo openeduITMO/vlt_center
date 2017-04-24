@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CheckRlcpRepository extends CrudRepository<CheckRlcp, Long>{
-    @Query("select c from CheckRlcp c where c.session = :session")
+    @Query("select c from CheckRlcp c where c.attempt.session = :session")
     CheckRlcp findBySession(@Param("session") String session);
 }

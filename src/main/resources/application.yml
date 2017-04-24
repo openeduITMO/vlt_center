@@ -13,7 +13,7 @@ spring:
            max-request-size: 5124MB
 
 security.token:
-  tokenExpirationTime: 30 # Minutes
+  tokenExpirationTime: 1 # Minutes
   refreshTokenExpTime: 1440 # Minutes
   tokenIssuer: http://efimchick.com
   tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
@@ -27,7 +27,7 @@ spring.datasource:
 spring.jpa:
   database: H2
   show-sql: true
-  database-platform: org.hibernate.dialect.H2Dialect
+  database-platform: com.spring.boot.vlt.config.H2ExtDialect
   hibernate.ddl-auto: none # use "create" for auto create data base
 
 spring.h2.console.enabled: true

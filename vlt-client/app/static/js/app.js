@@ -15,7 +15,7 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
         whiteListedDomains: ['efimchick.com', 'localhost'],
         authPrefix: 'Bearer '
       });
-      jwtInterceptorProvider.tokenGetter = function (jwtHelper, $http, store) {
+      jwtInterceptorProvider.tokenGetter = ['AuthProvider', 'jwtHelper', '$http', 'store', function (AuthProvider, jwtHelper, $http, store) {
         var SERVER_HOST = 'http://localhost:8012';
         var jwt = store.get('token');
         var refreshToken = store.get('refreshJwtToken');
@@ -31,20 +31,16 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
             })
               .then(res => {
                   jwt = res.data.token;
+                  AuthProvider.setStore(jwt, res.data.refreshJwtToken)
+                  return jwt;
                 },
                 err => {
-                  store.remove('role');
-                  store.remove('token');
-                  store.remove('refreshJwtToken');
+                  AuthProvider.destroy();
                 })
-            jwt = refreshToken;
-          } else {
-            store.set('role', jwtHelper.decodeToken(jwt)['scopes'][0]);
-            store.set('token', jwt);
-            return jwt;
           }
+          return jwt;
         }
-      };
+      }];
       $httpProvider.interceptors.push('jwtInterceptor');
     }])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'USER_ROLES',
@@ -81,11 +77,19 @@ var app = angular.module('App', ['ui.router', 'angular-storage', 'angular-jwt', 
           data: {
             authorizedRoles: [USER_ROLES.all]
           }
+        })
+        .state('session', {
+          url: '/show/:session',
+          controller: 'SessionCtrl',
+          templateUrl: 'templates/session.html',
+          data: {
+            authorizedRoles: [USER_ROLES.admin, USER_ROLES.developer]
+          }
         });
 
       $urlRouterProvider.otherwise('/login');
 
-       /*
+      /*
        Удаляет # из url. '/#/test' -> '/test', но при попытке обновить страницу '/test' - ошибка 404
        TODO: удалить # из url
        */

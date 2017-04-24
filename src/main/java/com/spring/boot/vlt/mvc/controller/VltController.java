@@ -5,6 +5,7 @@ import com.spring.boot.vlt.common.ErrorCode;
 import com.spring.boot.vlt.common.ErrorResponse;
 import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
+import com.spring.boot.vlt.mvc.model.pojo_response.DeclarationForVl;
 import com.spring.boot.vlt.mvc.service.VltService;
 import com.spring.boot.vlt.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,15 @@ public class VltController {
         return new ResponseEntity<>(otherVlList, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/get_users/{dirName}", method = RequestMethod.GET)
+    public ResponseEntity<Set<DeclarationForVl>> getStudentForVl(JwtAuthenticationToken token, @PathVariable("dirName") String dirName) {
+        UserContext userContext = (UserContext) token.getPrincipal();
+
+        return AccessUtils.isDeveloperOrAdmin(userContext) ?
+                new ResponseEntity<>(vltService.getDeclarationUsers(dirName), HttpStatus.OK):
+                ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
+    }
+
     @RequestMapping(value = "/declaration/{dirName}", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<VirtLab> declaration(JwtAuthenticationToken token, @PathVariable("dirName") String dirName) {
         UserContext userContext = (UserContext) token.getPrincipal();
@@ -58,12 +68,12 @@ public class VltController {
 
     @RequestMapping(value = "/get_property_vl/{dirName}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<VirtLab> getPropertyVl(JwtAuthenticationToken token,
-                                                 @PathVariable("dirName") String nameVl) {
+                                                 @PathVariable("dirName") String dirName) {
         UserContext userContext = (UserContext) token.getPrincipal();
         return AccessUtils.isDeveloper(userContext) ?
-                new ResponseEntity(vltService.foundVlByDirUnderUser(userContext.getUsername(), nameVl), HttpStatus.OK) :
+                new ResponseEntity(vltService.foundVlByDirUnderUser(userContext.getUsername(), dirName), HttpStatus.OK) :
                 AccessUtils.isAdmin(userContext) ?
-                        new ResponseEntity(vltService.getVl(nameVl), HttpStatus.OK) :
+                        new ResponseEntity(vltService.getVl(dirName), HttpStatus.OK) :
                         ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 

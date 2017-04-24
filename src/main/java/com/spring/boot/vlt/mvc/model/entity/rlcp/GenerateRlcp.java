@@ -1,5 +1,6 @@
 package com.spring.boot.vlt.mvc.model.entity.rlcp;
 
+import com.spring.boot.vlt.mvc.model.entity.Attempts;
 import rlcp.generate.GeneratingResult;
 
 import javax.persistence.*;
@@ -13,8 +14,9 @@ public class GenerateRlcp {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "session", nullable = false)
-    private String session;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "attempt")
+    private Attempts attempt;
 
     @Column(name = "response", nullable = false)
     private GeneratingResult response;
@@ -28,15 +30,15 @@ public class GenerateRlcp {
     public GenerateRlcp() {
     }
 
-    public GenerateRlcp(String session, GeneratingResult response, Date date) {
-        this.session = session;
+    public GenerateRlcp(Attempts attempt, GeneratingResult response, Date date) {
+        this.attempt = attempt;
         this.response = response;
         this.date = date;
     }
 
-    public GenerateRlcp(String session, GeneratingResult response, Date date, Long idParent) {
+    public GenerateRlcp(Attempts attempt, GeneratingResult response, Date date, Long idParent) {
         this.parent = idParent;
-        this.session = session;
+        this.attempt = attempt;
         this.response = response;
         this.date = date;
     }
@@ -45,12 +47,12 @@ public class GenerateRlcp {
         return id;
     }
 
-    public String getSession() {
-        return session;
+    public Attempts getAttempts() {
+        return attempt;
     }
 
-    public void setSession(String session) {
-        this.session = session;
+    public void setAttempts(Attempts attempt) {
+        this.attempt = attempt;
     }
 
     public GeneratingResult getResponse() {
@@ -72,7 +74,7 @@ public class GenerateRlcp {
     @Override
     public String toString() {
         return "Generate{" +
-                "session='" + session + '\'' +
+                "session='" + attempt == null ? null : attempt.getSession() + '\'' +
                 ", response=" + response +
                 ", date=" + date +
                 '}';

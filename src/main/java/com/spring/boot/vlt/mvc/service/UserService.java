@@ -39,7 +39,7 @@ public class UserService {
     }
 
     @Transactional
-    public Set<VirtLab> getUserVirtLabs(String userLogin){
+    public Set<VirtLab> getAvailableVirtLabs(String userLogin){
         return userRepository.getUsersVirtLabs(userLogin);
     }
 

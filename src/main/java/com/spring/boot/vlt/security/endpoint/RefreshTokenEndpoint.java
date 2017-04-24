@@ -23,7 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -41,8 +43,8 @@ public class RefreshTokenEndpoint {
     @Qualifier("jwtHeaderTokenExtractor") private TokenExtractor tokenExtractor;
 
     @RequestMapping(value="/auth/token", method= RequestMethod.GET, produces = "application/json")
-    public @ResponseBody
-    JwtToken refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public @ResponseBody Map<String, String> refreshToken(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         String tokenPayload = tokenExtractor.extract(request.getHeader(WebSecurityConfig.JWT_TOKEN_HEADER_PARAM));
 
         RawAccessJwtToken rawToken = new RawAccessJwtToken(tokenPayload);
@@ -63,6 +65,13 @@ public class RefreshTokenEndpoint {
 
         UserContext userContext = UserContext.create(user.getLogin(), authorities);
 
-        return jwtTokenFactory.createAccessJwtToken(userContext);
+        JwtToken accessJwtToken = jwtTokenFactory.createAccessJwtToken(userContext);
+        JwtToken refreshJwtToken = jwtTokenFactory.createRefreshToken(userContext);
+
+        Map<String, String> tokenMap = new HashMap<String, String>();
+        tokenMap.put("token", accessJwtToken.getToken());
+        tokenMap.put("refreshJwtToken", refreshJwtToken.getToken());
+
+        return tokenMap;
     }
 }

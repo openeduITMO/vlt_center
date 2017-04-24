@@ -1,0 +1,52 @@
+<div id="generate" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
+  <div class="panel">
+    <span class="fa fa-angle-up button hidden"></span>
+    <div class="panel-heading">Generate</div>
+  </div>
+  <div class="info-all">
+    <div id="generate-info">
+      <div class="panel panel-default">
+        <div class="panel-heading">Описание блока Generate</div>
+        <table class="table generate-table">
+          <tr ng-show="vlId.isDir">
+            <td>DefaultCode</td>
+            <td colspan="2"><span id="preText">{{generate.code}}</span></td>
+          </tr>
+          <tr ng-show="vlId.isDir">
+            <td>DefaultText</td>
+            <td colspan="2"><span>{{generate.text}}</span></td>
+          </tr>
+          <tr ng-show="vlId.isDir">
+            <td>DeafaultInstructions</td>
+            <td colspan="2"><span>{{generate.instructions}}</span></td>
+          </tr>
+          <tr>
+            <td>Algorithm</td>
+            <td colspan="2"><span id="algorithm">{{algorithm}}</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div id="generate-result" ng-show="generate_result != null">
+      <div class="panel panel-default">
+        <div class="panel-heading">Ответ метода Generate</div>
+        <table class="table generate-table">
+          <tr>
+            <td>Code</td>
+            <td>{{generate_result.code}}</td>
+          </tr>
+          <tr>
+            <td>Text</td>
+            <td>{{generate_result.text}}</td>
+          </tr>
+          <tr>
+            <td>Instructions</td>
+            <td>
+              <div>{{generate_result.instructions}}</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

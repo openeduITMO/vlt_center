@@ -3,9 +3,6 @@ package com.spring.boot.vlt.mvc.model.staticFile;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Дмитрий on 16.03.2016.
- */
 public class StaticFile {
     private List<String> dev;
     private List<String> lib;

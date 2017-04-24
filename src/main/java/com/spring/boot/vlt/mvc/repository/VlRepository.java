@@ -1,6 +1,5 @@
 package com.spring.boot.vlt.mvc.repository;
 
-import com.spring.boot.vlt.mvc.model.entity.User;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,9 +14,12 @@ public interface VlRepository extends CrudRepository<VirtLab, Long> {
     @Query("select vl from VirtLab vl where vl.url = :url")
     VirtLab findByUrl(@Param("url") String url);
 
-    @Query("select v from VirtLab v where v.author.login = :login")
+    @Query("select vl from VirtLab vl join vl.authors author where author.login = :login")
     Set<VirtLab> findByAuthor(@Param("login") String login);
 
-    @Query("select vl from VirtLab vl where vl.author.login != :login and public = true")
+    @Query("select vl from " +
+            "VirtLab vl join vl.authors author " +
+            "where vl.isPublic = true and author.login != :login and " +
+                "vl.id not in (select declaration.id from User user join user.declaration declaration where user.login = :login)")
     Set<VirtLab> getPublicVlList(@Param("login") String login);
 }

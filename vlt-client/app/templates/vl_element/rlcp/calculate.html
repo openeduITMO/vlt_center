@@ -1,0 +1,41 @@
+<div id="calculate" ng-show="calculate_result.length" ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
+  <div class="panel">
+    <span class="fa fa-angle-up button hidden"></span>
+    <div class="panel-heading">Calculate</div>
+  </div>
+  <div class="info-all">
+    <div id="calculate-answer">
+      <div class="panel panel-default">
+        <div class="panel-heading">Ответ пользователя</div>
+        <table class="table check-table">
+          <tbody>
+          <tr ng-repeat="cl in calculate_result">
+            <td>
+              {{cl.result}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="calculate-result">
+      <div class="panel panel-default">
+        <div class="panel-heading">Ответ метода Calculate</div>
+        <table class="table check-table">
+          <thead>
+          <tr class="table_tit">
+            <th>Code</th>
+            <th>Text</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="cl in calculate_result">
+            <td>{{cl.answer.code}}</td>
+            <td>{{cl.answer.text}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

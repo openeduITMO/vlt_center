@@ -33,6 +33,16 @@ app.factory('IndexService', function ($http, $q, SERVER_HOST) {
           });
     },
 
+    getUsers: (dir) => {
+      return $http.get(SERVER_HOST + '/VLT/api/get_users/' + dir)
+        .then(res => {
+            return res.data;
+          },
+          err => {
+            return $q.reject(err);
+          });
+    },
+
     addVl: (name) => {
       return $http.post(SERVER_HOST + '/VLT/api/add_vl', name)
         .then(res => {

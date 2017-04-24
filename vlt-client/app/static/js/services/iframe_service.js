@@ -4,9 +4,13 @@ app.factory('iFrameService', function ($http, $q, SERVER_HOST) {
   $http.defaults.headers.common["Cache-Control"] = "Cache-Control";
   $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-  return{
-    getJs: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/frame/get_js/' + dir + '/' + frame)
+  return {
+    getJs: (vlId) => {
+      var url = '/VLT/api/frame/get_js/' + vlId.res;
+      if (!vlId.isDir) {
+        url = '/VLT/api/session/get_js/' + vlId.res;
+      }
+      return $http.get(SERVER_HOST + url)
         .then(res => {
             return res.data;
           },
@@ -15,8 +19,12 @@ app.factory('iFrameService', function ($http, $q, SERVER_HOST) {
           });
     },
 
-    getCss: (dir, frame) => {
-      return $http.get(SERVER_HOST+'/VLT/api/frame/get_css/' + dir + '/' + frame)
+    getCss: (vlId) => {
+      var url = '/VLT/api/frame/get_css/' + vlId.res;
+      if (!vlId.isDir) {
+        url = '/VLT/api/session/get_css/' + vlId.res;
+      }
+      return $http.get(SERVER_HOST + url)
         .then(res => {
             return res.data;
           },
@@ -35,6 +43,10 @@ app.factory('iFrameService', function ($http, $q, SERVER_HOST) {
           err => {
             return $q.reject(err);
           });
+    },
+
+    getCalculateBySession: (session) => {
+
     }
   }
 });

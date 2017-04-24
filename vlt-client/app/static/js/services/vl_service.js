@@ -5,8 +5,8 @@ app.factory('VlService', function ($http, $q, SERVER_HOST) {
   $http.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
   return {
-    getProperty: (dir, frame) => {
-      return $http.get(SERVER_HOST + '/VLT/api/frame/get_property/' + dir + '/' + frame)
+    getProperty: (dir) => {
+      return $http.get(SERVER_HOST + '/VLT/api/frame/get_property/' + dir)
         .then(res => {
             return res.data;
           },
@@ -65,6 +65,36 @@ app.factory('VlService', function ($http, $q, SERVER_HOST) {
           });
     },
 
+    getPropertyBySession: (session) => {
+      return $http.get(SERVER_HOST + '/VLT/api/session/get_property_vl/' + session)
+        .then(res => {
+            return res.data;
+          },
+          err => {
+            return $q.reject(err);
+          });
+    },
+
+    getGenerateBySession: (session) => {
+      return $http.get(SERVER_HOST + '/VLT/api/session/get_generate/' + session)
+        .then(res => {
+            return res.data;
+          },
+          err => {
+            return $q.reject(err);
+          });
+    },
+
+    getCheckBySession: (session) => {
+      return $http.get(SERVER_HOST + '/VLT/api/session/get_check/' + session)
+        .then(res => {
+            return res.data;
+          },
+          err => {
+            return $q.reject(err);
+          });
+    },
+
     getServerStatus: (dir) => {
       return $http.post(SERVER_HOST + '/VLT/api/' + dir + '/get_server_status')
         .then(res => {
@@ -98,7 +128,7 @@ app.factory('VlService', function ($http, $q, SERVER_HOST) {
     generate: (dir, algorithm) => {
       return $http.get(SERVER_HOST + '/VLT/api/' + dir + '/get_generate', {
           params: {algorithm: algorithm}
-      })
+        })
         .then(res => {
             return res.data;
           },
@@ -108,7 +138,7 @@ app.factory('VlService', function ($http, $q, SERVER_HOST) {
     },
 
     repeat: (session) => {
-      return $http.get(SERVER_HOST + '/VLT/public/resources/repeat', {
+      return $http.get(SERVER_HOST + '/VLT/api/repeat', {
           params: {session: session}
         })
         .then(res => {
@@ -120,7 +150,7 @@ app.factory('VlService', function ($http, $q, SERVER_HOST) {
     },
 
     check: (dir, frameId, session, result) => {
-      return $http.get(SERVER_HOST + '/VLT/api' + dir + '/' + frameId + '/get_check', {
+      return $http.get(SERVER_HOST + '/VLT/api/' + dir + '/' + frameId + '/get_check', {
           params: {session: session, instructions: result}
         })
         .then(res => {

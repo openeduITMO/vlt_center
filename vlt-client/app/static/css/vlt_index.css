@@ -73,6 +73,15 @@ iframe {
   margin: 5px;
 }
 
+.select-input{
+  display: inline-block;
+  vertical-align: middle;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 5px;
+}
+
 .title-text {
   margin-left: 2%;
   font-size: 30px;
@@ -85,6 +94,10 @@ iframe {
   display: inline-block;
   vertical-align: top;
   margin-left: 50px;
+  margin-bottom: 50px;
+}
+
+#add-vl-block, #vl-settings, #vl-import, #vl-running{
   margin-bottom: 50px;
 }
 
@@ -630,4 +643,37 @@ input[type='file'] {
 #jsLab {
   margin-bottom: 50px;
   display: inline-block;
+}
+
+#session-info {
+  text-align: center;
+  margin-top: 65px;
+}
+
+.approbation-div .list {
+  list-style-type: none;
+  margin: 0;
+  opacity: 0;
+  padding: 4px 7px;
+  position: absolute;
+  margin-left: -1000px;
+  background: white;
+  box-shadow: 1px 1px 6px rgb(195, 195, 195);
+  border-radius: 2px;
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+}
+
+.approbation-div .list li {
+  padding: 3px 5px;
+  cursor: pointer;
+}
+
+.approbation-div .list li:hover {
+  background: lightgray;
+}
+
+.approbation-div .show .list {
+  margin-left: 280px;
+  opacity: 1;
 }

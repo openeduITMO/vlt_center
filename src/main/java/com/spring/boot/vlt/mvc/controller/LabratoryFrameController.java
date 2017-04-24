@@ -2,7 +2,8 @@ package com.spring.boot.vlt.mvc.controller;
 
 import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
-import com.spring.boot.vlt.mvc.model.frames.LaboratoryFrame;
+import com.spring.boot.vlt.mvc.model.staticFile.LaboratoryFrame;
+import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
 import com.spring.boot.vlt.mvc.service.UserService;
 import com.spring.boot.vlt.security.JwtAuthenticationToken;
@@ -36,9 +37,9 @@ public class LabratoryFrameController {
         return new ResponseEntity(laboratoryFrameService.getLaboratoryFrame(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/get_property/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String> getNameVl(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
-        laboratoryFrameService.setPreCondition(dirName, frameId);
+    @RequestMapping(value = "/get_property/{dirName}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getNameVl(@PathVariable("dirName") String dirName) {
+        laboratoryFrameService.setPreCondition(dirName, null);
         VirtLab virtLab = laboratoryFrameService.getVirtLab();
         return new ResponseEntity(virtLab, HttpStatus.OK);
     }
@@ -76,15 +77,15 @@ public class LabratoryFrameController {
         return new ResponseEntity("\"" + url + "\"", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/get_js/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String> getJs(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
-        laboratoryFrameService.setPreCondition(dirName, frameId);
+    @RequestMapping(value = "/get_js/{dirName}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<StaticFile> getJs(@PathVariable("dirName") String dirName) {
+        laboratoryFrameService.setPreCondition(dirName, null);
         return new ResponseEntity(laboratoryFrameService.getStatic("js"), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/get_css/{dirName}/{frameId}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String> getCss(@PathVariable("dirName") String dirName, @PathVariable("frameId") String frameId) {
-        laboratoryFrameService.setPreCondition(dirName, frameId);
+    @RequestMapping(value = "/get_css/{dirName}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<StaticFile> getCss(@PathVariable("dirName") String dirName) {
+        laboratoryFrameService.setPreCondition(dirName, null);
         return new ResponseEntity(laboratoryFrameService.getStatic("css"), HttpStatus.OK);
     }
 

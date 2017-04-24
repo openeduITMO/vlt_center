@@ -1,6 +1,7 @@
 app.controller('VlCtrl', function ($scope, $location, VlService) {
     $scope.dirName = $location.path().split('/')[2];
     $scope.frameId = $location.path().split('/')[3];
+    $scope.vlId = {isDir: true, res: $scope.dirName};
     $scope.session = "";
     $scope.nameVL = "";
     $scope.algorithm = "";
@@ -8,7 +9,6 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
     $scope.frame;
     $scope.generate;
     $scope.generate_result = null;
-    $scope.test = 'test';
     $scope.calculate_result = [];
     $scope.check_result;
     $scope.check_answer = null;
@@ -20,7 +20,7 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
     $scope.calculate_result.push(data);
   });
 
-    VlService.getProperty($scope.dirName, $scope.frameId)
+    VlService.getProperty($scope.dirName)
       .then(res => {
         $scope.nameVL = res.name;
         $("#labFrame").css('width', res.width);
@@ -80,7 +80,7 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
             showBtn();
             clearTable();
             setGenerate(res.response);
-            $scope.session = res.session;
+            $scope.session = res.attempts.session;
             frame.setSession($scope.session);
             frame.Vlab.init();
           },
@@ -115,7 +115,7 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
             $("#check-answer").css("display", "inline-block");
             $scope.check_answer = result;
             $scope.check_result = res.response;
-            $scope.session = res.session;
+            $scope.session = res.attempts.session;
             frame.setSession($scope.session);
           },
           err => {

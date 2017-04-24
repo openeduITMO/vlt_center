@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <div class="panel panel-default settings"
+  <div id="vl-settings" class="panel panel-default settings"
        ng-show="!hide.settingsForm" ng-hide="hide.settingsForm"
        ng-if="isAuthorized([userRoles.admin,userRoles.developer])">
     <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('settings-form')"></span>
@@ -47,7 +47,8 @@
             <td><label>Опубликовать</label></td>
             <td>
               <label class="toggle">
-                <input id="is-public-vl" type="checkbox" ng-model="vl.public" class="ng-pristine ng-untouched ng-valid ng-empty">
+                <input id="is-public-vl" type="checkbox" ng-model="vl.public"
+                       class="ng-pristine ng-untouched ng-valid ng-empty">
                 <span class="handle"></span>
               </label>
             </td>
@@ -59,7 +60,7 @@
     </div>
   </div>
 
-  <div class="panel panel-default import"
+  <div id="vl-import" class="panel panel-default import"
        ng-show="!hide.importForm" ng-hide="hide.importForm"
        ng-if="isAuthorized([userRoles.admin,userRoles.developer])">
     <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('import-form')"></span>
@@ -76,7 +77,8 @@
     </div>
   </div>
 
-  <div class="panel panel-default running" ng-show="!hide.runningForm" ng-hide="hide.runningForm">
+  <div id="vl-running" class="panel panel-default running
+  " ng-show="!hide.runningForm" ng-hide="hide.runningForm">
     <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('running-form')"></span>
     <div class="panel-heading">Запуск "{{vl.name}}"<span class="name-vl"></span></div>
     <div class="panel-body">
