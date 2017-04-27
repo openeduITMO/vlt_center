@@ -1,10 +1,11 @@
 package com.spring.boot.vlt.mvc.service;
 
 import com.spring.boot.vlt.config.property.VltSettings;
-import com.spring.boot.vlt.mvc.model.pojo_response.DeclarationForVl;
-import com.spring.boot.vlt.mvc.model.entity.Attempts;
+import com.spring.boot.vlt.mvc.model.entity.Session;
+import com.spring.boot.vlt.mvc.model.pojo_response.RegisterForVl;
 import com.spring.boot.vlt.mvc.model.entity.User;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
+import com.spring.boot.vlt.mvc.model.pojo_response.ResultInfo;
 import com.spring.boot.vlt.mvc.repository.UserRepository;
 import com.spring.boot.vlt.mvc.repository.VlRepository;
 import org.apache.logging.log4j.LogManager;
@@ -16,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,8 +46,8 @@ public class VltService {
                         new NullPointerException("User with login = " + userLogin + " not contain vl = " + dirName));
     }
 
-    public Attempts saveAttempt(String login, String dir) {
-        Attempts attempt = new Attempts(
+    public Session saveAttempt(String login, String dir) {
+        Session attempt = new Session(
                 userService.getUserByLogin(login),
                 getVl(dir),
                 attemptsService.generateSession());
@@ -56,7 +56,7 @@ public class VltService {
         return attempt;
     }
 
-    public Attempts findAttemptBySession(String session) {
+    public Session findAttemptBySession(String session) {
         return attemptsService.foundBySession(session).get();
     }
 
@@ -73,18 +73,31 @@ public class VltService {
                 .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
-    public VirtLab declarationOnVL(String dirName, String login) {
+    public VirtLab registerOnVL(String dirName, String login) {
         User user = userService.getUserByLogin(login);
         VirtLab virtLab = vlRepository.findByDirName(dirName);
-        user.addDeclaration(virtLab);
+        user.addRegister(virtLab);
         userService.saveUser(user);
         return virtLab;
     }
 
-    public Set<DeclarationForVl> getDeclarationUsers(String dir) {
-        //сменить и не вызывать userRepository
-        Set<DeclarationForVl> studentForVl = userRepository.getStudentForVl(dir);
-        return studentForVl;
+    public Map<String, List<ResultInfo>> getRegisterUsers(String dir) {
+        Set<RegisterForVl> studentForVl = userRepository.getStudentForVl(dir);
+        Map<String, List<ResultInfo>> result = new HashMap<>();
+
+        for(RegisterForVl reg: studentForVl){
+            if (!result.keySet().contains(reg.getLogin())){
+                result.put(reg.getLogin(), Collections.singletonList(reg.getInfo()));
+            } else{
+                List<ResultInfo> listInfo = new ArrayList<ResultInfo>();
+                listInfo.add(reg.getInfo());
+                listInfo.addAll(result.get(reg.getLogin()));
+                Collections.sort(listInfo);
+                result.put(reg.getLogin(), listInfo);
+            }
+        }
+
+        return result;
     }
 
     @Transactional

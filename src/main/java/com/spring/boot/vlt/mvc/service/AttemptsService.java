@@ -1,11 +1,11 @@
 package com.spring.boot.vlt.mvc.service;
 
-import com.spring.boot.vlt.mvc.model.entity.Attempts;
+import com.spring.boot.vlt.mvc.model.entity.Session;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
 import com.spring.boot.vlt.mvc.model.entity.rlcp.CheckRlcp;
 import com.spring.boot.vlt.mvc.model.entity.rlcp.GenerateRlcp;
 import com.spring.boot.vlt.mvc.model.staticFile.StaticFile;
-import com.spring.boot.vlt.mvc.repository.AttemptsRepository;
+import com.spring.boot.vlt.mvc.repository.SessionRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class AttemptsService {
     private final Logger logger = LogManager.getLogger(this.getClass());
     @Autowired
-    private AttemptsRepository attemptsRepository;
+    private SessionRepository attemptsRepository;
     @Autowired
     LaboratoryFrameService laboratoryFrameService;
 
@@ -31,13 +31,13 @@ public class AttemptsService {
         return session;
     }
 
-    public boolean saveAttempt(Attempts attempt) {
-        Optional<Attempts> save = Optional.ofNullable(attemptsRepository.save(attempt));
+    public boolean saveAttempt(Session attempt) {
+        Optional<Session> save = Optional.ofNullable(attemptsRepository.save(attempt));
         save.orElseThrow(() -> new HibernateException("exception while saving attempt: " + attempt.toString()));
         return save.isPresent();
     }
 
-    public Optional<Attempts> foundBySession(String session) {
+    public Optional<Session> foundBySession(String session) {
         return Optional.ofNullable(attemptsRepository.foundBySession(session));
     }
 

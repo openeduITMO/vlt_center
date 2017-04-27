@@ -1,7 +1,7 @@
 package com.spring.boot.vlt.mvc.controller.rlcp;
 
 import com.spring.boot.vlt.mvc.model.UserContext;
-import com.spring.boot.vlt.mvc.model.entity.Attempts;
+import com.spring.boot.vlt.mvc.model.entity.Session;
 import com.spring.boot.vlt.mvc.model.entity.rlcp.CheckRlcp;
 import com.spring.boot.vlt.mvc.model.entity.rlcp.GenerateRlcp;
 import com.spring.boot.vlt.mvc.service.LaboratoryFrameService;
@@ -37,7 +37,7 @@ public class RlcpMethodController {
     @RequestMapping(value = "/{dir}/get_generate", method = RequestMethod.GET)
     public ResponseEntity<GenerateRlcp> getGenerate(JwtAuthenticationToken token, @PathVariable("dir") String dir, @RequestParam("algorithm") String algorithm) {
         UserContext userContext = (UserContext) token.getPrincipal();
-        Attempts attempt = vltService.saveAttempt(userContext.getUsername(), dir);
+        Session attempt = vltService.saveAttempt(userContext.getUsername(), dir);
 
         String url = attempt.getLab().getUrl();
         if (url != null) {
@@ -76,7 +76,7 @@ public class RlcpMethodController {
                                               @RequestParam("session") String session,
                                               @RequestParam("instructions") String instructions) {
         UserContext userContext = (UserContext) token.getPrincipal();
-        Attempts attempt = vltService.findAttemptBySession(session);
+        Session attempt = vltService.findAttemptBySession(session);
 
         String url = attempt.getLab().getUrl();
         if (url != null &&
@@ -86,7 +86,7 @@ public class RlcpMethodController {
             List<ConditionForChecking> checks = laboratoryFrameService.getCheckList();
 
             RlcpCheckResponse rlcpResponse = rlcpMethodService.getCheck(url, session, checks, instructions);
-            Optional<CheckRlcp> checkRlcp = rlcpDataBaseService.saveCheckResult(attempt, rlcpResponse.getBody().getResults().get(0));
+            Optional<CheckRlcp> checkRlcp = rlcpDataBaseService.saveCheckResult(attempt, instructions, rlcpResponse.getBody().getResults().get(0));
 
             return new ResponseEntity<>(checkRlcp.get(), HttpStatus.OK);
         }

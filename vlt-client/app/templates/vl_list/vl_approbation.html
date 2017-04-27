@@ -7,29 +7,33 @@
 
       <form>
         <div>
-          <input type="text" class="search-input" ng-model="search" placeholder="Поиск"/>
+          <!--<input type="text" class="search-input" ng-model="search" placeholder="Поиск"/>-->
         </div>
       </form>
 
       <table class="table" id="vl-list">
         <thead>
-        <th ng-click="sort('student')" class="student">Студент
-              <span ng-show="sortKey=='student'"
-                    ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-        </th>
-        <!--<th>Студент</th>-->
+        <!--<th ng-click="sort('student')" class="student">Студент-->
+              <!--<span ng-show="sortKey=='student'"-->
+                    <!--ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>-->
+        <!--</th>-->
+        <th>Студент</th>
+        <th>Последняя сессия</th>
         <th>Время начала</th>
-        <th>Сессия</th>
         <th>Результат</th>
         <th>Просмотреть</th>
         </thead>
         <tbody>
-        <tr dir-paginate="st in studentCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">
-          <td>{{st.login}}</td>
-          <td>{{st.startDate}}</td>
-          <td>{{st.session}}</td>
-          <td>{{st.result.output}} : {{st.result.result}}</td>
-          <td><span class='fa fa-play button show-session-vl' data='Просмотреть' ng-click="showSession(currentDir, st.session)"/></td>
+        <!--<tr dir-paginate="(key, value) in studentCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">-->
+        <tr ng-repeat="(key, value) in studentCollection">
+          <td>{{key}}</td>
+          <td>{{value[0].session}}</td>
+          <td>{{value[0].startDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td>{{value[0].result.output}} : {{st.result.result}}</td>
+          <td>
+            <span class='fa fa-history button history-session-vl' data='История запусков' ng-click="showHistory(key)"/>
+            <span class='fa fa-play button show-session-vl' data='Просмотреть' ng-click="showSession(currentDir, value[0].session)"/>
+          </td>
         </tr>
         </tbody>
       </table>

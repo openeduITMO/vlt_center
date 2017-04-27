@@ -5,7 +5,8 @@ import com.spring.boot.vlt.common.ErrorCode;
 import com.spring.boot.vlt.common.ErrorResponse;
 import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
-import com.spring.boot.vlt.mvc.model.pojo_response.DeclarationForVl;
+import com.spring.boot.vlt.mvc.model.pojo_response.RegisterForVl;
+import com.spring.boot.vlt.mvc.model.pojo_response.ResultInfo;
 import com.spring.boot.vlt.mvc.service.VltService;
 import com.spring.boot.vlt.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @CrossOrigin
@@ -40,19 +43,19 @@ public class VltController {
     }
 
     @RequestMapping(value = "/get_users/{dirName}", method = RequestMethod.GET)
-    public ResponseEntity<Set<DeclarationForVl>> getStudentForVl(JwtAuthenticationToken token, @PathVariable("dirName") String dirName) {
+    public ResponseEntity<Map<String, List<ResultInfo>>> getStudentForVl(JwtAuthenticationToken token, @PathVariable("dirName") String dirName) {
         UserContext userContext = (UserContext) token.getPrincipal();
 
         return AccessUtils.isDeveloperOrAdmin(userContext) ?
-                new ResponseEntity<>(vltService.getDeclarationUsers(dirName), HttpStatus.OK):
+                new ResponseEntity<>(vltService.getRegisterUsers(dirName), HttpStatus.OK):
                 ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/declaration/{dirName}", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<VirtLab> declaration(JwtAuthenticationToken token, @PathVariable("dirName") String dirName) {
+    public ResponseEntity<VirtLab> register(JwtAuthenticationToken token, @PathVariable("dirName") String dirName) {
         UserContext userContext = (UserContext) token.getPrincipal();
         return AccessUtils.isStudent(userContext) ?
-                new ResponseEntity(vltService.declarationOnVL(dirName, userContext.getUsername()), HttpStatus.OK) :
+                new ResponseEntity(vltService.registerOnVL(dirName, userContext.getUsername()), HttpStatus.OK) :
                 ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 

@@ -28,12 +28,12 @@ public class User implements Serializable{
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "labs_declaration",
+            name = "labs_register",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "labs_id", referencedColumnName = "id")
     )
     @JsonIgnore
-    private Set<VirtLab> declaration = new HashSet<>();
+    private Set<VirtLab> register = new HashSet<>();
 
     public User() {
     }
@@ -74,20 +74,20 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public Set<VirtLab> getDeclaration() {
-        return declaration;
+    public Set<VirtLab> getRegister() {
+        return register;
     }
 
-    public void setDeclaration(Set<VirtLab> declaration) {
-        this.declaration = declaration;
+    public void setRegister(Set<VirtLab> register) {
+        this.register = register;
     }
 
-    public void addDeclaration(VirtLab declaration) {
-        this.declaration.add(declaration);
+    public void addRegister(VirtLab register) {
+        this.register.add(register);
     }
 
-    public void deleteDeclaration(User declaration) {
-        this.declaration.remove(declaration);
+    public void deleteRegister(User Register) {
+        this.register.remove(Register);
     }
 
     public void setRole(Role role) {

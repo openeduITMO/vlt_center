@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "attempts")
-public class Attempts {
+public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -25,10 +25,10 @@ public class Attempts {
     @Column(name = "session", nullable = false)
     private String session;
 
-    public Attempts() {
+    public Session() {
     }
 
-    public Attempts(User user, VirtLab lab, String session) {
+    public Session(User user, VirtLab lab, String session) {
         this.user = user;
         this.lab = lab;
         this.session = session;

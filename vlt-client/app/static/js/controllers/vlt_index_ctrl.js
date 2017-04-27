@@ -141,6 +141,10 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
     $location.path('/start_vl/' + dir + '/' + frameId);
   }
 
+  $scope.showHistory = function(key){
+
+  }
+
   $scope.showSession = function(dir, session){
     $location.path('/show/' + session);
   }

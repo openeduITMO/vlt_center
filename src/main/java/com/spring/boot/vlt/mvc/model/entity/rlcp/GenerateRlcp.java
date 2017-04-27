@@ -1,6 +1,6 @@
 package com.spring.boot.vlt.mvc.model.entity.rlcp;
 
-import com.spring.boot.vlt.mvc.model.entity.Attempts;
+import com.spring.boot.vlt.mvc.model.entity.Session;
 import rlcp.generate.GeneratingResult;
 
 import javax.persistence.*;
@@ -16,7 +16,7 @@ public class GenerateRlcp {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "attempt")
-    private Attempts attempt;
+    private Session attempt;
 
     @Column(name = "response", nullable = false)
     private GeneratingResult response;
@@ -30,13 +30,13 @@ public class GenerateRlcp {
     public GenerateRlcp() {
     }
 
-    public GenerateRlcp(Attempts attempt, GeneratingResult response, Date date) {
+    public GenerateRlcp(Session attempt, GeneratingResult response, Date date) {
         this.attempt = attempt;
         this.response = response;
         this.date = date;
     }
 
-    public GenerateRlcp(Attempts attempt, GeneratingResult response, Date date, Long idParent) {
+    public GenerateRlcp(Session attempt, GeneratingResult response, Date date, Long idParent) {
         this.parent = idParent;
         this.attempt = attempt;
         this.response = response;
@@ -47,11 +47,11 @@ public class GenerateRlcp {
         return id;
     }
 
-    public Attempts getAttempts() {
+    public Session getAttempts() {
         return attempt;
     }
 
-    public void setAttempts(Attempts attempt) {
+    public void setAttempts(Session attempt) {
         this.attempt = attempt;
     }
 

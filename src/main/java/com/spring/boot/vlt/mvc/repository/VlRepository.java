@@ -20,6 +20,6 @@ public interface VlRepository extends CrudRepository<VirtLab, Long> {
     @Query("select vl from " +
             "VirtLab vl join vl.authors author " +
             "where vl.isPublic = true and author.login != :login and " +
-                "vl.id not in (select declaration.id from User user join user.declaration declaration where user.login = :login)")
+                "vl.id not in (select reg.id from User user join user.register reg where user.login = :login)")
     Set<VirtLab> getPublicVlList(@Param("login") String login);
 }

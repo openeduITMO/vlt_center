@@ -1,6 +1,6 @@
 package com.spring.boot.vlt.mvc.service.rlcp;
 
-import com.spring.boot.vlt.mvc.model.entity.Attempts;
+import com.spring.boot.vlt.mvc.model.entity.Session;
 import com.spring.boot.vlt.mvc.model.entity.rlcp.CheckRlcp;
 import com.spring.boot.vlt.mvc.model.entity.rlcp.GenerateRlcp;
 import com.spring.boot.vlt.mvc.repository.rlcp.CheckRlcpRepository;
@@ -15,7 +15,6 @@ import rlcp.generate.GeneratingResult;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class RlcpDataBaseService {
@@ -33,7 +32,7 @@ public class RlcpDataBaseService {
         return generate;
     }
 
-    public Optional<GenerateRlcp> saveGenerateResult(Attempts attempt, GeneratingResult result) {
+    public Optional<GenerateRlcp> saveGenerateResult(Session attempt, GeneratingResult result) {
         Date time = Calendar.getInstance().getTime();
         GenerateRlcp generate = new GenerateRlcp(attempt, result, time);
 
@@ -45,7 +44,7 @@ public class RlcpDataBaseService {
     public Optional<GenerateRlcp> saveRepeatGenerateResult(String session) {
         GenerateRlcp generateRlcp = getGenerateBySession(session).get();
         Date time = Calendar.getInstance().getTime();
-        Attempts attempts = new Attempts(generateRlcp.getAttempts().getUser(),
+        Session attempts = new Session(generateRlcp.getAttempts().getUser(),
                 generateRlcp.getAttempts().getLab(), "");
 //                generateRlcp.getAttempts().getLab(), attemptsService.generateSession());
 
@@ -56,12 +55,12 @@ public class RlcpDataBaseService {
         return saveGenerate;
     }
 
-    public Optional<CheckRlcp> saveCheckResult(Attempts attempt, CheckingResult result) {
+    public Optional<CheckRlcp> saveCheckResult(Session session, String request, CheckingResult response) {
         Date time = Calendar.getInstance().getTime();
-        CheckRlcp check = new CheckRlcp(attempt, result, time);
+        CheckRlcp check = new CheckRlcp(session, request, response, time);
 
         Optional<CheckRlcp> saveCheck = Optional.ofNullable(checkRepository.save(check));
-        saveCheck.orElseThrow(() -> new HibernateException("exception while saving rlcp-check: " + result));
+        saveCheck.orElseThrow(() -> new HibernateException("exception while saving rlcp-check: " + session));
         return saveCheck;
     }
 }

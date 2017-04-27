@@ -1,6 +1,6 @@
 package com.spring.boot.vlt.mvc.model.entity.rlcp;
 
-import com.spring.boot.vlt.mvc.model.entity.Attempts;
+import com.spring.boot.vlt.mvc.model.entity.Session;
 import rlcp.check.CheckingResult;
 
 import javax.persistence.*;
@@ -16,13 +16,13 @@ public class CheckRlcp {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "attempt")
-    private Attempts attempt;
+    private Session attempt;
 
     @Column(name = "response", nullable = false)
     private CheckingResult response;
 
-//    @Column(name = "request", nullable = false)
-//    private CheckingRe request;
+    @Column(name = "request", nullable = false)
+    private String request;
 
     @Column(name = "date", nullable = false)
     private Date date;
@@ -30,21 +30,30 @@ public class CheckRlcp {
     public CheckRlcp() {
     }
 
-    public CheckRlcp(Attempts attempt, CheckingResult response, Date date) {
+    public CheckRlcp(Session attempt, String request, CheckingResult response, Date date) {
         this.attempt = attempt;
+        this.request = request;
         this.response = response;
         this.date = date;
+    }
+
+    public String getRequest() {
+        return request;
+    }
+
+    public void setRequest(String request) {
+        this.request = request;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Attempts getSession() {
+    public Session getAttempts() {
         return attempt;
     }
 
-    public void setSession(Attempts attempt) {
+    public void setAttempts(Session attempt) {
         this.attempt = attempt;
     }
 
@@ -68,6 +77,7 @@ public class CheckRlcp {
     public String toString() {
         return "CheckRlcp{" +
                 "attempt=" + attempt +
+                ", request=" + request +
                 ", response=" + response +
                 ", date=" + date +
                 '}';

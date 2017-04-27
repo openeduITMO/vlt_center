@@ -14,9 +14,9 @@ public class H2ExtDialect extends H2Dialect {
 
     public H2ExtDialect() {
         super();
-        registerKeyword("SEPARATOR");
-        registerFunction("group_concat", new StandardSQLFunction("group_concat", new StringType()));
-//        registerFunction("group_concat", new SQLFunctionTemplate(StandardBasicTypes.STRING, "GROUP_CONCAT(?1)"));
+//        registerFunction("group_concat", new StandardSQLFunction("group_concat", new StringType()));
+//        registerKeyword("SEPARATOR ';'");
+        registerFunction("group_concat", new SQLFunctionTemplate(StandardBasicTypes.STRING, "GROUP_CONCAT(?1, ?2)"));
 //        registerHibernateType(Types.LONGVARCHAR, StandardBasicTypes.TEXT.getName());
 
     }

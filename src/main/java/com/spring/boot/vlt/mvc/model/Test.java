@@ -1,14 +1,14 @@
 package com.spring.boot.vlt.mvc.model;
 
-import com.spring.boot.vlt.mvc.model.entity.Attempts;
+import com.spring.boot.vlt.mvc.model.entity.Session;
 
 import java.util.ArrayList;
 
 public class Test {
     private String login;
-    private ArrayList<Attempts> attemptses;
+    private ArrayList<Session> attemptses;
 
-    public Test(String login, ArrayList<Attempts> attemptses) {
+    public Test(String login, ArrayList<Session> attemptses) {
         this.login = login;
         this.attemptses = attemptses;
     }
@@ -21,11 +21,11 @@ public class Test {
         this.login = login;
     }
 
-    public ArrayList<Attempts> getAttemptses() {
+    public ArrayList<Session> getAttemptses() {
         return attemptses;
     }
 
-    public void setAttemptses(ArrayList<Attempts> attemptses) {
+    public void setAttemptses(ArrayList<Session> attemptses) {
         this.attemptses = attemptses;
     }
 }
