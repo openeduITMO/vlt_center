@@ -1,6 +1,6 @@
 .idea/
 .mvn/
-*.iml
+vlt.iml
 target/
 logs/
 vlt-client/node_modules/
