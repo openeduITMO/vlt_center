@@ -2,11 +2,13 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
   $scope.vlCollection = [];
   $scope.studentCollection = [];
   $scope.vl = {name: "", dirName: ""};
-  $scope.hide = {addForm: true, settingsForm: true, importForm: true, runningForm: true, servers: true};
+  $scope.hide = {addForm: true, settingsForm: true, importForm: true, runningForm: true, servers: true, history: true};
   $scope.currentDir = "";
+  $scope.selectedStudent = "";
   $scope.servers = [];
   $scope.frameCollection = [];
   $scope.session;
+  $scope.selectedHistory = [];
 
   //init vlt
   IndexService.getVlList()
@@ -32,7 +34,9 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
         $scope.hide.settingsForm = true;
         $scope.hide.importForm = true;
         $scope.hide.runningForm = true;
+        $scope.hide.history = true;
         $scope.vl = {};
+        $scope.selectedHistory = [];
         break;
       case "add-form":
         $scope.hide.addForm = true;
@@ -52,6 +56,10 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
         break;
       case "settings-servers":
         $scope.hide.servers = true;
+        break;
+      case "history-vl":
+        $scope.hide.history = true;
+        $scope.selectedHistory = [];
         break;
     }
   };
@@ -141,8 +149,10 @@ app.controller('IndexCtrl', function ($scope, store, $location, IndexService) {
     $location.path('/start_vl/' + dir + '/' + frameId);
   }
 
-  $scope.showHistory = function(key){
-
+  $scope.showHistory = function(student, listSession){
+    $scope.hide.history = false;
+    $scope.selectedStudent = student;
+    $scope.selectedHistory = listSession;
   }
 
   $scope.showSession = function(dir, session){

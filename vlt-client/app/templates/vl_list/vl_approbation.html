@@ -2,21 +2,11 @@
   <div class="list-div, approbation-div">
     <div class="panel panel-default">
       <div class="panel-heading">Информация о прохождении
-        <dropdown-list data-items-list="vlCollection" data-student-list="studentCollection" current-dir="currentDir" data-placeholder="Выберите ВЛ"></dropdown-list>
+        <dropdown-list data-items-list="vlCollection" data-student-list="studentCollection" current-dir="currentDir"
+                       data-placeholder="Выберите ВЛ"></dropdown-list>
       </div>
-
-      <form>
-        <div>
-          <!--<input type="text" class="search-input" ng-model="search" placeholder="Поиск"/>-->
-        </div>
-      </form>
-
       <table class="table" id="vl-list">
         <thead>
-        <!--<th ng-click="sort('student')" class="student">Студент-->
-              <!--<span ng-show="sortKey=='student'"-->
-                    <!--ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>-->
-        <!--</th>-->
         <th>Студент</th>
         <th>Последняя сессия</th>
         <th>Время начала</th>
@@ -24,15 +14,16 @@
         <th>Просмотреть</th>
         </thead>
         <tbody>
-        <!--<tr dir-paginate="(key, value) in studentCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">-->
-        <tr ng-repeat="(key, value) in studentCollection">
+        <tr ng-repeat="(key, listSession) in studentCollection">
           <td>{{key}}</td>
-          <td>{{value[0].session}}</td>
-          <td>{{value[0].startDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-          <td>{{value[0].result.output}} : {{st.result.result}}</td>
+          <td>{{listSession[0].session}}</td>
+          <td>{{listSession[0].startDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td>{{listSession[0].result.output}} : {{listSession[0].result.result}}</td>
           <td>
-            <span class='fa fa-history button history-session-vl' data='История запусков' ng-click="showHistory(key)"/>
-            <span class='fa fa-play button show-session-vl' data='Просмотреть' ng-click="showSession(currentDir, value[0].session)"/>
+            <span class='fa fa-history button history-session-vl' data='История запусков'
+                  ng-click="showHistory(key, listSession)"/>
+            <span class='fa fa-eye button show-session-vl' data='Просмотреть'
+                  ng-click="showSession(currentDir, value[0].session)"/>
           </td>
         </tr>
         </tbody>
@@ -44,4 +35,35 @@
     direction-links="true"
     boundary-links="true">
   </dir-pagination-controls>
+
+  <br/>
+  <div id="history-vl" class="panel panel-default s-form"
+       ng-show="!hide.history" ng-hide="hide.history"
+       ng-if="isAuthorized([userRoles.admin, userRoles.developer])">
+    <span class="fa fa-times button close" data="Закрыть" ng-click="closeForm('history-vl')"></span>
+    <div class="panel-heading">Студент: {{selectedStudent}}</div>
+    <div class="panel-body">
+      <div class="add-form col-xs-6">
+        <table class="table" id="student-history">
+          <thead>
+            <th>Сессия</th>
+          <th>Время начала</th>
+          <th>Результат</th>
+          <th>Просмотреть</th>
+          </thead>
+          <tbody>
+          <tr ng-repeat="history in selectedHistory">
+          <td>{{history.session}}</td>
+            <td>{{history.startDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>{{history.result.output}} : {{history.result.result}}</td>
+            <td center-text>
+              <span class='fa fa-eye button show-session-vl' data='Просмотреть'
+                    ng-click="showSession(currentDir, history.session)"/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

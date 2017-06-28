@@ -1,3 +1,12 @@
+app.directive('vlAll', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'templates/vl_list/vl_all.html',
+    replace: true,
+    scope: true
+  };
+});
+
 app.directive('vlAvailable', function () {
   return {
     restrict: 'E',
@@ -64,8 +73,20 @@ app.directive('dropdownList',function($timeout, IndexService){
         $listContainer.removeClass('show');
         IndexService.getUsers(item.dirName)
           .then(res => {
+            _.forEach(res, function(key, value) {
+              key.sort(compareDate);
+            });
             scope.studentList = res;
           });
+      };
+
+      function compareDate(a, b) {
+        if (a.startDate > b.startDate)
+          return -1;
+        else if (a.startDate < b.startDate)
+          return 1;
+        else
+          return 0;
       }
     }
   }

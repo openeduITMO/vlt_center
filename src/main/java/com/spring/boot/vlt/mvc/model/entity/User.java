@@ -18,6 +18,13 @@ public class User implements Serializable{
     @Column(name = "login", unique = true)
     private String login;
 
+//    @Column(name = "name")
+//    private String name;
+//
+//    @Column(name = "surname")
+//    private String surname;
+//
+
     @Column(name = "password")
     @JsonIgnore
     private String password;
@@ -41,13 +48,17 @@ public class User implements Serializable{
     public User(String login, String password) {
         this.login = login;
         this.password = password;
+//        this.name = name;
+//        this.surname = surname;
     }
 
-    public User(Long id, String username, String password, Role role) {
+    public User(Long id, String login, String password, Role role) {
         this.id = id;
-        this.login = username;
+        this.login = login;
         this.password = password;
         this.role = role;
+//        this.name = name;
+//        this.surname = surname;
     }
 
     public Long getId() {
@@ -65,6 +76,22 @@ public class User implements Serializable{
     public Role getRole() {
         return role;
     }
+
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getSurname() {
+//        return surname;
+//    }
+//
+//    public void setSurname(String surname) {
+//        this.surname = surname;
+//    }
 
     public void setLogin(String login) {
         this.login = login;
@@ -97,6 +124,8 @@ public class User implements Serializable{
     @Override
     public String toString() {
         return "User{" +
+//                "name='" + name + '\'' +
+//                "surname='" + surname + '\'' +
                 "login='" + login + '\'' +
                 ", role='" + role + '\'' +
                 '}';

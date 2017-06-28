@@ -23,7 +23,7 @@ app.controller('ServerStatusCtrl', function ($scope, $location, ServerStatusServ
             } else {
               $("#check-status-server-btn").css("color", "green");
               $("#check-status-server-btn").parent().find("p").detach();
-              $("#check-status-server-btn").parent().append("<p class='success'>Внешний сервер запушен</p>");
+              $("#check-status-server-btn").parent().append("<p class='success'>Внешний сервер запущен</p>");
             }
           },
           err => {

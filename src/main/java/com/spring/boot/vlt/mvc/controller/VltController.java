@@ -5,7 +5,6 @@ import com.spring.boot.vlt.common.ErrorCode;
 import com.spring.boot.vlt.common.ErrorResponse;
 import com.spring.boot.vlt.mvc.model.UserContext;
 import com.spring.boot.vlt.mvc.model.entity.VirtLab;
-import com.spring.boot.vlt.mvc.model.pojo_response.RegisterForVl;
 import com.spring.boot.vlt.mvc.model.pojo_response.ResultInfo;
 import com.spring.boot.vlt.mvc.service.VltService;
 import com.spring.boot.vlt.security.JwtAuthenticationToken;
@@ -35,6 +34,14 @@ public class VltController {
         return new ResponseEntity<>(virtList, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/get_admin_list_vl", method = RequestMethod.GET)
+    public ResponseEntity<Set<VirtLab>> getVlListForAdmin(JwtAuthenticationToken token) {
+        UserContext userContext = (UserContext) token.getPrincipal();
+        return AccessUtils.isAdmin(userContext) ?
+                new ResponseEntity<>(vltService.getVlListForAdmin(userContext.getUsername()), HttpStatus.OK) :
+                ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
+    }
+
     @RequestMapping(value = "/get_other_list_vl", method = RequestMethod.GET)
     public ResponseEntity<Set<VirtLab>> getPublicVlList(JwtAuthenticationToken token) {
         UserContext userContext = (UserContext) token.getPrincipal();
@@ -45,9 +52,8 @@ public class VltController {
     @RequestMapping(value = "/get_users/{dirName}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<ResultInfo>>> getStudentForVl(JwtAuthenticationToken token, @PathVariable("dirName") String dirName) {
         UserContext userContext = (UserContext) token.getPrincipal();
-
         return AccessUtils.isDeveloperOrAdmin(userContext) ?
-                new ResponseEntity<>(vltService.getRegisterUsers(dirName), HttpStatus.OK):
+                new ResponseEntity<>(vltService.getRegisterUsers(dirName), HttpStatus.OK) :
                 ErrorResponse.of("No access. Contact your administrator", ErrorCode.NOT_ACCESS_RIGHT, HttpStatus.UNAUTHORIZED);
     }
 

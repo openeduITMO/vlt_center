@@ -97,6 +97,14 @@ iframe {
   margin-bottom: 50px;
 }
 
+.vl-all {
+  min-width: 550px;
+  display: inline-table;
+  vertical-align: top;
+  margin-left: 50px;
+  margin-bottom: 50px;
+}
+
 #add-vl-block, #vl-settings, #vl-import, #vl-running{
   margin-bottom: 50px;
 }
@@ -132,7 +140,7 @@ iframe {
   border-collapse: collapse;
 }
 
-.list-div .table th:first-child {
+.vl-list .list-div .table th:first-child {
   width: 80%;
 }
 
@@ -618,6 +626,19 @@ input[type='file'] {
 
 .toggle .handle {
   width: 100px;
+}
+
+.history-session-vl, .show-session-vl{
+  margin-left: 20px;
+}
+
+#history-vl{
+  width: auto;
+  height: auto;
+}
+
+.center-text{
+  text-align: center;
 }
 
 .toggle input[type="checkbox"]:checked + .handle:before {

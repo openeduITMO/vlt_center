@@ -1,10 +1,7 @@
-<div class="vl-list">
-
+<div class="vl-all" ng-if="isAuthorized([userRoles.admin])">
   <div class="list-div">
     <div class="panel panel-default">
-      <span class="fa fa-plus button plusTd" data="Добавить новую ВЛ" ng-click="showAddForm()"
-            ng-if="isAuthorized([userRoles.admin,userRoles.developer])"></span>
-      <div class="panel-heading">Доступные виртуальные лаборатории</div>
+      <div class="panel-heading">Все виртуальные лаборатории</div>
       <form>
         <div>
           <input type="text" class="search-input" ng-model="search" placeholder="Поиск"/>
@@ -16,11 +13,15 @@
               <span ng-show="sortKey=='name'"
                     ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
         </th>
+        <th class="">Разработчик</th>
         <th class="commands center-text">Команды</th>
         </thead>
         <tbody>
         <tr dir-paginate="vl in vlCollection|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
           <td>{{vl.name}}</td>
+          <td>
+            <span ng-repeat="author in vl.author">{{author.login}} </span>
+          </td>
           <td class="center-text">
             <span class="fa fa-play button run-vl" data="Запуск" ng-click="showRunningForm(vl)"/>
             <span class="fa fa-cog button tune-vl" data="Настройки" ng-click="getPropertyVl(vl)"

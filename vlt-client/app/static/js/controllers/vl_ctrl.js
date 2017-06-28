@@ -106,6 +106,9 @@ app.controller('VlCtrl', function ($scope, $location, VlService) {
 
     $scope.checkFn = function () {
       var result = frame.Vlab.getResults();
+      if (result == null) {
+        result = "NaN";
+      }
       VlService.check($scope.dirName, $scope.frameId, $scope.session, result)
         .then(res => {
             frame.setPreviousSolution(result);

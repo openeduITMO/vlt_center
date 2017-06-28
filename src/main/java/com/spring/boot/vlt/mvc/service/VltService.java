@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class VltService {
@@ -34,14 +35,21 @@ public class VltService {
     @Autowired
     private UserRepository userRepository;
 
+    public Set<VirtLab> getAllVirtList() {
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
+        return StreamSupport.stream(vlRepository.findAll().spliterator(), false)
+                .filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
+    }
+
+
     public Set<VirtLab> getVirtListByAuthor(String userLogin) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        return vlRepository.findByAuthor(userLogin)
+        return vlRepository.foundByAuthor(userLogin)
                 .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
     public VirtLab foundVlByDirUnderUser(String userLogin, String dirName) {
-        return vlRepository.findByAuthor(userLogin)
+        return vlRepository.foundByAuthor(userLogin)
                 .stream().filter(vl -> dirName.equals(vl.getDirName())).findFirst().orElseThrow(() ->
                         new NullPointerException("User with login = " + userLogin + " not contain vl = " + dirName));
     }
@@ -69,13 +77,19 @@ public class VltService {
 
     public Set<VirtLab> getPublicVlList(String userLogin) {
         final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
-        return vlRepository.getPublicVlList(userLogin)
+        return vlRepository.foundPublicVlList(userLogin)
+                .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
+    }
+
+    public Set<VirtLab> getVlListForAdmin(String userLogin) {
+        final String path = System.getProperty("user.dir") + File.separator + vltSettings.getPathsUploadedFiles();
+        return vlRepository.foundPublicVlList(userLogin)
                 .stream().filter(vl -> (new File(path, vl.getDirName())).exists()).collect(Collectors.toSet());
     }
 
     public VirtLab registerOnVL(String dirName, String login) {
         User user = userService.getUserByLogin(login);
-        VirtLab virtLab = vlRepository.findByDirName(dirName);
+        VirtLab virtLab = vlRepository.foundByDirName(dirName);
         user.addRegister(virtLab);
         userService.saveUser(user);
         return virtLab;
@@ -121,7 +135,7 @@ public class VltService {
     }
 
     public VirtLab getVl(String vlDir) {
-        return Optional.ofNullable(vlRepository.findByDirName(vlDir)).orElseThrow(() ->
+        return Optional.ofNullable(vlRepository.foundByDirName(vlDir)).orElseThrow(() ->
                 new NullPointerException("vl with dir name = " + vlDir + " not found"));
     }
 
@@ -148,7 +162,7 @@ public class VltService {
     }
 
     public boolean chekAndSaveUrl(VirtLab vl, String url) {
-        if (vlRepository.findByUrl(url) == null) {
+        if (vlRepository.foundByUrl(url) == null) {
             vl.setUrl(url);
             vlRepository.save(vl);
             return true;
